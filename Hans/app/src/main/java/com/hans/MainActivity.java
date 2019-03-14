@@ -8,8 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.hans.domain.Order;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    ArrayList<Order> orderList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        orderListInit();
+        ArrayAdapter<Order> orderArrayAdapter = new OrderArrayAdapter(this, 0, orderList);
+        ListView listView = (ListView) findViewById(R.id.customListView);
+        listView.setAdapter(orderArrayAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -26,6 +39,30 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    private void orderListInit() {
+        orderList.add(new Order(
+                1,
+                "adr1",
+                "adr2",
+                10.5,
+                "1m x 2m"
+        ));
+        orderList.add(new Order(
+                2,
+                "adr3",
+                "adr4",
+                14.8,
+                "5m x 7m"
+        ));
+        orderList.add(new Order(
+                3,
+                "adr5",
+                "adr6",
+                4.0,
+                "0.5m x 0.8m"
+        ));
     }
 
     @Override
