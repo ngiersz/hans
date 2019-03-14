@@ -33,19 +33,20 @@ public class OrderArrayAdapter extends ArrayAdapter<Order> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.order_list_element, null);
 
-        TextView description = (TextView) view.findViewById(R.id.description);
-        TextView pickupAddress = (TextView) view.findViewById(R.id.pickupAddress);
-        TextView deliveryAddress = (TextView) view.findViewById(R.id.deliveryAddress);
+//        TextView description = (TextView) view.findViewById(R.id.description);
+//        TextView pickupAddress = (TextView) view.findViewById(R.id.pickupAddress);
+//        TextView deliveryAddress = (TextView) view.findViewById(R.id.deliveryAddress);
         TextView price = (TextView) view.findViewById(R.id.price);
-        TextView weight = (TextView) view.findViewById(R.id.weight);
-        TextView measurments = (TextView) view.findViewById(R.id.measurments);
+//        TextView weight = (TextView) view.findViewById(R.id.weight);
+//        TextView measurments = (TextView) view.findViewById(R.id.measurments);
 
-        description.setText(order.getDescription());
-        pickupAddress.setText(order.getPickupAddress());
-        deliveryAddress.setText(order.getDeliveryAddress());
+
+//        description.setText(order.getDescription());
+//        pickupAddress.setText(order.getPickupAddress());
+//        deliveryAddress.setText(order.getDeliveryAddress());
         price.setText(order.getPrice().toString());
-        weight.setText(order.getWeight().toString());
-        measurments.setText(order.getMeasurments());
+//        weight.setText(order.getWeight().toString());
+//        measurments.setText(order.getMeasurments());
 
         // image
 

@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         orderListInit();
         ArrayAdapter<Order> orderArrayAdapter = new OrderArrayAdapter(this, 0, orderList);
         ListView listView = (ListView) findViewById(R.id.customListView);
+        if(listView == null) {
+            Log.d("listView", "listView is null");
+        }
+        else {
+            Log.d("listView", "listView is not null");
+        }
         listView.setAdapter(orderArrayAdapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -47,21 +54,27 @@ public class MainActivity extends AppCompatActivity {
                 "adr1",
                 "adr2",
                 10.5,
-                "1m x 2m"
+                "1m x 2m",
+                "description1",
+                20.0
         ));
         orderList.add(new Order(
                 2,
                 "adr3",
                 "adr4",
                 14.8,
-                "5m x 7m"
+                "5m x 7m",
+                "description2",
+                120.0
         ));
         orderList.add(new Order(
                 3,
                 "adr5",
                 "adr6",
                 4.0,
-                "0.5m x 0.8m"
+                "0.5m x 0.8m",
+                "description3",
+                28.0
         ));
     }
 

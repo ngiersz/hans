@@ -18,13 +18,15 @@ public class Order {
 
     String description;
 
-    public Order(int id, String pickupAddress, String destinationAddress, Double weight, String measurments) {
+    public Order(int id, String pickupAddress, String destinationAddress, Double weight, String measurments, String description, Double price) {
         this.id = id;
         this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = destinationAddress;
         this.weight = weight;
         this.measurments = measurments;
+        this.description = description;
+        this.price = price;
     }
 
     public Integer getId() {
