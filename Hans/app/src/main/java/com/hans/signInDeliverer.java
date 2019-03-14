@@ -34,6 +34,16 @@ public class signInDeliverer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_in_deliverer);
 
+        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -50,8 +60,7 @@ public class signInDeliverer extends AppCompatActivity
     public void signIn(View view)
     {
         Log.d("koy", "signIn");
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
+
 
     }
 
