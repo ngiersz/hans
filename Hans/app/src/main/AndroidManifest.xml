@@ -22,7 +22,7 @@
 
 
         <activity android:name=".signInDeliverer"
-            android:label="signInDeliverer"
+            android:label="Zaloguj się do HANS"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
