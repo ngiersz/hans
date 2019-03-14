@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Hans</string>
     <string name="action_settings">Settings</string>
+    <string name="just_sign_in">Hey You!\nJust sign in with Goggle!</string>
 </resources>
