@@ -8,24 +8,43 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.hans.domain.Order;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    ArrayList<Order> orders = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        initOrderList();
+        ListView listView = (ListView) findViewById(R.id.listView);
+        OrderListAdapter orderListAdapter = new OrderListAdapter(this, R.layout.adapter_view_layout, orders);
+        listView.setAdapter(orderListAdapter);
+    }
+
+    private void initOrderList() {
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
+        orders.add(new Order("add1", "add2", "desc"));
     }
 
     @Override
