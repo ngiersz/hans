@@ -33,33 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void orderListInit() {
-        orderList.add(new Order(
-                1,
-                "adr1",
-                "adr2",
-                10.5,
-                "1m x 2m",
-                "description1",
-                20.0
-        ));
-        orderList.add(new Order(
-                2,
-                "adr3",
-                "adr4",
-                14.8,
-                "5m x 7m",
-                "description2",
-                120.0
-        ));
-        orderList.add(new Order(
-                3,
-                "adr5",
-                "adr6",
-                4.0,
-                "0.5m x 0.8m",
-                "description3",
-                28.0
-        ));
+        orderList.add(new Order(1, "adr1", "adr2", 10.5, "1m x 2m", "description1", 20.0));
+        orderList.add(new Order(2, "adr3", "adr4", 10.5, "1m x 2m", "description2", 20.0));
+        orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));
+        orderList.add(new Order(4, "adr7", "adr8", 10.5, "1m x 2m", "description4", 20.0));
+        orderList.add(new Order(5, "adr9", "adr10", 10.5, "1m x 2m", "description5", 20.0));
+        orderList.add(new Order(1, "adr1", "adr2", 10.5, "1m x 2m", "description1", 20.0));
+        orderList.add(new Order(2, "adr3", "adr4", 10.5, "1m x 2m", "description2", 20.0));
+        orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));
+        orderList.add(new Order(4, "adr7", "adr8", 10.5, "1m x 2m", "description4", 20.0));
+        orderList.add(new Order(5, "adr9", "adr10", 10.5, "1m x 2m", "description5", 20.0));
     }
 
     @Override

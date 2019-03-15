@@ -29,6 +29,12 @@ public class Order {
         this.price = price;
     }
 
+    public Order(String pickupAddress, String deliveryAddress, String description) {
+        this.pickupAddress = pickupAddress;
+        this.deliveryAddress = deliveryAddress;
+        this.description = description;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -60,11 +66,8 @@ public class Order {
     public String getDescription() {
         return description;
     }
-<<<<<<< HEAD
-=======
 
     public void setDescription(String description) {
         this.description = description;
     }
->>>>>>> order-custom-list
 }
