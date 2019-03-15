@@ -5,11 +5,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.hans.domain.Order;
@@ -28,25 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         orderListInit();
-        ArrayAdapter<Order> orderArrayAdapter = new OrderArrayAdapter(this, 0, orderList);
-        ListView listView = (ListView) findViewById(R.id.customListView);
-        if(listView == null) {
-            Log.d("listView", "listView is null");
-        }
-        else {
-            Log.d("listView", "listView is not null");
-        }
-        listView.setAdapter(orderArrayAdapter);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        ListView listView = (ListView) findViewById(R.id.listView);
+        OrderListAdapter orderListAdapter = new OrderListAdapter(this, R.layout.adapter_view_layout, orderList);
+        listView.setAdapter(orderListAdapter);
     }
+
 
     private void orderListInit() {
         orderList.add(new Order(

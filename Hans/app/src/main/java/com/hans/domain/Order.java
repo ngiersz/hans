@@ -60,4 +60,11 @@ public class Order {
     public String getDescription() {
         return description;
     }
+<<<<<<< HEAD
+=======
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+>>>>>>> order-custom-list
 }
