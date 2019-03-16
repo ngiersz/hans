@@ -21,6 +21,9 @@ class OrderListAdapter extends ArrayAdapter<Order> {
         TextView pickupAddress;
         TextView deliveryAddress;
         TextView description;
+        TextView price;
+        TextView weight;
+        TextView measurments;
     }
 
     public OrderListAdapter(Context context, int resource, ArrayList<Order> objects) {
@@ -35,8 +38,11 @@ class OrderListAdapter extends ArrayAdapter<Order> {
         String pickupAddress = getItem(position).getPickupAddress();
         String deliveryAddress = getItem(position).getDeliveryAddress();
         String description = getItem(position).getDescription();
+        Double price = getItem(position).getPrice();
+        Double weight = getItem(position).getWeight();
+        String measurments = getItem(position).getMeasurments();
 
-        Order order = new Order(pickupAddress, deliveryAddress, description);
+        Order order = new Order(pickupAddress, deliveryAddress, description, price, weight, measurments);
 
         final View view;
         ViewHolder viewHolder = null;
@@ -46,13 +52,19 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             convertView = inflater.inflate(mResource, parent, false);
             viewHolder = new ViewHolder();
 
-            viewHolder.pickupAddress = (TextView) convertView.findViewById(R.id.textView2);
-            viewHolder.deliveryAddress = (TextView) convertView.findViewById(R.id.textView3);
-            viewHolder.description = (TextView) convertView.findViewById(R.id.textView1);
+            viewHolder.pickupAddress = convertView.findViewById(R.id.pickupAddress);
+            viewHolder.deliveryAddress = convertView.findViewById(R.id.deliveryAddress);
+            viewHolder.description = convertView.findViewById(R.id.description);
+            viewHolder.price = convertView.findViewById(R.id.price);
+            viewHolder.weight = convertView.findViewById(R.id.weight);
+            viewHolder.measurments = convertView.findViewById(R.id.measurments);
 
-            viewHolder.pickupAddress.setText(order.getPickupAddress());
-            viewHolder.deliveryAddress.setText(order.getDeliveryAddress());
+            viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress());
+            viewHolder.deliveryAddress.setText("Do: " + order.getDeliveryAddress());
             viewHolder.description.setText(order.getDescription());
+            viewHolder.price.setText(order.getPrice().toString() + " PLN");
+            viewHolder.weight.setText(order.getWeight().toString());
+            viewHolder.measurments.setText(order.getMeasurments());
 
             view = convertView;
         }

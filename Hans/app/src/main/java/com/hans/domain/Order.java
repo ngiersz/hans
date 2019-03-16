@@ -29,10 +29,13 @@ public class Order {
         this.price = price;
     }
 
-    public Order(String pickupAddress, String deliveryAddress, String description) {
+    public Order(String pickupAddress, String deliveryAddress, String description, Double price, Double weight, String measurments) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.description = description;
+        this.price = price;
+        this.weight = weight;
+        this.measurments = measurments;
     }
 
     public Integer getId() {
