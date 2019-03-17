@@ -62,8 +62,9 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress());
             viewHolder.deliveryAddress.setText("Do: " + order.getDeliveryAddress());
             viewHolder.description.setText(order.getDescription());
+            // TODO: get suffixes from values/strings.xml
             viewHolder.price.setText(order.getPrice().toString() + " PLN");
-            viewHolder.weight.setText(order.getWeight().toString());
+            viewHolder.weight.setText(order.getWeight().toString() + " kg");
             viewHolder.measurments.setText(order.getMeasurments());
 
             view = convertView;
