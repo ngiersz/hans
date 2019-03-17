@@ -15,18 +15,19 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
-        <activity android:name=".signInDeliverer"
-            android:label="Zaloguj się do HANS"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+        <activity android:name=".SignInGoogle"
+            android:label="Zaloguj się do HANS">
+        </activity>
+        <activity android:name=".ChooseAccountType"
+            android:label="Wybierz rodzaj użytkownika">
+        </activity>
+        <activity android:name=".CompleteAccountData"
+            android:label="Uzupełnij wymagane dane">
         </activity>
     </application>
 

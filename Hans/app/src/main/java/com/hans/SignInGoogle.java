@@ -18,12 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class signInDeliverer extends AppCompatActivity
+public class SignInGoogle extends AppCompatActivity
 {
-    private final int REQUEST_CODE_SIGN_IN = 1;
+    private final int RC_SIGN_IN = 1;
+    private final int RC_CHOOSE_ACCOUNT_TYPE = 2;
+    private final int RC_COMPLETE_ACCOUNT_DATA = 3;
+
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
@@ -39,8 +41,9 @@ public class signInDeliverer extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
+                Log.d("koy", "signIn");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
@@ -57,13 +60,6 @@ public class signInDeliverer extends AppCompatActivity
 
     }
 
-    public void signIn(View view)
-    {
-        Log.d("koy", "signIn");
-
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -71,12 +67,17 @@ public class signInDeliverer extends AppCompatActivity
         Log.d("koy", "onActivityResult");
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == REQUEST_CODE_SIGN_IN)
+        if (requestCode == RC_SIGN_IN)
         {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        }
+        else if (requestCode == RC_CHOOSE_ACCOUNT_TYPE)
+        {
+            Intent intent = new Intent(getBaseContext(), CompleteAccountData.class);
+            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
         }
     }
 
@@ -116,8 +117,16 @@ public class signInDeliverer extends AppCompatActivity
                             Log.d("koy", "signInWithCredential:success");
 
                             // user ready to use
-                            FirebaseUser user = mAuth.getCurrentUser();
+//                            FirebaseUser user = mAuth.getCurrentUser();
+////                            Intent output = new Intent();
+////                            output.putExtra("user", user);
+////                            setResult(RESULT_OK, output);
+////                            finish();
 
+                            //TODO: check if this email has account in app
+                            // if so, skip start ChooseAccountType activity
+                            Intent intent = new Intent(getBaseContext(), ChooseAccountType.class);
+                            startActivityForResult(intent, RC_CHOOSE_ACCOUNT_TYPE);
 
                         } else
                         {
