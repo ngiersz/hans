@@ -2,14 +2,12 @@ package com.hans;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.hans.domain.Order;
@@ -19,8 +17,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ArrayList<Order> orderList = new ArrayList<>();
-
-    Button infoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +29,13 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listView);
         OrderListAdapter orderListAdapter = new OrderListAdapter(this, R.layout.adapter_view_layout, orderList);
         listView.setAdapter(orderListAdapter);
-
-        infoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OrderInfoActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
+    public void showOrderInfo(View view) {
+        Log.d("button", "button clicked, function showOrderInfo");
+        Intent intent = new Intent(MainActivity.this, OrderInfoActivity.class);
+        startActivity(intent);
+    }
 
     private void orderListInit() {
         orderList.add(new Order(1, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1.785m x 2.128m x 5.348m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
