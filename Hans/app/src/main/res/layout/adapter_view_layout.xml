@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingLeft="10px"
+                android:paddingLeft="8dp"
                 android:text="pickup address"
                 android:textAlignment="viewStart" />
 
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingLeft="10px"
+                android:paddingLeft="8dp"
                 android:text="delivery address"
                 android:textAlignment="viewStart" />
         </LinearLayout>
@@ -41,19 +41,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="50"
             android:orientation="vertical"
-            android:paddingTop="10px">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/price"
                 android:layout_width="match_parent"
-                android:layout_height="50px"
+                android:layout_height="24dp"
                 android:gravity="center"
                 android:text="price" />
 
             <TextView
                 android:id="@+id/weight"
                 android:layout_width="match_parent"
-                android:layout_height="50px"
+                android:layout_height="24dp"
                 android:layout_below="@+id/price"
                 android:gravity="center"
                 android:text="weight" />
@@ -73,11 +73,11 @@
             android:layout_height="match_parent"
             android:layout_weight="66.6" >
 
-            <ImageButton
+            <Button
                 android:id="@+id/infoButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/baseline_info_black_18dp"
                 />
         </LinearLayout>
