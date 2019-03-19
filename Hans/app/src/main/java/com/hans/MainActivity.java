@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        databaseFirebase db = new databaseFirebase();
+        db.insertToDatabase();
     }
 
     @Override
