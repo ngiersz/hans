@@ -14,7 +14,7 @@ import com.hans.domain.Order;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class DelivererAllOrdersActivity extends AppCompatActivity {
 
     ArrayList<Order> orderList = new ArrayList<>();
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showOrderInfo(View view) {
         Log.d("button", "button clicked, function showOrderInfo");
-        Intent intent = new Intent(MainActivity.this, OrderInfoActivity.class);
+        Intent intent = new Intent(DelivererAllOrdersActivity.this, OrderInfoActivity.class);
         startActivity(intent);
     }
 

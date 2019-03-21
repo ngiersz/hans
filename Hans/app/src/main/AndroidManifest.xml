@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".OrderInfoActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".DelivererAllOrdersActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,10 +24,10 @@
 
         <activity android:name=".signInDeliverer"
             android:label="Zaloguj się do HANS"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".DelivererAllOrdersActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".DelivererAllOrdersActivity" />
         </activity>
     </application>
 
