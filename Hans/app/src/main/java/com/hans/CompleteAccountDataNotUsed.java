@@ -3,22 +3,20 @@ package com.hans;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import java.util.regex.Pattern;
-
-public class CompleteAccountData extends AppCompatActivity
+public class CompleteAccountDataNotUsed extends AppCompatActivity
 {
-    private final int RC_COMPLETE_ACCOUNT_DATA = 3;
+    private String accountType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.complete_account_data);
+        setContentView(R.layout.complete_account_data_not_used);
 
     }
 
@@ -37,6 +35,9 @@ public class CompleteAccountData extends AppCompatActivity
 
     private boolean checkIfAllCompletedCorrectly()
     {
+        if (!checkIfChoosed())
+            return false;
+
         //TODO: create User object and add to database
         EditText firstname = findViewById(R.id.firstname);
         EditText lastname = findViewById(R.id.lastname);
@@ -69,4 +70,26 @@ public class CompleteAccountData extends AppCompatActivity
             return true;
     }
 
+    private boolean checkIfChoosed()
+    {
+        RadioButton deliverer = findViewById(R.id.deliverer);
+        RadioButton client = findViewById(R.id.client);
+
+        if (deliverer.isChecked())
+        {
+            accountType = "deliverer";
+            return true;
+        }
+        else if (client.isChecked())
+        {
+            accountType = "client";
+            return true;
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "Proszę wybrać rodzaj użytkownika.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+    }
 }

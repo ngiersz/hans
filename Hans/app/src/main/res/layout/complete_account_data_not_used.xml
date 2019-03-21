@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nazwisko:"
+            android:text="Nazwisko"
             android:textSize="20sp" />
 
         <EditText
@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email:"
+            android:text="Email"
             android:textSize="20sp" />
 
         <EditText
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Numer telefonu:"
+            android:text="Numer telefonu"
             android:textSize="20sp" />
 
         <EditText
@@ -62,21 +62,37 @@
             android:layout_height="wrap_content"
             android:textSize="30sp" />
 
+
+        <RadioButton
+            android:id="@+id/deliverer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dostawca"
+            android:textSize="30sp" />
+
+        <RadioButton
+            android:id="@+id/client"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Klient"
+            android:textSize="30sp" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
+                android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
                 android:onClick="onClickNext"
-                android:text="DALEJ"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:text="ZAŁÓŻ KONTO" />
         </FrameLayout>
-    </LinearLayout>
 
+
+    </LinearLayout>
 
 
 </LinearLayout>

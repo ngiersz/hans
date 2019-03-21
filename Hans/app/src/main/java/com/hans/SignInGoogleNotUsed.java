@@ -20,7 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class SignInGoogle extends AppCompatActivity
+public class SignInGoogleNotUsed extends AppCompatActivity
 {
     private final int RC_SIGN_IN = 1;
     private final int RC_CHOOSE_ACCOUNT_TYPE = 2;
@@ -34,7 +34,7 @@ public class SignInGoogle extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in_deliverer);
+        setContentView(R.layout.sign_in_with_google_not_used);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener()
         {
@@ -74,10 +74,9 @@ public class SignInGoogle extends AppCompatActivity
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-        else if (requestCode == RC_CHOOSE_ACCOUNT_TYPE)
+        else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
         {
-            Intent intent = new Intent(getBaseContext(), CompleteAccountData.class);
-            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
+            //TODO: get user object or user's id
         }
     }
 
@@ -123,16 +122,15 @@ public class SignInGoogle extends AppCompatActivity
 ////                            setResult(RESULT_OK, output);
 ////                            finish();
 
-                            //TODO: check if this email has account in app
-                            // if so, skip start ChooseAccountType activity
-                            Intent intent = new Intent(getBaseContext(), ChooseAccountType.class);
-                            startActivityForResult(intent, RC_CHOOSE_ACCOUNT_TYPE);
+
+                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataNotUsed.class);
+                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
 
                         } else
                         {
                             // If sign in fails, display a message to the user.
                             Log.w("koy", "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.layout.sign_in_deliverer), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.layout.sign_in_with_google_not_used), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });

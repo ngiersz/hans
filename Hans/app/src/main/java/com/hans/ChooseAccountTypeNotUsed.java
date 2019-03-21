@@ -7,14 +7,14 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-public class ChooseAccountType extends AppCompatActivity
+public class ChooseAccountTypeNotUsed extends AppCompatActivity
 {
     private String accountType;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.choose_account_type);
+        setContentView(R.layout.choose_account_type_not_used);
 
     }
 
@@ -22,6 +22,9 @@ public class ChooseAccountType extends AppCompatActivity
     {
         if (checkIfChoosed())
         {
+            //TODO: check if account_type exists for this Google Account
+            // if so, launch app
+            // if not, create account_type
             Intent output = new Intent();
             output.putExtra("account_type", accountType);
             setResult(RESULT_OK, output);
