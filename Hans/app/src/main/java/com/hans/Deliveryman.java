@@ -2,19 +2,19 @@ package com.hans;
 
 import java.util.ArrayList;
 
-public class Client extends User {
-    private int _clientId;
+public class Deliveryman extends User {
+    private int _deliverymanId;
     private ArrayList<Order> _Orders;
 
-    public Client(int clientId){
+    public Deliveryman(int clientId){
         super();
-        this._clientId=clientId;
+        this._deliverymanId=clientId;
         CompleteUserData();
 
     }
-    public Client(String name,String surName,String gender, int age){
+    public Deliveryman(String name,String surName,String gender, int age){
         super(name,surName,gender,age);
-        this._clientId=GetNewID();
+        this._deliverymanId=GetNewID();
     }
     private int GetNewID(){
         return 2;
@@ -28,5 +28,5 @@ public class Client extends User {
         //adding order to the array and inserting in to the database
     }
 
-    public int get_clientId(){return this._clientId;}
+    public int get_deliverymanId(){return this._deliverymanId;}
 }
