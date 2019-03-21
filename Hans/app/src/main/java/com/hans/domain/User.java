@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.domain;
 
 import java.util.ArrayList;
 

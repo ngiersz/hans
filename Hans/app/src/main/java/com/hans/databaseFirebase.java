@@ -4,15 +4,21 @@ package com.hans;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.hans.domain.Client;
+import com.hans.domain.Deliveryman;
+import com.hans.domain.Order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.opencensus.tags.Tag;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -98,9 +104,61 @@ public class databaseFirebase {
                 });
 
     }
+
+    public void insertOrderToDatabase(Order order){
+        Map<String,Object> orderInsert = new HashMap<>();
+        orderInsert.put("id",order.getId());
+        orderInsert.put("orderStatus",order.getOrderStatus());
+        orderInsert.put("pickupAddress",order.getPickupAddress());
+        orderInsert.put("deliveryAddress",order.getDeliveryAddress());
+        orderInsert.put("price",order.getWeight());
+        orderInsert.put("weight",order.getWeight());
+        orderInsert.put("measurements",order.getMeasurements());
+        orderInsert.put("description",order.getDescription());
+
+
+
+
+        db.collection("Orders")
+                .add(orderInsert)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG,"Order documentSnapshood added with ID: "+documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding Order document",e);
+                    }
+                });
+    }
+
 //    public Deliveryman getDeliveryAccount(String googleID){
 //     return ;}
 //    public Deliveryman getClientAccount(String googleID){
 //     return ;}
+public ArrayList<Order> getAllOrdersToDeliver(){
+    final ArrayList<Order> orderList= new ArrayList<>();
+    db.collection("Orders")
+            .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            orderList.add(document.toObject(Order.class));
+                            Log.d("Order", document.toObject(Order.class).toString());
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+                        }
 
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+     return orderList;
+    }
 }

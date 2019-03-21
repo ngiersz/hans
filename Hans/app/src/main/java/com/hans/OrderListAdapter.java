@@ -40,7 +40,7 @@ class OrderListAdapter extends ArrayAdapter<Order> {
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
-        String measurments = getItem(position).getMeasurments();
+        String measurments = getItem(position).getMeasurements();
 
         Order order = new Order(pickupAddress, deliveryAddress, description, price, weight, measurments);
 
@@ -65,7 +65,7 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             // TODO: get suffixes from values/strings.xml
             viewHolder.price.setText(order.getPrice().toString() + " PLN");
             viewHolder.weight.setText(order.getWeight().toString() + " kg");
-            viewHolder.measurments.setText(order.getMeasurments());
+            viewHolder.measurments.setText(order.getMeasurements());
 
             view = convertView;
         }

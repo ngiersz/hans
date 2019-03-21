@@ -25,16 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        databaseFirebase db = new databaseFirebase();
-        db.insertToDatabase();
+
         orderListInit();
         ListView listView = findViewById(R.id.listView);
         OrderListAdapter orderListAdapter = new OrderListAdapter(this, R.layout.adapter_view_layout, orderList);
@@ -58,6 +49,18 @@ public class MainActivity extends AppCompatActivity {
         orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));
         orderList.add(new Order(4, "adr7", "adr8", 10.5, "1m x 2m", "description4", 20.0));
         orderList.add(new Order(5, "adr9", "adr10", 10.5, "1m x 2m", "description5", 20.0));
+
+
+        databaseFirebase db = new databaseFirebase();
+
+        for(Order order : orderList){
+           // db.insertOrderToDatabase(order);
+        }
+        ArrayList<Order> orderListTest = new ArrayList<>();
+        orderListTest = db.getAllOrdersToDeliver();
+        for(Order order : orderListTest){
+           Log.d("Order", "#####################SPAM"+order.toString());
+        }
     }
 
     @Override

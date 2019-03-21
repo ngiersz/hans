@@ -14,28 +14,31 @@ public class Order {
 
     Double weight;
 
-    String measurments;
+    String measurements;
 
     String description;
 
-    public Order(int id, String pickupAddress, String destinationAddress, Double weight, String measurments, String description, Double price) {
+    public Order(int id, String pickupAddress, String destinationAddress, Double weight, String measurements, String description, Double price) {
         this.id = id;
         this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = destinationAddress;
         this.weight = weight;
-        this.measurments = measurments;
+        this.measurements = measurements;
         this.description = description;
         this.price = price;
     }
 
-    public Order(String pickupAddress, String deliveryAddress, String description, Double price, Double weight, String measurments) {
+    public Order(String pickupAddress, String deliveryAddress, String description, Double price, Double weight, String measurements) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.description = description;
         this.price = price;
         this.weight = weight;
-        this.measurments = measurments;
+        this.measurements = measurements;
+    }
+
+    public Order() {
     }
 
     public Integer getId() {
@@ -62,8 +65,8 @@ public class Order {
         return weight;
     }
 
-    public String getMeasurments() {
-        return measurments;
+    public String getMeasurements() {
+        return measurements;
     }
 
     public String getDescription() {
@@ -72,5 +75,19 @@ public class Order {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderStatus=" + orderStatus +
+                ", pickupAddress='" + pickupAddress + '\'' +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", price=" + price +
+                ", weight=" + weight +
+                ", measurements='" + measurements + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
