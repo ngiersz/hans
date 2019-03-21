@@ -134,5 +134,3 @@ public class MainActivity extends AppCompatActivity
         // Close the navigation drawer
         drawerLayout.closeDrawers();
     }
-
-}
