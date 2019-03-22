@@ -62,21 +62,6 @@
             android:layout_height="wrap_content"
             android:textSize="30sp" />
 
-
-        <RadioButton
-            android:id="@+id/deliverer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dostawca"
-            android:textSize="30sp" />
-
-        <RadioButton
-            android:id="@+id/client"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Klient"
-            android:textSize="30sp" />
-
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

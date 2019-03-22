@@ -19,8 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInGoogleNotUsed"
-            android:label="Zaloguj się do HANS">
+        <activity android:name=".SignInGoogleActivity"
+        android:label="Zaloguj się do HANS">
+    </activity>
+        <activity android:name=".CompleteAccountDataActivity"
+            android:label="Uzupełnij swoje dane">
         </activity>
     </application>
 

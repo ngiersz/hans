@@ -12,8 +12,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hans.domain.Client;
-import com.hans.domain.Deliveryman;
+import com.hans.domain.ClientNotUsed;
+import com.hans.domain.DeliverymanNotUsed;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class databaseFirebase {
                 });
 
     }
-    public void insertClientToDatabase(Client client){
+    public void insertClientToDatabase(ClientNotUsed client){
         Map<String,Object> clientInsert = new HashMap<>();
         clientInsert.put("googleID",client.get_googleId());
         clientInsert.put("googleEmail",client.get_googleEmail());
@@ -78,7 +78,7 @@ public class databaseFirebase {
                 });
 
     }
-    public void insertDeliverymanToDatabase(Deliveryman deliveryman){
+    public void insertDeliverymanToDatabase(DeliverymanNotUsed deliveryman){
         Map<String,Object> deliverymanInsert = new HashMap<>();
         deliverymanInsert.put("googleID",deliveryman.get_googleId());
         deliverymanInsert.put("googleEmail",deliveryman.get_googleEmail());

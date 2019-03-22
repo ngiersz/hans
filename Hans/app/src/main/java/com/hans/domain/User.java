@@ -1,8 +1,14 @@
 package com.hans.domain;
 
+import android.util.Log;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
-public abstract class User {
+public class User {
 
     private String _googleEmail;
     private String _googleId;
@@ -51,5 +57,37 @@ public abstract class User {
     public String get_surname(){return this._surname;}
     public String get_gender(){return this._gender;}
     public int get_age(){return this._age;}
+
+    public String toJSON()
+    {            ObjectMapper objectMapper = new ObjectMapper();
+        String userJSON = null;
+        try
+        {
+            userJSON = objectMapper.writeValueAsString(this);
+
+        }
+        catch (Exception e)
+        {
+            Log.d("exception", e.getMessage());
+        }
+        return userJSON;
+    }
+
+    public static User createFromJSON(String userJSON)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = null;
+        try
+        {
+            user = objectMapper.readValue(userJSON, User.class);
+        }
+        catch (Exception e)
+        {
+            Log.d("exception", e.getMessage());
+        }
+        return user;
+    }
+
+
 
 }

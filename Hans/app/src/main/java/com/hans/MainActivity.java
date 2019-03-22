@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hans.domain.User;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private NavigationView navigationView;
     private FirebaseUser firebaseUser;
-
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
         if (firebaseUser == null)
         {
-            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleNotUsed.class);
+            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
             startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
         }
         else Log.d("koy", "create" + firebaseUser.getEmail());
@@ -73,12 +75,10 @@ public class MainActivity extends AppCompatActivity
         {
             if (requestCode == RC_SIGN_IN_WITH_GOOGLE)
             {
-                Log.d("koy", "bierzemy konto");
-
                 firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
-                System.out.println(firebaseUser == null);
+                String userJSON = data.getStringExtra("userJSON");
+                user = User.createFromJSON(userJSON);
             }
-            //Log.d("koy", firebaseUser.getEmail());
         }
         else
             finish();

@@ -20,21 +20,23 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.hans.domain.User;
 
-public class SignInGoogleNotUsed extends AppCompatActivity
+public class SignInGoogleActivity extends AppCompatActivity
 {
     private final int RC_SIGN_IN = 1;
-    private final int RC_COMPLETE_ACCOUNT_DATA = 3;
+    private final int RC_COMPLETE_ACCOUNT_DATA = 2;
 
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in_with_google_not_used);
+        setContentView(R.layout.activity_sign_in_with_google);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener()
         {
@@ -74,6 +76,17 @@ public class SignInGoogleNotUsed extends AppCompatActivity
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
+        {
+            String userJSON = data.getStringExtra("userJSON");
+            // firebaseUser ready to use
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            Intent output = new Intent();
+            output.putExtra("firebaseUser", firebaseUser);
+            output.putExtra("userJSON", userJSON);
+            setResult(RESULT_OK, output);
+            finish();
+        }
 
     }
 
@@ -112,22 +125,15 @@ public class SignInGoogleNotUsed extends AppCompatActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("koy", "signInWithCredential:success");
 
-                            // user ready to use
-                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                            Intent output = new Intent();
-                            output.putExtra("firebaseUser", firebaseUser);
-                            setResult(RESULT_OK, output);
-                            finish();
-
-
-//                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataNotUsed.class);
-//                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
+                            // activity for completing user info
+                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataActivity.class);
+                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
 
                         } else
                         {
                             // If sign in fails, display a message to the user.
                             Log.w("koy", "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.layout.sign_in_with_google_not_used), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.layout.activity_sign_in_with_google), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
