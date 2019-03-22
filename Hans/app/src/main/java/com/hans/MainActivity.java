@@ -1,6 +1,8 @@
 package com.hans;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,12 +16,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity
 {
+    private final int RC_SIGN_IN_WITH_GOOGLE = 1;
+
 
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private FirebaseUser firebaseUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +50,38 @@ public class MainActivity extends AppCompatActivity
         navigationView.inflateHeaderView(R.layout.menu_header_deliverer);
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
+
+        // Check if user is logged.
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser == null)
+        {
+            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleNotUsed.class);
+            startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
+        }
+        else Log.d("koy", "create" + firebaseUser.getEmail());
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK)
+        {
+            if (requestCode == RC_SIGN_IN_WITH_GOOGLE)
+            {
+                Log.d("koy", "bierzemy konto");
+
+                firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
+                System.out.println(firebaseUser == null);
+            }
+            //Log.d("koy", firebaseUser.getEmail());
+        }
+        else
+            finish();
     }
 
     @Override

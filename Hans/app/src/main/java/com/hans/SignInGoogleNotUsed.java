@@ -18,12 +18,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInGoogleNotUsed extends AppCompatActivity
 {
     private final int RC_SIGN_IN = 1;
-    private final int RC_CHOOSE_ACCOUNT_TYPE = 2;
     private final int RC_COMPLETE_ACCOUNT_DATA = 3;
 
 
@@ -74,10 +74,7 @@ public class SignInGoogleNotUsed extends AppCompatActivity
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-        else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
-        {
-            //TODO: get user object or user's id
-        }
+
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
@@ -88,7 +85,7 @@ public class SignInGoogleNotUsed extends AppCompatActivity
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated email.
-            Log.w("koy", account.getEmail());
+            Log.w("koy","zalogowanie na google" + account.getEmail());
             firebaseAuthWithGoogle(account);
 
         } catch (ApiException e)
@@ -116,15 +113,15 @@ public class SignInGoogleNotUsed extends AppCompatActivity
                             Log.d("koy", "signInWithCredential:success");
 
                             // user ready to use
-//                            FirebaseUser user = mAuth.getCurrentUser();
-////                            Intent output = new Intent();
-////                            output.putExtra("user", user);
-////                            setResult(RESULT_OK, output);
-////                            finish();
+                            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                            Intent output = new Intent();
+                            output.putExtra("firebaseUser", firebaseUser);
+                            setResult(RESULT_OK, output);
+                            finish();
 
 
-                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataNotUsed.class);
-                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
+//                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataNotUsed.class);
+//                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
 
                         } else
                         {
