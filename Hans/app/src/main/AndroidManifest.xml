@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         android:theme="@style/AppTheme">
-        <activity android:name=".OrderInfoActivity"></activity>
+        <activity android:name=".OrderInfoFragment"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -25,10 +25,10 @@
 
         <activity android:name=".signInDeliverer"
             android:label="Zaloguj się do HANS"
-            android:parentActivityName=".DelivererAllOrdersActivity">
+            android:parentActivityName=".DelivererAllOrdersFragment">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DelivererAllOrdersActivity" />
+                android:value=".DelivererAllOrdersFragment" />
         </activity>
     </application>
 

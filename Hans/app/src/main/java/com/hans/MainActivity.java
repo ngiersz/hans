@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -21,9 +22,10 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.menu_test);
+        setContentView(R.layout.activity_main);
 
         // Set a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -40,9 +42,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
 
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void setupDrawerContent(NavigationView navigationView)
     {
         navigationView.setNavigationItemSelectedListener(
@@ -63,42 +69,45 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
     }
-    public void selectDrawerItem(MenuItem menuItem) {
+
+    public void selectDrawerItem(MenuItem menuItem)
+    {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId())
+        {
             case R.id.new_order:
-                fragmentClass = f_client_menu.class;
+                fragmentClass = ClientMenuFragment.class;
                 Log.d("menu", "nowe zlecenie");
                 break;
             case R.id.waiting_orders:
-                fragmentClass = f_client_menu.class;
+                fragmentClass = ClientMenuFragment.class;
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders:
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.search_new_orders:
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererAllOrdersFragment.class;
                 Log.d("menu", "szukaj zleceń");
                 break;
             case R.id.in_process_order:
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 Log.d("menu", "zlecenie w trakcie wykonywania");
                 break;
             case R.id.my_account:
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:
                 Log.d("menu", "klient");
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.removeHeaderView(navigationView.getHeaderView(R.layout.menu_header_deliverer));
                 navigationView.getHeaderView(1).setVisibility(View.GONE);
@@ -107,25 +116,27 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_deliverer:
                 Log.d("menu", "dostawca");
-                fragmentClass = f_deliverer_menu.class;
+                fragmentClass = DelivererMenuFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.getHeaderView(0).setVisibility(View.GONE);
                 navigationView.getHeaderView(1).setVisibility(View.VISIBLE);
                 navigationView.inflateMenu(R.menu.menu_deliverer);
                 break;
             default:
-                fragmentClass = f_client_menu.class;
+                fragmentClass = ClientMenuFragment.class;
         }
 
-        try {
+        try
+        {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
@@ -134,3 +145,13 @@ public class MainActivity extends AppCompatActivity
         // Close the navigation drawer
         drawerLayout.closeDrawers();
     }
+
+    public void showOrderInfo(View view)
+    {
+        Fragment newFragment = new OrderInfoFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+}
