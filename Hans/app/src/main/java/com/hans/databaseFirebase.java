@@ -125,8 +125,25 @@ public class databaseFirebase {
 
 public ArrayList<Order> getAllOrdersToDeliver(){
     final ArrayList<Order> orderList= new ArrayList<>();
+    readOrdersAll(new FirestoreCallback() {
+        @Override
+        public  ArrayList<Order> onCallback(ArrayList<Order> orderList) {
+            for (Order order:orderList
+                 ) {  Log.d("############Order", order.toString());
+
+
+            }
+            return orderList;
+
+        }
+    });
+    return orderList;
+    }
+private void readOrdersAll(final FirestoreCallback firestoreCallback){
+    final ArrayList<Order> orderList= new ArrayList<>();
+
     db.collection("Orders")
-            .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
+            .whereEqualTo("orderStatus", "IN_TRANSIT")
             .get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -137,12 +154,18 @@ public ArrayList<Order> getAllOrdersToDeliver(){
                             Log.d("Order", document.toObject(Order.class).toString());
                             Log.d(TAG, document.getId() + " => " + document.getData());
                         }
+                        firestoreCallback.onCallback(orderList);
 
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 }
             });
-     return orderList;
-    }
 }
+
+private interface  FirestoreCallback{
+    ArrayList<Order> onCallback( ArrayList<Order> orderList );
+
+}
+}
+

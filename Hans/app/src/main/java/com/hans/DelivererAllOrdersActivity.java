@@ -11,8 +11,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.hans.domain.Order;
+import com.hans.domain.OrderStatus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DelivererAllOrdersActivity extends AppCompatActivity {
 
@@ -39,28 +42,42 @@ public class DelivererAllOrdersActivity extends AppCompatActivity {
     }
 
     private void orderListInit() {
-//        orderList.add(new Order(1, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1.785m x 2.128m x 5.348m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
-//        orderList.add(new Order(2, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1m x 2m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
+        Map<String, Object> pickupAddress = new HashMap();
+        Map<String, Object> deliveryAddress = new HashMap();
+        Map<String, Object> dimensions = new HashMap();
+
+
+        orderList.add(new Order(1, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(2, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(3, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(4, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(5, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(6, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+
+        //        orderList.add(new Order(2, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1m x 2m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
 //        orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));
 //        orderList.add(new Order(4, "adr7", "adr8", 10.5, "1m x 2m", "description4", 20.0));
 //        orderList.add(new Order(5, "adr9", "adr10", 10.5, "1m x 2m", "description5", 20.0));
+//        orderList.add(new Order(1, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1.785m x 2.128m x 5.348m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
 //        orderList.add(new Order(1, "adr1", "adr2", 10.5, "1m x 2m", "description1", 20.0));
 //        orderList.add(new Order(2, "adr3", "adr4", 10.5, "1m x 2m", "description2", 20.0));
 //        orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));
 //        orderList.add(new Order(4, "adr7", "adr8", 10.5, "1m x 2m", "description4", 20.0));
 //        orderList.add(new Order(5, "adr9", "adr10", 10.5, "1m x 2m", "description5", 20.0));
-//
+
 
         databaseFirebase db = new databaseFirebase();
 
         for(Order order : orderList){
-            db.insertOrderToDatabase(order);
+           // db.insertOrderToDatabase(order);
         }
-//        ArrayList<Order> orderListTest = new ArrayList<>();
-//        orderListTest = db.getAllOrdersToDeliver();
-//        for(Order order : orderListTest){
-//           Log.d("Order", "#####################SPAM"+order.toString());
-//        }
+        ArrayList<Order> orderListTest = new ArrayList<>();
+        orderListTest = db.getAllOrdersToDeliver();
+        Log.d("Order", "#####################SPAM");
+
+        for(Order order : orderListTest){
+           Log.d("Order", "#####################SPAM"+order.toString());
+        }
     }
 
     @Override

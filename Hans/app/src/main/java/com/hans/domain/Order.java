@@ -14,7 +14,7 @@ public class Order {
 
     private Map<String,Object> deliveryAddress=new HashMap<>();
 
-    private float length;
+    private Double length;
 
     private Double price;
 
@@ -32,7 +32,7 @@ public class Order {
 
 
 
-    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, float length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId) {
+    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
@@ -48,7 +48,7 @@ public class Order {
 
     }
 
-    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, float length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId, String delivererId) {
+    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId, String delivererId) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
@@ -63,10 +63,19 @@ public class Order {
         this.delivererId = delivererId;
     }
 
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String measurements, String description) {
+        this.pickupAddress = pickupAddress;
+        this.deliveryAddress = deliveryAddress;
+        this.price = price;
+        this.weight = weight;
+        this.measurements = measurements;
+        this.description = description;
+    }
+
     public Order() {
     }
 
-    public float getLength() { return length; }
+    public Double getLength() { return length; }
 
     public Map<String, Object> getDimensions() { return dimensions; }
 
