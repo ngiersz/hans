@@ -1,45 +1,78 @@
 package com.hans.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class Order {
 
-    Integer id;
+    private Integer id;
 
-    OrderStatus orderStatus;
+    private OrderStatus orderStatus;
 
-    String pickupAddress;
+    private Map<String,Object> pickupAddress=new HashMap<>();
 
-    String deliveryAddress;
+    private Map<String,Object> deliveryAddress=new HashMap<>();
 
-    Double price;
+    private float length;
 
-    Double weight;
+    private Double price;
 
-    String measurements;
+    private Double weight;
 
-    String description;
+    private Map<String,Object> dimensions=new HashMap<>();
 
-    public Order(int id, String pickupAddress, String destinationAddress, Double weight, String measurements, String description, Double price) {
+    private String measurements;
+
+    private String description;
+
+    private String clientId;
+
+    private String delivererId;
+
+
+
+    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, float length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId) {
         this.id = id;
-        this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
-        this.pickupAddress = pickupAddress;
-        this.deliveryAddress = destinationAddress;
-        this.weight = weight;
-        this.measurements = measurements;
-        this.description = description;
-        this.price = price;
-    }
-
-    public Order(String pickupAddress, String deliveryAddress, String description, Double price, Double weight, String measurements) {
+        this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
-        this.description = description;
+        this.length = length;
         this.price = price;
         this.weight = weight;
+        this.dimensions = dimensions;
         this.measurements = measurements;
+        this.description = description;
+        this.clientId = clientId;
+        this.delivererId = "-";
+
+    }
+
+    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, float length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId, String delivererId) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.pickupAddress = pickupAddress;
+        this.deliveryAddress = deliveryAddress;
+        this.length = length;
+        this.price = price;
+        this.weight = weight;
+        this.dimensions = dimensions;
+        this.measurements = measurements;
+        this.description = description;
+        this.clientId = clientId;
+        this.delivererId = delivererId;
     }
 
     public Order() {
     }
+
+    public float getLength() { return length; }
+
+    public Map<String, Object> getDimensions() { return dimensions; }
+
+    public String getClientId() { return clientId; }
+
+    public String getDelivererId() { return delivererId; }
 
     public Integer getId() {
         return id;
@@ -49,13 +82,9 @@ public class Order {
         return orderStatus;
     }
 
-    public String getPickupAddress() {
-        return pickupAddress;
-    }
+    public Map<String, Object> getPickupAddress() { return pickupAddress; }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
+    public Map<String, Object> getDeliveryAddress() { return deliveryAddress; }
 
     public Double getPrice() {
         return price;
@@ -76,6 +105,7 @@ public class Order {
     public void setDescription(String description) {
         this.description = description;
     }
+    public void setDelivererId(String delivererId) { this.delivererId = delivererId; }
 
     @Override
     public String toString() {
@@ -84,10 +114,14 @@ public class Order {
                 ", orderStatus=" + orderStatus +
                 ", pickupAddress='" + pickupAddress + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", length=" + length +
                 ", price=" + price +
                 ", weight=" + weight +
+                ", dimensions=" + dimensions +
                 ", measurements='" + measurements + '\'' +
                 ", description='" + description + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", delivererId='" + delivererId + '\'' +
                 '}';
     }
 }
