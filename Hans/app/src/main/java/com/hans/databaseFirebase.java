@@ -144,8 +144,8 @@ private void readOrdersAll(final FirestoreCallback firestoreCallback){
 
     db.collection("Orders")
             .whereEqualTo("orderStatus", "IN_TRANSIT")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            .get();
+            /*.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -160,10 +160,20 @@ private void readOrdersAll(final FirestoreCallback firestoreCallback){
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 }
-            });
+            });*/
 }
 
-private interface  FirestoreCallback{
+    public Task getAllOrdersTask() {
+        return db.collection("Orders")
+                .get();
+    }
+    public Task getAllOrdersForDelivererTask() {
+        return db.collection("Orders")
+                .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
+                .get();
+    }
+
+    private interface  FirestoreCallback{
     ArrayList<Order> onCallback( ArrayList<Order> orderList );
 
 }
