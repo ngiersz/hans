@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.domain.User;
@@ -192,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         Fragment newFragment = new OrderInfoFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, newFragment);
+        Log.d("new fragm    ent", "id=" + Integer.toString(view.getId()));
         transaction.addToBackStack(null);
         transaction.commit();
     }

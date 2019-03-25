@@ -3,13 +3,12 @@ package com.hans;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,14 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 import static android.support.constraint.Constraints.TAG;
 
-
 public class DelivererAllOrdersFragment extends Fragment
 {
 
     ArrayList<Order> orderList = new ArrayList<>();
     ArrayList<Order> receivedOrderList = new ArrayList<>();
 
-    ListView listView;
+    ListView ordersListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,9 +39,26 @@ public class DelivererAllOrdersFragment extends Fragment
         View v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
         orderListInit();
-        listView = v.findViewById(R.id.listView);
+        ordersListView = v.findViewById(R.id.listView);
         OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, orderList);
-        listView.setAdapter(orderListAdapter);
+        ordersListView.setAdapter(orderListAdapter);
+
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("LISTPOS", Integer.toString(position));
+                Fragment newFragment = new OrderInfoFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("order", orderList.get(position).toJSON());
+                newFragment.setArguments(bundle);
+
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return v;
     }
