@@ -15,6 +15,7 @@ import com.hans.domain.Order;
 public class OrderClientInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
+    databaseFirebase db = new databaseFirebase();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -41,11 +42,13 @@ public class OrderClientInfoFragment extends Fragment {
 
         ordersListView = v.findViewById(R.id.listView);
 
-        Button button = ordersListView.findViewById(R.id.cancel_order_button);
+        Button button = v.findViewById(R.id.cancel_order_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                db.deleteOrderByID(order);
+                db.insertOrderToDatabase(order);
             }
         });
         return v;

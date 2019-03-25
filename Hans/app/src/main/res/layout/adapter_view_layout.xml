@@ -25,8 +25,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:text="pickup address"
-                android:textAlignment="viewStart" />
+                android:text="pickup address" />
 
             <TextView
                 android:id="@+id/deliveryAddress"
@@ -34,8 +33,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:text="delivery address"
-                android:textAlignment="viewStart" />
+                android:text="delivery address" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,14 +57,6 @@
                 android:layout_below="@+id/price"
                 android:gravity="center"
                 android:text="weight" />
-
-            <TextView
-                android:id="@+id/measurments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/weight"
-                android:gravity="center"
-                android:text="measurments" />
 
 
         </LinearLayout>

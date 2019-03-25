@@ -24,7 +24,6 @@ class OrderListAdapter extends ArrayAdapter<Order> {
         TextView description;
         TextView price;
         TextView weight;
-        TextView measurments;
     }
 
     public OrderListAdapter(Context context, int resource, ArrayList<Order> objects) {
@@ -41,9 +40,8 @@ class OrderListAdapter extends ArrayAdapter<Order> {
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
-        String measurments = getItem(position).getMeasurements();
 
-        Order order = new Order(pickupAddress, deliveryAddress, price, weight, measurments, description);
+        Order order = new Order(pickupAddress, deliveryAddress, price, weight, description);
 
         final View view;
         ViewHolder viewHolder = null;
@@ -58,7 +56,6 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             viewHolder.description = convertView.findViewById(R.id.description);
             viewHolder.price = convertView.findViewById(R.id.price);
             viewHolder.weight = convertView.findViewById(R.id.weight);
-            viewHolder.measurments = convertView.findViewById(R.id.measurments);
 
             viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress());
             viewHolder.deliveryAddress.setText("Do: " + order.getDeliveryAddress());
@@ -66,7 +63,6 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             // TODO: get suffixes from values/strings.xml
             viewHolder.price.setText(order.getPrice().toString() + " PLN");
             viewHolder.weight.setText(order.getWeight().toString() + " kg");
-            viewHolder.measurments.setText(order.getMeasurements());
 
             view = convertView;
         }

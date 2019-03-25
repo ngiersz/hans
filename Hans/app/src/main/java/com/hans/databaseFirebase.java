@@ -67,7 +67,6 @@ public class databaseFirebase {
         orderInsert.put("deliveryAddress",order.getDeliveryAddress());
         orderInsert.put("price",order.getWeight());
         orderInsert.put("weight",order.getWeight());
-        orderInsert.put("measurements",order.getMeasurements());
         orderInsert.put("description",order.getDescription());
         orderInsert.put("clientId",order.getClientId());
         orderInsert.put("delivererId",order.getDelivererId());
@@ -91,6 +90,25 @@ public class databaseFirebase {
                         Log.w(TAG, "Error adding Order document",e);
                     }
                 });
+    }
+
+    public void deleteOrderByID(Order order){
+        db.collection("Orders").document(order.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG,"Document successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG,"Error deleting document!",e);
+
+                    }
+                });
+
     }
 
 
