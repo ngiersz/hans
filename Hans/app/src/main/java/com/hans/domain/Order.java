@@ -1,5 +1,9 @@
 package com.hans.domain;
 
+import android.util.Log;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,5 +136,36 @@ public class Order {
                 ", clientId='" + clientId + '\'' +
                 ", delivererId='" + delivererId + '\'' +
                 '}';
+    }
+
+    public String toJSON()
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String orderJSON = null;
+        try
+        {
+            orderJSON = objectMapper.writeValueAsString(this);
+
+        }
+        catch (Exception e)
+        {
+            Log.d("exception", e.getMessage());
+        }
+        return orderJSON;
+    }
+
+    public static Order createFromJSON(String userJSON)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Order order = null;
+        try
+        {
+            order = objectMapper.readValue(userJSON, Order.class);
+        }
+        catch (Exception e)
+        {
+            Log.d("exception", e.getMessage());
+        }
+        return order;
     }
 }

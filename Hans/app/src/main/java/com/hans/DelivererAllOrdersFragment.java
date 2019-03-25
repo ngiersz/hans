@@ -50,6 +50,11 @@ public class DelivererAllOrdersFragment extends Fragment
                 Fragment newFragment = new OrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("order", orderList.get(position).toJSON());
+                newFragment.setArguments(bundle);
+
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
