@@ -110,7 +110,12 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
         }
         catch (IOException e){
+
             e.printStackTrace();
+        }
+        catch (Exception e) {
+            GoToPoint(0,0,2);
+            mMap.addMarker(new MarkerOptions().position((new LatLng(0,0))));
         }
     }
 

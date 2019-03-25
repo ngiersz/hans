@@ -26,18 +26,7 @@ public class OrderInfoFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-        View v = inflater.inflate(R.layout.fragment_order_info, container, false);
-        Fragment mapsActivity = new MapsActivity();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, mapsActivity);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("origin", "Opalenicka 51");
-        bundle.putString("destination", "św. michała 100");
-        mapsActivity.setArguments(bundle);
-
-        transaction.addToBackStack(null);
-        transaction.commit();
 
         Log.d("orderinfo", "OrderInfoFragment started");
         Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
@@ -56,6 +45,8 @@ public class OrderInfoFragment extends Fragment
         TextView toStreet = view.findViewById(R.id.toStreet);
         TextView toNumber = view.findViewById(R.id.toNumber);
 
+
+
         TextView price = view.findViewById(R.id.price);
         TextView description = view.findViewById(R.id.description);
         TextView weight = view.findViewById(R.id.weight);
@@ -72,6 +63,18 @@ public class OrderInfoFragment extends Fragment
         toZipCode.setText(order.getDeliveryAddress().get("zipCode").toString());
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
+
+        Fragment mapsActivity = new MapsActivity();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, mapsActivity);
+
+        Bundle mapsBundle = new Bundle();
+        mapsBundle.putString("origin", fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText());
+        mapsBundle.putString("destination", toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText());
+        mapsActivity.setArguments(mapsBundle);
+
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
