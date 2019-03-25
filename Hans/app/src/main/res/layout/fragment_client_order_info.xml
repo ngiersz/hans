@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     android:background="#FFFFFF"
     android:orientation="vertical">
 
@@ -15,11 +15,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Imię"
+            android:text="Z"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/firstname"
+        <TextView
+            android:id="@+id/from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp" />
@@ -27,11 +27,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nazwisko"
+            android:text="Do"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/lastname"
+        <TextView
+            android:id="@+id/to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp" />
@@ -40,11 +40,37 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Numer telefonu"
+            android:text="Opis"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/phone_number"
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cena"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waga"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp" />
@@ -54,17 +80,17 @@
             android:layout_height="match_parent">
 
             <Button
+                android:id="@+id/cancel_order_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                android:onClick="onClickNext"
                 android:textColor="#FFFFFF"
-                android:text="ZAŁÓŻ KONTO" />
+                android:text="Anuluj zlecenie" />
         </FrameLayout>
 
 
     </LinearLayout>
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

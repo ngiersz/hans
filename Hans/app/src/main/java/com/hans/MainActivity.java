@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
         switch (menuItem.getItemId())
         {
             case R.id.new_order:
-                fragmentClass = ClientMenuFragment.class;
+                fragmentClass = ClientAddOrderFragment.class;
                 Log.d("menu", "nowe zlecenie");
                 break;
             case R.id.waiting_orders:
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = ClientAllOrdersFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.search_new_orders:
@@ -144,12 +144,12 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = MapsActivity.class;
+                fragmentClass = DelivererMenuFragment.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:
                 Log.d("menu", "klient");
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = ClientAllOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.removeHeaderView(navigationView.getHeaderView(R.layout.menu_header_deliverer));
                 navigationView.getHeaderView(1).setVisibility(View.GONE);
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_deliverer:
                 Log.d("menu", "dostawca");
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = DelivererAllOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.getHeaderView(0).setVisibility(View.GONE);
                 navigationView.getHeaderView(1).setVisibility(View.VISIBLE);
@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity
         Fragment newFragment = new OrderInfoFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, newFragment);
+        Log.d("new fragm    ent", "id=" + Integer.toString(view.getId()));
         transaction.addToBackStack(null);
         transaction.commit();
     }

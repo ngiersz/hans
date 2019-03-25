@@ -4,65 +4,65 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
 public class User {
 
-    private String _googleEmail;
-    private String _googleId;
-    private String _name;
-    private String _surname;
-    private String _gender;
-    private int _age;
+    private String googleEmail;
+    private String googleId;
+    private String name;
+    private String surname;
+    private String phoneNumber;
 
+    public User(String googleEmail, String googleId, String name, String surname) {
+        this.googleEmail = googleEmail;
+        this.googleId = googleId;
+        this.name = name;
+        this.surname = surname;
+    }
 
     public User(){}
-    public User(String name,String surname, String gender, int age){
-        this._name=name;
-        this._surname=surname;
-        this._gender=gender;
-        this._age=age;
+    public User(String name,String surname, String phoneNumber){
+        this.name=name;
+        this.surname=surname;
+        this.phoneNumber=phoneNumber;
     }
 
 
-    public void changeGoogleEmail(String newGoogleEmail){
-        this._googleEmail=newGoogleEmail;
+    public void setGoogleEmail(String newGoogleEmail){
+        this.googleEmail =newGoogleEmail;
     }
-    public void changeGoogleID(String newGoogleID){
-        this._googleId=newGoogleID;
+    public void setGoogleID(String newGoogleID){
+        this.googleId =newGoogleID;
     }
-    public void changeName(String newName){
-        this._name=newName;
+    public void setName(String newName){
+        this.name=newName;
     }
-    public void changeSurName(String newSurName){
-        this._name=newSurName;
+    public void setSurName(String newSurName){
+        this.name=newSurName;
     }
-    public void changeAge(String newAge){
-        this._name=newAge;
+    public void setAge(String newAge){
+        this.name=newAge;
     }
-    public void changeGender(String newGender){
-        this._name=newGender;
+    public void setGender(String newGender){
+        this.name=newGender;
     }
 
 
-    public String getGoogleEmail(){return this._googleEmail;}
-    public String getGoogleId(){return  this._googleId;}
-    public String getName(){return this._name;}
-    public String getSurname(){return this._surname;}
-    public String getGender(){return this._gender;}
-    public int getAge(){return this._age;}
+    public String getGoogleEmail(){return this.googleEmail;}
+    public String getGoogleId(){return  this.googleId;}
+    public String getName(){return this.name;}
+    public String getSurname(){return this.surname;}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
     @Override
     public String toString() {
         return "User{" +
-                "_googleEmail='" + _googleEmail + '\'' +
-                ", _googleId='" + _googleId + '\'' +
-                ", _name='" + _name + '\'' +
-                ", _surname='" + _surname + '\'' +
-                ", _gender='" + _gender + '\'' +
-                ", _age=" + _age +
+                "googleEmail='" + googleEmail + '\'' +
+                ", googleId='" + googleId + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phoneNumber=" + phoneNumber +
                 '}';
     }
     public String toJSON()
@@ -88,6 +88,7 @@ public class User {
         try
         {
             user = objectMapper.readValue(userJSON, User.class);
+
         }
         catch (Exception e)
         {

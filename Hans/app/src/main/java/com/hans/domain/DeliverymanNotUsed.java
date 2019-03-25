@@ -15,9 +15,9 @@ public class DeliverymanNotUsed extends User
 
     }
 
-    public DeliverymanNotUsed(String name, String surName, String gender, int age)
+    public DeliverymanNotUsed(String name, String surName,int age)
     {
-        super(name, surName, gender, age);
+        super(name, surName, "123");
         this._deliverymanId = GetNewID();
     }
 

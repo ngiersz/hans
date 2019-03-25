@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="100"
-        android:onClick="showOrderInfo">
+        android:weightSum="100">
+        <!--android:onClick="showOrderInfo"-->
 
         <LinearLayout
             android:layout_width="match_parent"
