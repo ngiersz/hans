@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Order {
 
-    private Integer id;
+    private String id;
 
     private OrderStatus orderStatus;
 
@@ -26,7 +26,6 @@ public class Order {
 
     private Map<String,Object> dimensions=new HashMap<>();
 
-    private String measurements;
 
     private String description;
 
@@ -36,7 +35,7 @@ public class Order {
 
 
 
-    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId) {
+    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
@@ -45,14 +44,13 @@ public class Order {
         this.price = price;
         this.weight = weight;
         this.dimensions = dimensions;
-        this.measurements = measurements;
         this.description = description;
         this.clientId = clientId;
         this.delivererId = "-";
 
     }
 
-    public Order(Integer id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String measurements, String description, String clientId, String delivererId) {
+    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions,  String description, String clientId, String delivererId) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
@@ -61,18 +59,16 @@ public class Order {
         this.price = price;
         this.weight = weight;
         this.dimensions = dimensions;
-        this.measurements = measurements;
         this.description = description;
         this.clientId = clientId;
         this.delivererId = delivererId;
     }
 
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String measurements, String description) {
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String description) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.price = price;
         this.weight = weight;
-        this.measurements = measurements;
         this.description = description;
     }
 
@@ -87,7 +83,7 @@ public class Order {
 
     public String getDelivererId() { return delivererId; }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -107,12 +103,12 @@ public class Order {
         return weight;
     }
 
-    public String getMeasurements() {
-        return measurements;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setDescription(String description) {
@@ -131,7 +127,6 @@ public class Order {
                 ", price=" + price +
                 ", weight=" + weight +
                 ", dimensions=" + dimensions +
-                ", measurements='" + measurements + '\'' +
                 ", description='" + description + '\'' +
                 ", clientId='" + clientId + '\'' +
                 ", delivererId='" + delivererId + '\'' +

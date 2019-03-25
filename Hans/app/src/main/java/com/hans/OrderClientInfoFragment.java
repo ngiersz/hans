@@ -41,11 +41,11 @@ public class OrderClientInfoFragment extends Fragment {
 
         ordersListView = v.findViewById(R.id.listView);
 
-        Button button = ordersListView.findViewById(R.id.cancel_order_button);
+        Button button = v.findViewById(R.id.cancel_order_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                order.getId();
             }
         });
         return v;
