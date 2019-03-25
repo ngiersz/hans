@@ -81,9 +81,17 @@ public class SignInGoogleActivity extends AppCompatActivity
             String userJSON = data.getStringExtra("userJSON");
             // firebaseUser ready to use
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            User user = User.createFromJSON(userJSON);
+            Log.d("koy","mail of new user" +firebaseUser.getEmail());
+            user.setGoogleEmail(firebaseUser.getEmail());
+            Log.d("koy","id of new user" +firebaseUser.getUid());
+            user.setGoogleID(firebaseUser.getUid());
+            databaseFirebase db = new databaseFirebase();
+            db.insertUserToDatabase(user);
+
             Intent output = new Intent();
             output.putExtra("firebaseUser", firebaseUser);
-            output.putExtra("userJSON", userJSON);
+            output.putExtra("userJSON", user.toJSON());
             setResult(RESULT_OK, output);
             finish();
         }

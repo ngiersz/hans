@@ -3,6 +3,7 @@ package com.hans;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -26,12 +27,12 @@ public class CompleteAccountDataActivity extends AppCompatActivity
     {
         if (checkIfAllCompletedCorrectly())
         {
-            EditText firstname = findViewById(R.id.firstname);
-            EditText lastname = findViewById(R.id.lastname);
-            EditText email = findViewById(R.id.email);
+            EditText firstName = findViewById(R.id.firstname);
+            EditText lastName = findViewById(R.id.lastname);
             EditText phoneNumber = findViewById(R.id.phone_number);
 
-            User user = new User(firstname.getText().toString(), lastname.getText().toString(), "cos", 11);
+            User user = new User(firstName.getText().toString(), lastName.getText().toString(),phoneNumber.getText().toString());
+
             Intent output = new Intent();
             output.putExtra("userJSON", user.toJSON());
             setResult(RESULT_OK, output);
@@ -43,17 +44,12 @@ public class CompleteAccountDataActivity extends AppCompatActivity
     private boolean checkIfAllCompletedCorrectly()
     {
 
-        EditText email = findViewById(R.id.email);
         EditText phoneNumber = findViewById(R.id.phone_number);
 
-        String emailText = email.getText().toString();
+
         String phoneText = phoneNumber.getText().toString();
 
-        if (!emailText.matches(".+@.*[.][A-Za-z]{2,3}"))
-        {
-            Toast.makeText(getBaseContext(), "Zły format adresu email.", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (!phoneText.matches("([+][0-9]{2})?[0-9]{9}"))
+        if (!phoneText.matches("([+][0-9]{2})?[0-9]{9}"))
         {
             Toast.makeText(getBaseContext(), "Zły format numeru telefonu (+48123456789 LUB 123456789).", Toast.LENGTH_LONG).show();
             return false;

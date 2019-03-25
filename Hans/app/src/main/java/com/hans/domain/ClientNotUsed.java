@@ -15,9 +15,9 @@ public class ClientNotUsed extends User
 
     }
 
-    public ClientNotUsed(String name, String surName, String gender, int age)
+    public ClientNotUsed(String name, String surName, int age)
     {
-        super(name, surName, gender, age);
+        super(name, surName, "123");
         this._clientId = GetNewID();
     }
 
