@@ -69,12 +69,16 @@ public class DelivererAllOrdersFragment extends Fragment
         Map<String, Object> dimensions = new HashMap();
 
 
+        //orderList.add(new Order(1, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+
         orderList.add(new Order(1, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
         orderList.add(new Order(2, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
         orderList.add(new Order(3, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
         orderList.add(new Order(4, OrderStatus.IN_TRANSIT,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
         orderList.add(new Order(5, OrderStatus.DELIVERED,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
         orderList.add(new Order(6, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(7, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
+        orderList.add(new Order(8, OrderStatus.WAITING_FOR_DELIVERER,pickupAddress,deliveryAddress,10.5,10.5,10.5,dimensions,"asda","asdaaa","1222"));
 
         //        orderList.add(new Order(2, "Piotrowo 3, 60-101 Poznań", "Piotrowo 3, 60-101 Poznań", 10.5, "1m x 2m", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...\"", 20.0));
 //        orderList.add(new Order(3, "adr5", "adr6", 10.5, "1m x 2m", "description3", 20.0));

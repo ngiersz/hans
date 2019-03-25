@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
         switch (menuItem.getItemId())
         {
             case R.id.new_order:
-                fragmentClass = ClientMenuFragment.class;
+                fragmentClass = ClientAddOrderFragment.class;
                 Log.d("menu", "nowe zlecenie");
                 break;
             case R.id.waiting_orders:
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_client:
                 Log.d("menu", "klient");
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = ClientAllOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.removeHeaderView(navigationView.getHeaderView(R.layout.menu_header_deliverer));
                 navigationView.getHeaderView(1).setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_deliverer:
                 Log.d("menu", "dostawca");
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = DelivererAllOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.getHeaderView(0).setVisibility(View.GONE);
                 navigationView.getHeaderView(1).setVisibility(View.VISIBLE);

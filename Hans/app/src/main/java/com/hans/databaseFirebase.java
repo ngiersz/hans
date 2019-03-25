@@ -73,6 +73,8 @@ public class databaseFirebase {
         orderInsert.put("length",order.getLength());
         orderInsert.put("dimensions",order.getDimensions());
 
+        Log.d("addOrder", "przed db.collections");
+        Log.d("addOrder", orderInsert.toString());
 
         db.collection("Orders")
                 .add(orderInsert)

@@ -6,90 +6,239 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Punkt początkowy"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/fromCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Miasto"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/fromZipCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Kod pocztowy"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/fromStreet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ulica"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/fromNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Numer domu"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Punkt końcowy"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/toCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Miasto"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/toZipCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Kod pocztowy"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/toStreet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ulica"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <EditText
+                android:id="@+id/toNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Numer domu"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Opis"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Opis"
+                android:textSize="20sp"
+                android:inputType="none"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Z"
-            android:textSize="20sp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView
-            android:id="@+id/from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp" />
+            android:text="Cena (zł)"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Do"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/to"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opis"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cena"
-            android:textSize="20sp" />
-
-        <TextView
+        <EditText
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:inputType="none"/>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Waga"
-            android:textSize="20sp" />
+            android:text="Waga (kg)"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:textColor="#FFFFFF"
-                android:text="PRZYJMIJ ZLECENIE" />
-        </FrameLayout>
-
-
+            android:textSize="20sp"
+            android:inputType="none"/>
     </LinearLayout>
 
 
+
+
 </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Szerokość (cm)"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/width"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="none"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wysokość (cm)"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="none"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Głębokość (cm)"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/depth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:inputType="none"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
