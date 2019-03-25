@@ -91,7 +91,21 @@ public class databaseFirebase {
     }
 
     public void deleteOrderByID(Order order){
+        db.collection("Orders").document(order.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG,"Document successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG,"Error deleting document!",e);
 
+                    }
+                });
 
     }
 

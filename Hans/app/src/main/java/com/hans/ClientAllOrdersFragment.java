@@ -71,7 +71,9 @@ public class ClientAllOrdersFragment extends Fragment {
                 if (task.isSuccessful()) {
                     receivedOrderList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        receivedOrderList.add(document.toObject(Order.class));
+                        Order orderFromDatabase =document.toObject(Order.class);
+                        orderFromDatabase.setId(document.getId());
+                        receivedOrderList.add(orderFromDatabase);
                         Log.d("Order", document.toObject(Order.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
 
