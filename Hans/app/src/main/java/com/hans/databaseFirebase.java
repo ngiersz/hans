@@ -122,9 +122,9 @@ public class databaseFirebase {
                 .get();
     }
 
-    public Task getAllOrdersForClient(User user) {
+    public Task getAllOrdersForClient(String googleId) {
         return db.collection("Orders")
-                .whereEqualTo("clientId", user.getGoogleId())
+                .whereEqualTo("clientId", googleId)
                 .get();
     }
 

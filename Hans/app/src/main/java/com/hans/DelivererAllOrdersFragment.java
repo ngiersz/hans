@@ -64,7 +64,7 @@ public class DelivererAllOrdersFragment extends Fragment {
 
 
 
-        db.getAllOrdersTask().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.getAllOrdersForDelivererTask().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

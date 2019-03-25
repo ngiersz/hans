@@ -33,7 +33,17 @@ public class Order {
 
     private String delivererId;
 
-
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
+        this.pickupAddress = pickupAddress;
+        this.deliveryAddress = deliveryAddress;
+        this.length = length;
+        this.price = price;
+        this.weight = weight;
+        this.dimensions = dimensions;
+        this.description = description;
+        this.clientId = clientId;
+        this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
+    }
 
     public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
         this.id = id;
