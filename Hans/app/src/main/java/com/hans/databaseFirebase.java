@@ -8,13 +8,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hans.domain.ClientNotUsed;
-import com.hans.domain.DeliverymanNotUsed;
 import com.hans.domain.Order;
+import com.hans.domain.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +26,11 @@ public class databaseFirebase {
     // Write a message to the database
 
     FirebaseFirestore db;
+    private TaskCompletionSource<ArrayList<Order>> dbSource = new TaskCompletionSource<>();
+    private Task dbTask = dbSource.getTask();
+
+
+
     public databaseFirebase(){
         db = FirebaseFirestore.getInstance();
 
@@ -52,54 +57,31 @@ public class databaseFirebase {
                 });
 
     }
-    public void insertClientToDatabase(ClientNotUsed client){
-        Map<String,Object> clientInsert = new HashMap<>();
-        clientInsert.put("googleID",client.get_googleId());
-        clientInsert.put("googleEmail",client.get_googleEmail());
-        clientInsert.put("clientID",client.get_clientId());
-        clientInsert.put("name",client.get_name());
-        clientInsert.put("surname",client.get_surname());
-        clientInsert.put("gender",client.get_gender());
-        clientInsert.put("age",client.get_age());
 
-        db.collection("clients")
-                .add(clientInsert)
+    public void inserUserToDatabase(User user){
+        Map<String,Object> userInsert = new HashMap<>();
+        userInsert.put("_googleId",user.getGoogleId());
+        userInsert.put("_googleEmail",user.getGoogleEmail());
+        userInsert.put("_name",user.getName());
+        userInsert.put("_surname",user.getSurname());
+        userInsert.put("_age",user.getAge());
+        userInsert.put("_gender",user.getGender());
+
+
+
+
+        db.collection("Users")
+                .add(userInsert)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG,"Client documentSnapshood  added with ID: "+documentReference.getId());
+                        Log.d(TAG,"Order documentSnapshood added with ID: "+documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding Client document",e);
-                    }
-                });
-
-    }
-    public void insertDeliverymanToDatabase(DeliverymanNotUsed deliveryman){
-        Map<String,Object> deliverymanInsert = new HashMap<>();
-        deliverymanInsert.put("googleID",deliveryman.get_googleId());
-        deliverymanInsert.put("googleEmail",deliveryman.get_googleEmail());
-        deliverymanInsert.put("deliverymanID",deliveryman.get_deliverymanId());
-        deliverymanInsert.put("name",deliveryman.get_name());
-        deliverymanInsert.put("surname",deliveryman.get_surname());
-        deliverymanInsert.put("gender",deliveryman.get_gender());
-        deliverymanInsert.put("age",deliveryman.get_age());
-
-        db.collection("Deliverymen")
-                .add(deliverymanInsert)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG,"Deliveryman documentSnapshood added with ID: "+documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding deliveryman document",e);
+                        Log.w(TAG, "Error adding Order document",e);
                     }
                 });
 
@@ -115,6 +97,11 @@ public class databaseFirebase {
         orderInsert.put("weight",order.getWeight());
         orderInsert.put("measurements",order.getMeasurements());
         orderInsert.put("description",order.getDescription());
+        orderInsert.put("clientId",order.getClientId());
+        orderInsert.put("delivererId",order.getDelivererId());
+        orderInsert.put("length",order.getLength());
+        orderInsert.put("dimensions",order.getDimensions());
+
 
 
 
@@ -135,16 +122,30 @@ public class databaseFirebase {
                 });
     }
 
-//    public Deliveryman getDeliveryAccount(String googleID){
-//     return ;}
-//    public Deliveryman getClientAccount(String googleID){
-//     return ;}
+
 public ArrayList<Order> getAllOrdersToDeliver(){
     final ArrayList<Order> orderList= new ArrayList<>();
+    readOrdersAll(new FirestoreCallback() {
+        @Override
+        public  ArrayList<Order> onCallback(ArrayList<Order> orderList) {
+            for (Order order:orderList
+                 ) {  Log.d("############Order", order.toString());
+
+
+            }
+            return orderList;
+
+        }
+    });
+    return orderList;
+    }
+private void readOrdersAll(final FirestoreCallback firestoreCallback){
+    final ArrayList<Order> orderList= new ArrayList<>();
+
     db.collection("Orders")
-            .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            .whereEqualTo("orderStatus", "IN_TRANSIT")
+            .get();
+            /*.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -153,12 +154,28 @@ public ArrayList<Order> getAllOrdersToDeliver(){
                             Log.d("Order", document.toObject(Order.class).toString());
                             Log.d(TAG, document.getId() + " => " + document.getData());
                         }
+                        firestoreCallback.onCallback(orderList);
 
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 }
-            });
-     return orderList;
-    }
+            });*/
 }
+
+    public Task getAllOrdersTask() {
+        return db.collection("Orders")
+                .get();
+    }
+    public Task getAllOrdersForDelivererTask() {
+        return db.collection("Orders")
+                .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
+                .get();
+    }
+
+    private interface  FirestoreCallback{
+    ArrayList<Order> onCallback( ArrayList<Order> orderList );
+
+}
+}
+

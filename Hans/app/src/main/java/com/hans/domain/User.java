@@ -14,7 +14,6 @@ public class User {
     private String _googleId;
     private String _name;
     private String _surname;
-
     private String _gender;
     private int _age;
 
@@ -27,9 +26,6 @@ public class User {
         this._age=age;
     }
 
-    public String toString(){
-        return "Name="+this._name+"::Surname="+this._surname;
-    }
 
     public void changeGoogleEmail(String newGoogleEmail){
         this._googleEmail=newGoogleEmail;
@@ -51,13 +47,24 @@ public class User {
     }
 
 
-    public String get_googleEmail(){return this._googleEmail;}
-    public String get_googleId(){return  this._googleId;}
-    public String get_name(){return this._name;}
-    public String get_surname(){return this._surname;}
-    public String get_gender(){return this._gender;}
-    public int get_age(){return this._age;}
+    public String getGoogleEmail(){return this._googleEmail;}
+    public String getGoogleId(){return  this._googleId;}
+    public String getName(){return this._name;}
+    public String getSurname(){return this._surname;}
+    public String getGender(){return this._gender;}
+    public int getAge(){return this._age;}
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "_googleEmail='" + _googleEmail + '\'' +
+                ", _googleId='" + _googleId + '\'' +
+                ", _name='" + _name + '\'' +
+                ", _surname='" + _surname + '\'' +
+                ", _gender='" + _gender + '\'' +
+                ", _age=" + _age +
+                '}';
+    }
     public String toJSON()
     {
         ObjectMapper objectMapper = new ObjectMapper();

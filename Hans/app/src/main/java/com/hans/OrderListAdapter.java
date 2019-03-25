@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 class OrderListAdapter extends ArrayAdapter<Order> {
 
@@ -38,14 +39,14 @@ class OrderListAdapter extends ArrayAdapter<Order> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String pickupAddress = getItem(position).getPickupAddress();
-        String deliveryAddress = getItem(position).getDeliveryAddress();
+        Map<String, Object> pickupAddress = getItem(position).getPickupAddress();
+        Map<String, Object> deliveryAddress = getItem(position).getDeliveryAddress();
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
         String measurments = getItem(position).getMeasurements();
 
-        Order order = new Order(pickupAddress, deliveryAddress, description, price, weight, measurments);
+        Order order = new Order(pickupAddress, deliveryAddress, price, weight, measurments, description);
 
         final View view;
         ViewHolder viewHolder = null;
