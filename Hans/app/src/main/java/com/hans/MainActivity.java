@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "nowe zlecenie");
                 break;
             case R.id.waiting_orders:
-                fragmentClass = ClientMenuFragment.class;
+                fragmentClass = ClientAllWaitingsOrdersFragment.class;
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders:
-                fragmentClass = ClientAllOrdersFragment.class;
+                fragmentClass =  ClientMenuFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.search_new_orders:
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_client:
                 Log.d("menu", "klient");
-                fragmentClass = ClientAllOrdersFragment.class;
+                fragmentClass = ClientAllWaitingsOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.removeHeaderView(navigationView.getHeaderView(R.layout.menu_header_deliverer));
                 navigationView.getHeaderView(1).setVisibility(View.GONE);

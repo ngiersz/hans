@@ -127,6 +127,12 @@ public class databaseFirebase {
                 .whereEqualTo("clientId", googleId)
                 .get();
     }
+    public Task getAllWaitingOrdersForClient(String googleId) {
+        return db.collection("Orders")
+                .whereEqualTo("clientId", googleId)
+                .whereEqualTo("orderStatus","WAITING_FOR_DELIVERER")
+                .get();
+    }
 
     public TaskCompletionSource<ArrayList<Order>> getDbSource() {
         return dbSource;
