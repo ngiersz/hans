@@ -59,7 +59,8 @@ public class User {
     public int get_age(){return this._age;}
 
     public String toJSON()
-    {            ObjectMapper objectMapper = new ObjectMapper();
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
         String userJSON = null;
         try
         {
