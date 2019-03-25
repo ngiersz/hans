@@ -3,13 +3,10 @@ package com.hans;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import static android.support.constraint.Constraints.TAG;
-
 
 public class DelivererAllOrdersFragment extends Fragment
 {
