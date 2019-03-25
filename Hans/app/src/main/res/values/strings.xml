@@ -10,4 +10,5 @@
     <string name="measurments">Wymiary</string>
     <string name="weight">Waga</string>
     <string name="sign_in">Zaloguj się</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
