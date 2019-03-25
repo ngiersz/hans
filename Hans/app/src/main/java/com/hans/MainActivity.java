@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = ClientAllOrdersFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.search_new_orders:

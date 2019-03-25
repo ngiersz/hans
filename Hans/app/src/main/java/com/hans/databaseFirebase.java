@@ -27,6 +27,7 @@ public class databaseFirebase {
 
 
 
+
     public databaseFirebase(){
         db = FirebaseFirestore.getInstance();
 
@@ -109,7 +110,13 @@ public class databaseFirebase {
                 .get();
     }
 
+    public TaskCompletionSource<ArrayList<Order>> getDbSource() {
+        return dbSource;
+    }
 
+    public Task getDbTask() {
+        return dbTask;
+    }
 
 }
 
