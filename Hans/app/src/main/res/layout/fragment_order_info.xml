@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Miasto"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Kod pocztowy"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Ulica"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Numer domu"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Miasto"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Kod pocztowy"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Ulica"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <EditText
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Numer domu"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 
             <TextView
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Opis"
                 android:textSize="20sp"
-                android:inputType="none"/>
+                android:editable="false"/>
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -137,8 +137,8 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:inputType="none"/>
+            android:textSize="20sp"
+            android:editable="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -159,7 +159,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:inputType="none"/>
+            android:editable="false"/>
     </LinearLayout>
 
 
@@ -189,7 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:inputType="none"/>
+                        android:editable="false"/>
 
                 </LinearLayout>
 
@@ -211,7 +211,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:inputType="none"/>
+                        android:editable="false"/>
 
                 </LinearLayout>
 
@@ -233,7 +233,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
-                        android:inputType="none"/>
+                        android:editable="false"/>
 
                 </LinearLayout>
 
