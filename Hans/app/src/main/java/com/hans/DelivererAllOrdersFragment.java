@@ -49,7 +49,6 @@ public class DelivererAllOrdersFragment extends Fragment
     }
 
     private void orderListInit() {
-        Log.d("koy", "orderListInit");
         Map<String, Object> pickupAddress = new HashMap();
         Map<String, Object> deliveryAddress = new HashMap();
         Map<String, Object> dimensions = new HashMap();
