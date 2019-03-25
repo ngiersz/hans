@@ -76,8 +76,8 @@ public class ClientAddOrderFragment extends Fragment
 
 
                 //TODO: DŁUGOŚĆ TRASY
-                Order order = new Order(null, null, pickupAddress, deliveryAddress,
-                        null, priceDouble, weightDouble, dimensions, null,
+                Order order = new Order(pickupAddress, deliveryAddress,
+                        null, priceDouble, weightDouble, dimensions,
                         description.getText().toString(), firebaseUser.getUid() );
 
                 databaseFirebase db = new databaseFirebase();
