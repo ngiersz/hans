@@ -3,10 +3,12 @@ package com.hans;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +42,18 @@ public class DelivererAllOrdersFragment extends Fragment
         ordersListView = v.findViewById(R.id.listView);
         OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, orderList);
         ordersListView.setAdapter(orderListAdapter);
+
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("LISTPOS", Integer.toString(position));
+                Fragment newFragment = new OrderInfoFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
         return v;
     }

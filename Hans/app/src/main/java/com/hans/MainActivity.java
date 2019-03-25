@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity
         Fragment newFragment = new OrderInfoFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, newFragment);
+        Log.d("new fragm    ent", "id=" + Integer.toString(view.getId()));
         transaction.addToBackStack(null);
         transaction.commit();
     }

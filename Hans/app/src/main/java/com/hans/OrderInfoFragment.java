@@ -16,7 +16,7 @@ public class OrderInfoFragment extends Fragment
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_order_info, container, false);
         Log.d("orderinfo", "OrderInfoFragment started");
-
+        Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
         return v;
     }
 }
