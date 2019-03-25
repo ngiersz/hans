@@ -48,7 +48,7 @@ public class OrderClientInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 db.deleteOrderByID(order);
-                db.insertOrderToDatabase(order);
+                //db.insertOrderToDatabase(order);
             }
         });
         return v;
