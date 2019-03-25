@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class ClientAllOrdersFragment extends Fragment {
+public class ClientAllWaitingsOrdersFragment extends Fragment {
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     databaseFirebase db = new databaseFirebase();
@@ -68,7 +68,7 @@ public class ClientAllOrdersFragment extends Fragment {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        db.getAllOrdersForClient(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.getAllWaitingOrdersForClient(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
