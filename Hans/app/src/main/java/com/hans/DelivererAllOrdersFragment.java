@@ -27,7 +27,7 @@ public class DelivererAllOrdersFragment extends Fragment
     ArrayList<Order> orderList = new ArrayList<>();
     ArrayList<Order> receivedOrderList = new ArrayList<>();
 
-    ListView listView;
+    ListView ordersListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,9 +37,9 @@ public class DelivererAllOrdersFragment extends Fragment
         View v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
         orderListInit();
-        listView = v.findViewById(R.id.listView);
+        ordersListView = v.findViewById(R.id.listView);
         OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, orderList);
-        listView.setAdapter(orderListAdapter);
+        ordersListView.setAdapter(orderListAdapter);
 
         return v;
     }
