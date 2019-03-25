@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.domain.User;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = MapsActivity.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:

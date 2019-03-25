@@ -4,16 +4,20 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.provider.Telephony;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -25,23 +29,45 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     public EditText editText;
     public MarkerOptions Start, Destination;
     public Polyline polyline;
+    private String origin, destination;
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        editText = (EditText)findViewById(R.id.editText);
+        View v = inflater.inflate(R.layout.fragment_order_info, container, false);
+       SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
+               .findFragmentById(R.id.map);
+
+       mapFragment.getMapAsync(this);
+
+
+       Bundle bundle = this.getArguments();
+       if (bundle != null) {
+           origin = bundle.get("origin").toString();
+           destination = bundle.get("destination").toString();
+       }
+       return v;
     }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_maps);
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+//        editText = (EditText)findViewById(R.id.editText);
+//    }
 
 
     /**
@@ -56,8 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        GoToPoint(52.4011131,16.9491228, 15);
+        SetTwoPoints(origin, destination);
     }
 
     public void GoToPoint(double x, double y, float zoom) {
@@ -66,16 +91,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(update);
     }
 
-    public void FindOnMap(View V){
-        Geocoder geocoder = new Geocoder(this);
+    public void SetTwoPoints(String location1, String location2) {
+        FindOnMap(location1);
+        FindOnMap(location2);
+    }
+
+    public void FindOnMap(String locationName){
+        Geocoder geocoder = new Geocoder(this.getContext());
         try {
-            List<Address> addressList = geocoder.getFromLocationName(editText.getText().toString(), 1);
-            Address address = (Address)addressList.get(0);
+            List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
+            Address address = addressList.get(0);
             String locality = address.getLocality();
             double x = address.getLatitude();
             double y = address.getLongitude();
-            GoToPoint(x,y,15);
-            FindTheWay(new LatLng(x,y), new LatLng(x+0.01, y));
+            GoToPoint(x,y,11);
+            mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)));
+            //FindTheWay(new LatLng(x,y), new LatLng(x+0.01, y));
 
         }
         catch (IOException e){
@@ -88,7 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.Destination = new MarkerOptions().position(destination);
 
         String url = getUrl(Start.getPosition(), Destination.getPosition(), "driving");
-        new FetchURL(MapsActivity.this).execute(url,"drivinig");
+        new FetchURL(MapsActivity.this.getContext()).execute(url,"drivinig");
         mMap.addMarker(Start);
         mMap.addMarker(Destination);
         polyline = mMap.addPolyline(new PolylineOptions().add(Start.getPosition(), Destination.getPosition()).width(10).color(Color.RED));
