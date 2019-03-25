@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/orders_group"
+        android:checkableBehavior="single">
+        <item android:title="Zlecenia">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item android:id="@+id/new_order" android:title="Złóż nowe" />
+                    <item android:id="@+id/waiting_orders" android:title="Oczekujące" />
+                    <item android:id="@+id/in_process_orders" android:title="W trakcie" />
+                </group>
+            </menu>
+        </item>
+    </group>
+    <group
+        android:id="@+id/settings_group"
+        android:checkableBehavior="single">
+            <item android:id="@+id/my_account" android:title="Moje konto" />
+            <item android:id="@+id/settings" android:title="Ustawienia" />
+    </group>
+    <group
+        android:id="@+id/change_user_type_group"
+        android:checkableBehavior="single">
+        <item android:title="Zmień rodzaj użytkownika">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item android:id="@+id/change_to_client" android:title="Klient" />
+                    <item android:id="@+id/change_to_deliverer" android:title="Dostawca" />
+                </group>
+            </menu>
+        </item>
+    </group>
+</menu>

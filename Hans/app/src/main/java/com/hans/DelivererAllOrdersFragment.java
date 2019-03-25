@@ -1,14 +1,15 @@
 package com.hans;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,31 +25,31 @@ import java.util.Map;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class DelivererAllOrdersActivity extends AppCompatActivity {
+public class DelivererAllOrdersFragment extends Fragment
+{
 
     ArrayList<Order> orderList = new ArrayList<>();
+    ArrayList<Order> receivedOrderList = new ArrayList<>();
+
+    ListView listView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        View v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
         orderListInit();
-        ListView listView = findViewById(R.id.listView);
-        OrderListAdapter orderListAdapter = new OrderListAdapter(this, R.layout.adapter_view_layout, orderList);
+        listView = v.findViewById(R.id.listView);
+        OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, orderList);
         listView.setAdapter(orderListAdapter);
-    }
 
-    public void showOrderInfo(View view) {
-        Log.d("button", "button clicked, function showOrderInfo");
-        Intent intent = new Intent(DelivererAllOrdersActivity.this, OrderInfoActivity.class);
-        startActivity(intent);
+        return v;
     }
 
     private void orderListInit() {
+        Log.d("koy", "orderListInit");
         Map<String, Object> pickupAddress = new HashMap();
         Map<String, Object> deliveryAddress = new HashMap();
         Map<String, Object> dimensions = new HashMap();
@@ -90,7 +91,7 @@ public class DelivererAllOrdersActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        orderList.add(document.toObject(Order.class));
+                        receivedOrderList.add(document.toObject(Order.class));
                         Log.d("Order", document.toObject(Order.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
@@ -103,26 +104,26 @@ public class DelivererAllOrdersActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, signInDeliverer.class);
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            Intent intent = new Intent(this, signInDeliverer.class);
+//            startActivity(intent);
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }

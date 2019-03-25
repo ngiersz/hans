@@ -20,27 +20,32 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.hans.domain.User;
 
-public class signInDeliverer extends AppCompatActivity
+public class SignInGoogleActivity extends AppCompatActivity
 {
-    private final int REQUEST_CODE_SIGN_IN = 1;
+    private final int RC_SIGN_IN = 1;
+    private final int RC_COMPLETE_ACCOUNT_DATA = 2;
+
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_in_deliverer);
+        setContentView(R.layout.activity_sign_in_with_google);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                Log.d("koy", "signIn");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
@@ -57,13 +62,6 @@ public class signInDeliverer extends AppCompatActivity
 
     }
 
-    public void signIn(View view)
-    {
-        Log.d("koy", "signIn");
-
-
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -71,13 +69,25 @@ public class signInDeliverer extends AppCompatActivity
         Log.d("koy", "onActivityResult");
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == REQUEST_CODE_SIGN_IN)
+        if (requestCode == RC_SIGN_IN)
         {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
+        else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
+        {
+            String userJSON = data.getStringExtra("userJSON");
+            // firebaseUser ready to use
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
+            Intent output = new Intent();
+            output.putExtra("firebaseUser", firebaseUser);
+            output.putExtra("userJSON", userJSON);
+            setResult(RESULT_OK, output);
+            finish();
+        }
+
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
@@ -88,7 +98,7 @@ public class signInDeliverer extends AppCompatActivity
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated email.
-            Log.w("koy", account.getEmail());
+            Log.w("koy","zalogowanie na google" + account.getEmail());
             firebaseAuthWithGoogle(account);
 
         } catch (ApiException e)
@@ -115,15 +125,15 @@ public class signInDeliverer extends AppCompatActivity
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("koy", "signInWithCredential:success");
 
-                            // user ready to use
-                            FirebaseUser user = mAuth.getCurrentUser();
-
+                            // activity for completing user info
+                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataActivity.class);
+                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
 
                         } else
                         {
                             // If sign in fails, display a message to the user.
                             Log.w("koy", "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.layout.sign_in_deliverer), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.layout.activity_sign_in_with_google), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });
