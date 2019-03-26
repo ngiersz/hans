@@ -1,10 +1,15 @@
 package com.hans;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +26,13 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static java.lang.Math.sqrt;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -30,8 +41,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public MarkerOptions Start, Destination;
     public Polyline polyline;
     private String origin, destination;
+    private  Activity activity;
 
-
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        this.activity = activity;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +104,33 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void SetTwoPoints(String location1, String location2) {
         FindOnMap(location1);
         FindOnMap(location2);
+    }
+
+    public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, int weight) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        Geocoder geocoder = new Geocoder(context);
+        try {
+            List<Address> addressList = geocoder.getFromLocationName(location1, 1);
+            Address address = addressList.get(0);
+            double x1 = address.getLatitude();
+            double y1 = address.getLongitude();
+
+            addressList = geocoder.getFromLocationName(location2,1);
+            address = addressList.get(0);
+            double x2= address.getLatitude();
+            double y2 = address.getLongitude();
+
+            float[] distance = new float[1];
+            Location.distanceBetween(x1,y1,x2,y2,distance);
+            double price = distance[0]/1000 * 3.5;
+            result.put("distance", distance[0]/1000);
+            result.put("price",price);
+        }
+        catch (Exception e){
+
+        }
+        return result;
     }
 
     public void FindOnMap(String locationName){
