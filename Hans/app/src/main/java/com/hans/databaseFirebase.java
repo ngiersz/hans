@@ -65,7 +65,7 @@ public class databaseFirebase {
         orderInsert.put("orderStatus",order.getOrderStatus());
         orderInsert.put("pickupAddress",order.getPickupAddress());
         orderInsert.put("deliveryAddress",order.getDeliveryAddress());
-        orderInsert.put("price",order.getWeight());
+        orderInsert.put("price",order.getPrice());
         orderInsert.put("weight",order.getWeight());
         orderInsert.put("description",order.getDescription());
         orderInsert.put("clientId",order.getClientId());

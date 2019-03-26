@@ -80,10 +80,9 @@ public class ClientAddOrderFragment extends Fragment
                 Double weightDouble = Double.parseDouble(weight.getText().toString());
 
                 Double distanceDouble = Double.parseDouble(distance.getText().toString());
-                distanceDouble = Double.parseDouble(weight.getText().toString());
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+                Log.d("kot",price.getText().toString() );
                 Order order = new Order(pickupAddress, deliveryAddress,
                         distanceDouble, priceDouble, weightDouble, dimensions,
                         description.getText().toString(), firebaseUser.getUid());
