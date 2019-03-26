@@ -2,95 +2,126 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Punkt początkowy"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/fromCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Miasto"
-                android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt początkowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/fromZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp" />
-
-
-            <EditText
-                android:id="@+id/fromStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ulica"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Miasto"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
 
 
-            <EditText
-                android:id="@+id/fromNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Numer domu"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Punkt końcowy"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/toCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Miasto"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
 
 
-            <EditText
-                android:id="@+id/toZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ulica"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
 
 
-            <EditText
-                android:id="@+id/toStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ulica"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Numer domu"
+                        android:textSize="20sp"
+                        android:inputType="numberSigned"/>
 
 
-            <EditText
-                android:id="@+id/toNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Numer domu"
-                android:textSize="20sp" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt końcowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/toCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Miasto"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
+
+
+                    <EditText
+                        android:id="@+id/toZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
+
+
+                    <EditText
+                        android:id="@+id/toStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ulica"
+                        android:textSize="20sp"
+                        android:inputType="textPostalAddress"/>
+
+
+                    <EditText
+                        android:id="@+id/toNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Numer domu"
+                        android:textSize="20sp"
+                        android:inputType="numberSigned"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -104,7 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Opis"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:inputType="textMultiLine"/>
 
 
             <LinearLayout
@@ -131,7 +163,8 @@
                         android:layout_height="wrap_content"
                         android:editable="false"
                         android:text="123"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:inputType="numberDecimal"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -151,7 +184,7 @@
                         android:id="@+id/weight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
+                        android:inputType="numberDecimal"
                         android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -178,7 +211,8 @@
                         android:id="@+id/width"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:inputType="numberDecimal"/>
 
                 </LinearLayout>
 
@@ -199,7 +233,8 @@
                         android:id="@+id/height"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:inputType="numberDecimal"/>
 
                 </LinearLayout>
 
@@ -220,28 +255,23 @@
                         android:id="@+id/depth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:inputType="numberDecimal"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <FrameLayout
+            <Button
+                android:id="@+id/addOrderButton"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/addOrderButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:background="@color/colorPrimary"
-                    android:text="ZŁÓŻ ZLECENIE"
-                    android:textColor="#FFFFFF" />
-            </FrameLayout>
-
-
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:text="ZŁÓŻ ZLECENIE"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
+
     </ScrollView>
 
 

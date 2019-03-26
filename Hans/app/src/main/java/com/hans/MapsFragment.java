@@ -13,8 +13,6 @@ import android.widget.EditText;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -40,7 +38,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.activity_maps, container, false);
+        View v = inflater.inflate(R.layout.fragment_maps, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
                .findFragmentById(R.id.map);
 
@@ -57,7 +55,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.fragment_maps);
 //        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.map);

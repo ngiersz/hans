@@ -38,11 +38,12 @@ public class ClientAllWaitingsOrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
 
+        ((MainActivity)getActivity()).setActionBarTitle("Twoje oczekujące zlecenia");
+
+        v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
-
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,17 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="200dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/map">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,89 +25,111 @@
             android:orientation="vertical"
             tools:ignore="ExtraText">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Punkt początkowy"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/fromCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Miasto"
-                android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt początkowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/fromZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp" />
-
-
-            <EditText
-                android:id="@+id/fromStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Ulica"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Miasto"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/fromNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Numer domu"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Punkt końcowy"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/toCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Miasto"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Ulica"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Ulica"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/fromNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Numer domu"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt końcowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/toCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Miasto"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:editable="false"
-                android:hint="Numer domu"
-                android:textSize="20sp" />
+                    <EditText
+                        android:id="@+id/toZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp" />
+
+
+                    <EditText
+                        android:id="@+id/toStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Ulica"
+                        android:textSize="20sp" />
+
+
+                    <EditText
+                        android:id="@+id/toNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Numer domu"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+
 
 
             <TextView
@@ -241,14 +271,9 @@
 
             </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
         </LinearLayout>
 
     </ScrollView>
-</LinearLayout>
+
+</RelativeLayout>
 
