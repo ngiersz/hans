@@ -3,11 +3,8 @@ package com.hans;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.provider.Telephony;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +23,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
-public class MapsActivity extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     public EditText editText;
@@ -124,7 +120,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         this.Destination = new MarkerOptions().position(destination);
 
         String url = getUrl(Start.getPosition(), Destination.getPosition(), "driving");
-        new FetchURL(MapsActivity.this.getContext()).execute(url,"drivinig");
+        new FetchURL(MapsFragment.this.getContext()).execute(url,"drivinig");
         mMap.addMarker(Start);
         mMap.addMarker(Destination);
         polyline = mMap.addPolyline(new PolylineOptions().add(Start.getPosition(), Destination.getPosition()).width(10).color(Color.RED));
