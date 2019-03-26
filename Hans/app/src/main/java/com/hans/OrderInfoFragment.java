@@ -1,6 +1,7 @@
 package com.hans;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,15 +11,21 @@ import android.widget.TextView;
 
 import com.hans.domain.Order;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+
 public class OrderInfoFragment extends Fragment
 {
     Order order;
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_order_info, container, false);
+        view = inflater.inflate(R.layout.fragment_order_info, container, false);
+
+
         Log.d("orderinfo", "OrderInfoFragment started");
         Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
 
@@ -35,6 +42,8 @@ public class OrderInfoFragment extends Fragment
         TextView toZipCode = view.findViewById(R.id.toZipCode);
         TextView toStreet = view.findViewById(R.id.toStreet);
         TextView toNumber = view.findViewById(R.id.toNumber);
+
+
 
         TextView price = view.findViewById(R.id.price);
         TextView description = view.findViewById(R.id.description);
@@ -53,6 +62,7 @@ public class OrderInfoFragment extends Fragment
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
+
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());
@@ -60,6 +70,37 @@ public class OrderInfoFragment extends Fragment
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
+
         return view;
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+
+        TextView fromCity = view.findViewById(R.id.fromCity);
+        TextView fromZipCode = view.findViewById(R.id.fromZipCode);
+        TextView fromStreet = view.findViewById(R.id.fromStreet);
+        TextView fromNumber = view.findViewById(R.id.fromNumber);
+
+        TextView toCity = view.findViewById(R.id.toCity);
+        TextView toZipCode = view.findViewById(R.id.toZipCode);
+        TextView toStreet = view.findViewById(R.id.toStreet);
+        TextView toNumber = view.findViewById(R.id.toNumber);
+
+        Fragment mapsActivity = new MapsFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, mapsActivity);
+        //transaction.attach(mapsActivity);
+
+        Bundle mapsBundle = new Bundle();
+        mapsBundle.putString("origin", fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText());
+        mapsBundle.putString("destination", toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText());
+        mapsActivity.setArguments(mapsBundle);
+
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 }
