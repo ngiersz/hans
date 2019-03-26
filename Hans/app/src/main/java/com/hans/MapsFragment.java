@@ -1,10 +1,15 @@
 package com.hans;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +18,6 @@ import android.widget.EditText;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,7 +26,14 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static java.lang.Math.round;
+import static java.lang.Math.sqrt;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -32,15 +42,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public MarkerOptions Start, Destination;
     public Polyline polyline;
     private String origin, destination;
+    private  Activity activity;
 
-
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        this.activity = activity;
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.activity_maps, container, false);
+        View v = inflater.inflate(R.layout.fragment_maps, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
                .findFragmentById(R.id.map);
 
@@ -57,7 +72,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.fragment_maps);
 //        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
@@ -90,6 +105,35 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void SetTwoPoints(String location1, String location2) {
         FindOnMap(location1);
         FindOnMap(location2);
+    }
+
+    public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, Double weight) {
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        Geocoder geocoder = new Geocoder(context);
+        try {
+            List<Address> addressList = geocoder.getFromLocationName(location1, 1);
+            Address address = addressList.get(0);
+            double x1 = address.getLatitude();
+            double y1 = address.getLongitude();
+
+            addressList = geocoder.getFromLocationName(location2,1);
+            address = addressList.get(0);
+            double x2= address.getLatitude();
+            double y2 = address.getLongitude();
+
+            float[] distance = new float[1];
+            Location.distanceBetween(x1,y1,x2,y2,distance);
+            double price = distance[0]/1000 * 0.8;
+            if (price < 10)
+                price = 10;
+            result.put("distance", Math.round((distance[0]/1000) * 100.0)/100.0);
+            result.put("price", Math.round(price * 100.0)/100.0);
+        }
+        catch (Exception e){
+
+        }
+        return result;
     }
 
     public void FindOnMap(String locationName){

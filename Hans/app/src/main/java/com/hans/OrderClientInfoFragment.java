@@ -71,11 +71,16 @@ public class OrderClientInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 db.deleteOrderByID(order);
+                Toast.makeText(getContext(), "Anulowano zlecenie", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 //db.insertOrderToDatabase(order);
                 Toast.makeText(getContext(), "Usunięto zlecenie.", Toast.LENGTH_SHORT).show();
                 Boolean.toString(getActivity().getSupportFragmentManager().popBackStackImmediate());
             }
         });
+
+
+//
         return view;
     }
 }

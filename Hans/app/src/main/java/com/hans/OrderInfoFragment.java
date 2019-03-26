@@ -14,6 +14,8 @@ import com.hans.domain.Order;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.util.Map;
+
 public class OrderInfoFragment extends Fragment
 {
     Order order;

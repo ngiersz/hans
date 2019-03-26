@@ -34,8 +34,9 @@ public class DelivererAllOrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
+        ((MainActivity)getActivity()).setActionBarTitle("Dostępne zlecenia");
+        v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
 
