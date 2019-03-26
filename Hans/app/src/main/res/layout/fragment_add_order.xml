@@ -129,7 +129,8 @@
                         android:id="@+id/price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
+                        android:editable="false"
+                        android:text="123 zł"
                         android:textSize="20sp" />
                 </LinearLayout>
 
