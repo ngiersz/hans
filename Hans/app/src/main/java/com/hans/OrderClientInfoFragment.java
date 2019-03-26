@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hans.domain.Order;
 
@@ -70,9 +71,14 @@ public class OrderClientInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 db.deleteOrderByID(order);
+                Toast.makeText(getContext(), "Anulowano zlecenie", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 //db.insertOrderToDatabase(order);
             }
         });
+
+
+//
         return view;
     }
 }
