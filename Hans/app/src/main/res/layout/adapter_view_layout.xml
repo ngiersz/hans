@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:text="pickup address" />
+                android:text="pickup address"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/deliveryAddress"
@@ -33,7 +34,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="8dp"
-                android:text="delivery address" />
+                android:text="delivery address"
+                android:textColor="#000000"/>
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:gravity="center"
-                android:text="price" />
+                android:text="price"
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/weight"
@@ -56,7 +59,8 @@
                 android:layout_height="24dp"
                 android:layout_below="@+id/price"
                 android:gravity="center"
-                android:text="weight" />
+                android:text="weight"
+                android:textColor="#000000"/>
 
 
         </LinearLayout>
@@ -83,6 +87,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingLeft="10px"
+        android:text="description"
+        android:layout_gravity="start"
         android:textAlignment="viewStart"
-        android:text="description" />
+        android:textColor="#000000"/>
 </LinearLayout>

@@ -57,12 +57,12 @@ class OrderListAdapter extends ArrayAdapter<Order> {
             viewHolder.price = convertView.findViewById(R.id.price);
             viewHolder.weight = convertView.findViewById(R.id.weight);
 
-            viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress());
-            viewHolder.deliveryAddress.setText("Do: " + order.getDeliveryAddress());
+            viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress().get("city") + " " + order.getPickupAddress().get("street") + " " + order.getPickupAddress().get("number"));
+            viewHolder.deliveryAddress.setText("Do: " +order.getDeliveryAddress().get("city") + " " + order.getDeliveryAddress().get("street") + " " + order.getDeliveryAddress().get("number"));
             viewHolder.description.setText(order.getDescription());
             // TODO: get suffixes from values/strings.xml
-            viewHolder.price.setText(order.getPrice().toString() + " PLN");
-            viewHolder.weight.setText(order.getWeight().toString() + " kg");
+            viewHolder.price.setText("Cena: " + order.getPrice().toString() + " zł");
+            viewHolder.weight.setText("Waga: " + order.getWeight().toString() + " kg");
 
             view = convertView;
         }
