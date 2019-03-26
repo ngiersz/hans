@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static java.lang.Math.round;
 import static java.lang.Math.sqrt;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
@@ -106,7 +107,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         FindOnMap(location2);
     }
 
-    public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, int weight) {
+    public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, Double weight) {
 
         Map<String, Object> result = new HashMap<String, Object>();
         Geocoder geocoder = new Geocoder(context);
@@ -123,9 +124,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             float[] distance = new float[1];
             Location.distanceBetween(x1,y1,x2,y2,distance);
-            double price = distance[0]/1000 * 3.5;
-            result.put("distance", distance[0]/1000);
-            result.put("price",price);
+            double price = distance[0]/1000 * 0.8;
+            if (price < 10)
+                price = 10;
+            result.put("distance", Math.round((distance[0]/1000) * 100.0)/100.0);
+            result.put("price", Math.round(price * 100.0)/100.0);
         }
         catch (Exception e){
 

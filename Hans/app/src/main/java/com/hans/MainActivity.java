@@ -63,14 +63,12 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
         }
         else Log.d("koy", "create" + firebaseUser.getEmail());
-        
+
         Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, mapsActivity);
         transaction.addToBackStack(null);
         transaction.commit();
-
-
 
     }
 
