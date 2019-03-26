@@ -40,8 +40,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                                 Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_order_info, container, false);
-       SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
+        View v = inflater.inflate(R.layout.activity_maps, container, false);
+        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager()
                .findFragmentById(R.id.map);
 
        mapFragment.getMapAsync(this);

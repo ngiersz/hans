@@ -83,7 +83,7 @@ public class ClientAddOrderFragment extends Fragment
                 databaseFirebase db = new databaseFirebase();
                 db.insertOrderToDatabase(order);
                 Toast.makeText(getContext(), "Dodano zlecenie.", Toast.LENGTH_SHORT).show();
-                Boolean.toString(getActivity().getSupportFragmentManager().popBackStackImmediate());
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             }
         });
