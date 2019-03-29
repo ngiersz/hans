@@ -16,10 +16,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Maps;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hans.client.ClientAddOrderFragment;
+import com.hans.client.ClientAllWaitingsOrdersFragment;
+import com.hans.client.ClientMenuFragment;
+import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
 
 public class MainActivity extends AppCompatActivity

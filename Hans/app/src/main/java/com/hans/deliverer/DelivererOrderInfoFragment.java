@@ -1,29 +1,32 @@
-package com.hans;
+package com.hans.deliverer;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.hans.R;
 import com.hans.domain.Order;
 
-public class OrderClientInfoFragment extends Fragment {
+import com.hans.map.MapsFragment;
+
+public class DelivererOrderInfoFragment extends Fragment
+{
     Order order;
-    ListView ordersListView;
-    databaseFirebase db = new databaseFirebase();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
-        Log.d("orderinfo", "ClientOrderInfoFragment started");
+        View view = inflater.inflate(R.layout.fragment_order_info, container, false);
+
+
+        Log.d("orderinfo", "OrderInfoFragment started");
+        Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
@@ -63,22 +66,18 @@ public class OrderClientInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        ordersListView = view.findViewById(R.id.listView);
+        Fragment mapsActivity = new MapsFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.map, mapsActivity);
 
-        Button button = view.findViewById(R.id.cancel_order_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Bundle mapsBundle = new Bundle();
+        mapsBundle.putString("origin", fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText());
+        mapsBundle.putString("destination", toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText());
+        mapsActivity.setArguments(mapsBundle);
 
-                db.deleteOrderByID(order);
-                Toast.makeText(getContext(), "Anulowano zlecenie", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-                //db.insertOrderToDatabase(order);
-            }
-        });
+        transaction.addToBackStack(null);
+        transaction.commit();
 
-
-//
         return view;
     }
 }

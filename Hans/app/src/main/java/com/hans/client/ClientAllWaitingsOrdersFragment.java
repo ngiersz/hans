@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.client;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,17 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
+import com.hans.OrderListAdapter;
+import com.hans.R;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import static android.support.constraint.Constraints.TAG;
 public class ClientAllWaitingsOrdersFragment extends Fragment {
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
-    databaseFirebase db = new databaseFirebase();
+    DatabaseFirebase db = new DatabaseFirebase();
     View v;
     ListView ordersListView;
 
@@ -48,7 +49,7 @@ public class ClientAllWaitingsOrdersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new OrderClientInfoFragment();
+                Fragment newFragment = new ClientOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 

@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.map;
 
 import android.content.Context;
 import android.graphics.Color;

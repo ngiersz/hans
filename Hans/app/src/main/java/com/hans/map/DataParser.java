@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.map;
 
 import com.google.android.gms.maps.model.LatLng;
 

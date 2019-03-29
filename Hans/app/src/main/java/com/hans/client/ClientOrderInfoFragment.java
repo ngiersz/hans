@@ -1,34 +1,31 @@
-package com.hans;
+package com.hans.client;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hans.DatabaseFirebase;
+import com.hans.R;
 import com.hans.domain.Order;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-
-import java.util.Map;
-
-public class OrderInfoFragment extends Fragment
-{
+public class ClientOrderInfoFragment extends Fragment {
     Order order;
+    ListView ordersListView;
+    DatabaseFirebase db = new DatabaseFirebase();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-
-
-        Log.d("orderinfo", "OrderInfoFragment started");
-        Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
+        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
+        Log.d("orderinfo", "ClientOrderInfoFragment started");
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
@@ -68,18 +65,22 @@ public class OrderInfoFragment extends Fragment
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        Fragment mapsActivity = new MapsFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.map, mapsActivity);
+        ordersListView = view.findViewById(R.id.listView);
 
-        Bundle mapsBundle = new Bundle();
-        mapsBundle.putString("origin", fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText());
-        mapsBundle.putString("destination", toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText());
-        mapsActivity.setArguments(mapsBundle);
+        Button button = view.findViewById(R.id.cancel_order_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+                db.deleteOrderByID(order);
+                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                //db.insertOrderToDatabase(order);
+            }
+        });
 
+
+//
         return view;
     }
 }

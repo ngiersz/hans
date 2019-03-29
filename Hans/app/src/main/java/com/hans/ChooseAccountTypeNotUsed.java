@@ -2,10 +2,10 @@ package com.hans;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 public class ChooseAccountTypeNotUsed extends AppCompatActivity
 {
@@ -15,7 +15,6 @@ public class ChooseAccountTypeNotUsed extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choose_account_type_not_used);
-
     }
 
     public void onClickNext(View v)
@@ -50,7 +49,7 @@ public class ChooseAccountTypeNotUsed extends AppCompatActivity
         }
         else
         {
-            Toast.makeText(getBaseContext(), "Proszę wybrać rodzaj użytkownika.", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), "Proszę wybrać rodzaj użytkownika.", Snackbar.LENGTH_SHORT).show();
             return false;
         }
 

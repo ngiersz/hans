@@ -1,8 +1,9 @@
-package com.hans;
+package com.hans.client;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hans.DatabaseFirebase;
+import com.hans.R;
 import com.hans.domain.Order;
+import com.hans.map.MapsFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +41,7 @@ public class ClientAddOrderFragment extends Fragment
             {
                 if (!checkIfCorrectlyToAddOrder())
                 {
-                    Toast.makeText(getActivity().getBaseContext(), "Należy obliczyć cenę.", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Należy obliczyć cenę", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 TextView fromCity = view.findViewById(R.id.fromCity);
@@ -87,9 +90,10 @@ public class ClientAddOrderFragment extends Fragment
                         distanceDouble, priceDouble, weightDouble, dimensions,
                         description.getText().toString(), firebaseUser.getUid());
 
-                databaseFirebase db = new databaseFirebase();
+                DatabaseFirebase db = new DatabaseFirebase();
                 db.insertOrderToDatabase(order);
-                Toast.makeText(getContext(), "Dodano zlecenie.", Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
+
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             }
@@ -103,7 +107,7 @@ public class ClientAddOrderFragment extends Fragment
             {
                 if (!checkIfCorrectlyToComputePrice())
                 {
-                    Toast.makeText(getActivity().getBaseContext(), "Błędę dane. Potrzeba punkt początkowy, końcowy oraz wagę", Toast.LENGTH_LONG).show();
+                    Snackbar.make(getView(), "Błędę dane. Potrzeba punkt początkowy, końcowy oraz wagę", Snackbar.LENGTH_LONG).show();
                     return;
                 }
 
