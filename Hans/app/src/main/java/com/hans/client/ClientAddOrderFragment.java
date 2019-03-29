@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.map.MapsFragment;
@@ -26,6 +26,18 @@ public class ClientAddOrderFragment extends Fragment
 {
 
     private View view;
+
+    TextView fromCity;
+    TextView fromZipCode;
+    TextView fromStreet;
+    TextView fromNumber;
+    TextView toCity;
+    TextView toZipCode;
+    TextView toStreet;
+    TextView toNumber;
+    TextView weight;
+    TextView price ;
+    TextView distance;
 
     @Nullable
     @Override
@@ -44,23 +56,24 @@ public class ClientAddOrderFragment extends Fragment
                     Snackbar.make(getView(), "Należy obliczyć cenę", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                TextView fromCity = view.findViewById(R.id.fromCity);
-                TextView fromZipCode = view.findViewById(R.id.fromZipCode);
-                TextView fromStreet = view.findViewById(R.id.fromStreet);
-                TextView fromNumber = view.findViewById(R.id.fromNumber);
+                fromCity = view.findViewById(R.id.fromCity);
+                fromZipCode = view.findViewById(R.id.fromZipCode);
+                fromStreet = view.findViewById(R.id.fromStreet);
+                fromNumber = view.findViewById(R.id.fromNumber);
 
-                TextView toCity = view.findViewById(R.id.toCity);
-                TextView toZipCode = view.findViewById(R.id.toZipCode);
-                TextView toStreet = view.findViewById(R.id.toStreet);
-                TextView toNumber = view.findViewById(R.id.toNumber);
+                toCity = view.findViewById(R.id.toCity);
+                toZipCode = view.findViewById(R.id.toZipCode);
+                toStreet = view.findViewById(R.id.toStreet);
+                toNumber = view.findViewById(R.id.toNumber);
 
-                TextView price = view.findViewById(R.id.price);
+                price = view.findViewById(R.id.price);
+                distance = view.findViewById(R.id.distance);
+                weight = view.findViewById(R.id.weight);
+
                 TextView description = view.findViewById(R.id.description);
-                TextView weight = view.findViewById(R.id.weight);
                 TextView width = view.findViewById(R.id.width);
                 TextView height = view.findViewById(R.id.height);
                 TextView depth = view.findViewById(R.id.depth);
-                TextView distance = view.findViewById(R.id.distance);
 
                 Map<String, Object> pickupAddress = new HashMap<>();
                 pickupAddress.put("city", fromCity.getText().toString());
@@ -85,7 +98,6 @@ public class ClientAddOrderFragment extends Fragment
                 Double distanceDouble = Double.parseDouble(distance.getText().toString());
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                Log.d("kot",price.getText().toString() );
                 Order order = new Order(pickupAddress, deliveryAddress,
                         distanceDouble, priceDouble, weightDouble, dimensions,
                         description.getText().toString(), firebaseUser.getUid());
@@ -93,7 +105,6 @@ public class ClientAddOrderFragment extends Fragment
                 DatabaseFirebase db = new DatabaseFirebase();
                 db.insertOrderToDatabase(order);
                 Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
-
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
 
             }
@@ -105,21 +116,13 @@ public class ClientAddOrderFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                MainActivity.closeKeyboard(getActivity());
+
                 if (!checkIfCorrectlyToComputePrice())
                 {
-                    Snackbar.make(getView(), "Błędę dane. Potrzeba punkt początkowy, końcowy oraz wagę", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), "Błędne dane. Potrzeba punkt początkowy, końcowy oraz wagę", Snackbar.LENGTH_LONG).show();
                     return;
                 }
-
-                TextView fromCity = view.findViewById(R.id.fromCity);
-                TextView fromZipCode = view.findViewById(R.id.fromZipCode);
-                TextView fromStreet = view.findViewById(R.id.fromStreet);
-                TextView fromNumber = view.findViewById(R.id.fromNumber);
-
-                TextView toCity = view.findViewById(R.id.toCity);
-                TextView toZipCode = view.findViewById(R.id.toZipCode);
-                TextView toStreet = view.findViewById(R.id.toStreet);
-                TextView toNumber = view.findViewById(R.id.toNumber);
 
                 String location1 = fromCity.getText().toString() +
                         fromZipCode.getText().toString() +
@@ -130,14 +133,9 @@ public class ClientAddOrderFragment extends Fragment
                         toStreet.getText().toString() +
                         toNumber.getText().toString();
 
-                TextView weight = view.findViewById(R.id.weight);
                 Double weightDouble = Double.parseDouble(weight.getText().toString());
-
                 Map<String, Object> result = new MapsFragment().GetPriceAndDistance(getContext(), location1, location2, weightDouble);
-
-                TextView price = view.findViewById(R.id.price);
                 price.setText(result.get("price").toString());
-                TextView distance = view.findViewById(R.id.distance);
                 distance.setText(result.get("distance").toString());
 
             }
