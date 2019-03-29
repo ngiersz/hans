@@ -1,5 +1,8 @@
 package com.hans.deliverer;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -7,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hans.R;
@@ -22,11 +26,7 @@ public class DelivererOrderInfoFragment extends Fragment
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-
-
-        Log.d("orderinfo", "OrderInfoFragment started");
-        Log.d("in orderinfofragment", "id=" + Integer.toString(container.getId()));
+        View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
@@ -66,13 +66,36 @@ public class DelivererOrderInfoFragment extends Fragment
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
+        final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();
+        final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();
+
+        Button openNavigationStart = view.findViewById(R.id.openNavigationStart);
+        openNavigationStart.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                openGoogleMapsNavigation(startPoint);
+            }
+        });
+
+        Button openNavigationDestination = view.findViewById(R.id.openNavigationDestination);
+        openNavigationDestination.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                openGoogleMapsNavigation(destinationPoint);
+            }
+        });
+
         Fragment mapsActivity = new MapsFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.map, mapsActivity);
 
         Bundle mapsBundle = new Bundle();
-        mapsBundle.putString("origin", fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText());
-        mapsBundle.putString("destination", toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText());
+        mapsBundle.putString("origin", startPoint);
+        mapsBundle.putString("destination", destinationPoint);
         mapsActivity.setArguments(mapsBundle);
 
         transaction.addToBackStack(null);
@@ -80,4 +103,23 @@ public class DelivererOrderInfoFragment extends Fragment
 
         return view;
     }
+
+    public void openGoogleMapsNavigation(String destination)
+    {
+        Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
+
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null)
+        {
+            startActivity(mapIntent);
+        }
+        else
+        {
+            Snackbar.make(getView(), "Nie posiadasz Map Google. Zainstaluj ze Sklepu Play.", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+    }
+
 }

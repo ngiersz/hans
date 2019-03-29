@@ -20,8 +20,9 @@ public class CompleteAccountDataActivity extends AppCompatActivity
 
     }
 
-    public void onClickNext(View v)
+    public void onClickCreateAcoount(View v)
     {
+        MainActivity.closeKeyboard(getParent());
         if (checkIfAllCompletedCorrectly())
         {
             EditText firstName = findViewById(R.id.firstname);

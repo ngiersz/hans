@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                android:onClick="onClickNext"
+                android:onClick="onClickCreateAcoount"
                 android:textColor="#FFFFFF"
                 android:text="ZAŁÓŻ KONTO" />
         </FrameLayout>

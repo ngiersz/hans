@@ -141,7 +141,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             double x = address.getLatitude();
             double y = address.getLongitude();
             GoToPoint(x,y,11);
-            mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)).title(locationName));
             //FindTheWay(new LatLng(x,y), new LatLng(x+0.01, y));
 
         }

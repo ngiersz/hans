@@ -44,7 +44,22 @@ public class ClientAddOrderFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_add_order, container, false);
+        view = inflater.inflate(R.layout.fragment_client_add_order, container, false);
+
+        fromCity = view.findViewById(R.id.fromCity);
+        fromZipCode = view.findViewById(R.id.fromZipCode);
+        fromStreet = view.findViewById(R.id.fromStreet);
+        fromNumber = view.findViewById(R.id.fromNumber);
+
+        toCity = view.findViewById(R.id.toCity);
+        toZipCode = view.findViewById(R.id.toZipCode);
+        toStreet = view.findViewById(R.id.toStreet);
+        toNumber = view.findViewById(R.id.toNumber);
+
+        price = view.findViewById(R.id.price);
+        distance = view.findViewById(R.id.distance);
+        weight = view.findViewById(R.id.weight);
+
         Button button = view.findViewById(R.id.addOrderButton);
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -56,19 +71,6 @@ public class ClientAddOrderFragment extends Fragment
                     Snackbar.make(getView(), "Należy obliczyć cenę", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-                fromCity = view.findViewById(R.id.fromCity);
-                fromZipCode = view.findViewById(R.id.fromZipCode);
-                fromStreet = view.findViewById(R.id.fromStreet);
-                fromNumber = view.findViewById(R.id.fromNumber);
-
-                toCity = view.findViewById(R.id.toCity);
-                toZipCode = view.findViewById(R.id.toZipCode);
-                toStreet = view.findViewById(R.id.toStreet);
-                toNumber = view.findViewById(R.id.toNumber);
-
-                price = view.findViewById(R.id.price);
-                distance = view.findViewById(R.id.distance);
-                weight = view.findViewById(R.id.weight);
 
                 TextView description = view.findViewById(R.id.description);
                 TextView width = view.findViewById(R.id.width);
