@@ -2,19 +2,16 @@ package com.hans;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.hans.domain.User;
 
 public class CompleteAccountDataActivity extends AppCompatActivity
 {
-    private String accountType;
-
+    View view;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -23,8 +20,9 @@ public class CompleteAccountDataActivity extends AppCompatActivity
 
     }
 
-    public void onClickNext(View v)
+    public void onClickCreateAcoount(View v)
     {
+        MainActivity.closeKeyboard(getParent());
         if (checkIfAllCompletedCorrectly())
         {
             EditText firstName = findViewById(R.id.firstname);
@@ -51,7 +49,7 @@ public class CompleteAccountDataActivity extends AppCompatActivity
 
         if (!phoneText.matches("([+][0-9]{2})?[0-9]{9}"))
         {
-            Toast.makeText(getBaseContext(), "Zły format numeru telefonu (+48123456789 LUB 123456789).", Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), "Zły format numeru telefonu (+48123456789 LUB 123456789).", Snackbar.LENGTH_SHORT).show();
             return false;
         }
 

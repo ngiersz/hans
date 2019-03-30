@@ -1,7 +1,6 @@
-package com.hans;
+package com.hans.map;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
@@ -9,7 +8,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +22,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.hans.R;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static java.lang.Math.round;
-import static java.lang.Math.sqrt;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -145,7 +141,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             double x = address.getLatitude();
             double y = address.getLongitude();
             GoToPoint(x,y,11);
-            mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)));
+            mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)).title(locationName));
             //FindTheWay(new LatLng(x,y), new LatLng(x+0.01, y));
 
         }

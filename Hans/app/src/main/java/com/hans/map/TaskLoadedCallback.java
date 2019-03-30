@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.map;
 
 /**
  * Created by Vishal on 10/20/2018.

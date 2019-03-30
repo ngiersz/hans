@@ -18,7 +18,8 @@ import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class databaseFirebase {
+public class DatabaseFirebase
+{
     // Write a message to the database
 
     FirebaseFirestore db;
@@ -28,7 +29,7 @@ public class databaseFirebase {
 
 
 
-    public databaseFirebase(){
+    public DatabaseFirebase(){
         db = FirebaseFirestore.getInstance();
 
     }

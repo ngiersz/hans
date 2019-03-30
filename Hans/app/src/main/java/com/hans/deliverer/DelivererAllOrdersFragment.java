@@ -1,4 +1,4 @@
-package com.hans;
+package com.hans.deliverer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,18 +15,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
+import com.hans.OrderListAdapter;
+import com.hans.R;
+import com.hans.deliverer.DelivererOrderInfoFragment;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 import static android.support.constraint.Constraints.TAG;
 
 public class DelivererAllOrdersFragment extends Fragment {
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
-    databaseFirebase db = new databaseFirebase();
+    DatabaseFirebase db = new DatabaseFirebase();
     View v;
     ListView ordersListView;
 
@@ -45,7 +48,7 @@ public class DelivererAllOrdersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new OrderInfoFragment();
+                Fragment newFragment = new DelivererOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 

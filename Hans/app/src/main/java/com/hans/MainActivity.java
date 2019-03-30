@@ -1,5 +1,7 @@
 package com.hans;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,11 +17,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Maps;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hans.client.ClientAddOrderFragment;
+import com.hans.client.ClientAllWaitingsOrdersFragment;
+import com.hans.client.ClientMenuFragment;
+import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
 
 public class MainActivity extends AppCompatActivity
@@ -62,7 +68,6 @@ public class MainActivity extends AppCompatActivity
             Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
             startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
         }
-        else Log.d("koy", "create" + firebaseUser.getEmail());
 
         Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -196,4 +201,15 @@ public class MainActivity extends AppCompatActivity
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
+
+    public static void closeKeyboard(Activity activity)
+    {
+        View view = activity.getCurrentFocus();
+        if (view != null)
+        {
+            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
 }

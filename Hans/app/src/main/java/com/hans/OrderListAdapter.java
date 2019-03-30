@@ -13,7 +13,7 @@ import com.hans.domain.Order;
 import java.util.ArrayList;
 import java.util.Map;
 
-class OrderListAdapter extends ArrayAdapter<Order> {
+public class OrderListAdapter extends ArrayAdapter<Order> {
 
     private Context mContext;
     private int mResource;

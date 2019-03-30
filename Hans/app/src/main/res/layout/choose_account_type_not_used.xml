@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:background="@color/colorPrimary"
-            android:onClick="onClickNext"
+            android:onClick="onClickCreateAcoount"
             android:text="DALEJ"
             android:textColor="#FFFFFF" />
     </FrameLayout>

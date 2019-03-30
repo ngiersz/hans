@@ -1,6 +1,7 @@
-package com.hans;
+package com.hans.client;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,20 +10,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.hans.DatabaseFirebase;
+import com.hans.R;
 import com.hans.domain.Order;
 
-public class OrderClientInfoFragment extends Fragment {
+public class ClientOrderInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
-    databaseFirebase db = new databaseFirebase();
+    DatabaseFirebase db = new DatabaseFirebase();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
 
         Bundle bundle = this.getArguments();
@@ -71,7 +73,7 @@ public class OrderClientInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 db.deleteOrderByID(order);
-                Toast.makeText(getContext(), "Anulowano zlecenie", Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
                 //db.insertOrderToDatabase(order);
             }
