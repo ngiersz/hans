@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hans.domain.Order;
+import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
 import java.util.ArrayList;
@@ -18,6 +19,15 @@ import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
+/*
+    =/\                 /\=
+    / \'._   (\_/)   _.'/ \
+   / .''._'--(o.o)--'_.''. \
+  /.' _/ |`'=/ " \='`| \_ `.\
+ /` .' `\;-,'\___/',-;/` '. '\
+/.-'       `\(-V-)/`       `-.\
+`            "   "
+ */
 public class DatabaseFirebase
 {
     // Write a message to the database
@@ -112,6 +122,39 @@ public class DatabaseFirebase
 
     }
 
+    public void setOrder(Order order){
+        Map<String,Object> orderSet = new HashMap<>();
+        orderSet.put("id",order.getId());
+        orderSet.put("orderStatus",order.getOrderStatus());
+        orderSet.put("pickupAddress",order.getPickupAddress());
+        orderSet.put("deliveryAddress",order.getDeliveryAddress());
+        orderSet.put("price",order.getPrice());
+        orderSet.put("weight",order.getWeight());
+        orderSet.put("description",order.getDescription());
+        orderSet.put("clientId",order.getClientId());
+        orderSet.put("delivererId",order.getDelivererId());
+        orderSet.put("length",order.getLength());
+        orderSet.put("dimensions",order.getDimensions());
+
+
+        db.collection("Orders").document(order.getId())
+                .set(order)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG,"Document successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG,"Error deleting document!",e);
+
+                    }
+                });
+
+    }
+
 
     public Task getAllOrdersTask() {
         return db.collection("Orders")
@@ -132,6 +175,12 @@ public class DatabaseFirebase
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
                 .whereEqualTo("orderStatus","WAITING_FOR_DELIVERER")
+                .get();
+    }
+    public Task getInTransitOrdersForClient(String googleId) {
+        return db.collection("Orders")
+                .whereEqualTo("clientId", googleId)
+                .whereEqualTo("orderStatus","IN_TRANSIT")
                 .get();
     }
 
