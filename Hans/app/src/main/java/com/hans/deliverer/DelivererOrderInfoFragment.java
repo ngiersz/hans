@@ -13,13 +13,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
+import com.hans.domain.OrderStatus;
 import com.hans.map.MapsFragment;
 
 public class DelivererOrderInfoFragment extends Fragment {
     Order order;
+
+    DatabaseFirebase db = new DatabaseFirebase();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,6 +111,8 @@ public class DelivererOrderInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+                order.setOrderStatus(OrderStatus.IN_TRANSIT);
+                db.setOrder(order);
 //                getActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
