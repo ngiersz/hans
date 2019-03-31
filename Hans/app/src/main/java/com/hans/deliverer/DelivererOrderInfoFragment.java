@@ -108,10 +108,8 @@ public class DelivererOrderInfoFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
-                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                order.setOrderStatus(OrderStatus.IN_TRANSIT);
-                order.setDelivererId(firebaseUser.getUid());
-                db.setOrder(order);
+                acceptOrder();
+                sendNotificationToClient();
 
                 Fragment newFragment = new DelivererAllOrdersFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -136,7 +134,16 @@ public class DelivererOrderInfoFragment extends Fragment {
             Snackbar.make(getView(), "Nie posiadasz Map Google. Zainstaluj ze Sklepu Play.", Snackbar.LENGTH_SHORT).show();
             return;
         }
-
     }
 
+    private void acceptOrder() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        order.setOrderStatus(OrderStatus.IN_TRANSIT);
+        order.setDelivererId(firebaseUser.getUid());
+        db.setOrder(order);
+    }
+
+    private void sendNotificationToClient() {
+
+    }
 }
