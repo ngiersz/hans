@@ -1,8 +1,12 @@
 package com.hans;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -60,22 +64,44 @@ public class MainActivity extends AppCompatActivity
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
 
-        // Check if user is logged.
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (firebaseUser == null)
+        // Check internet connection
+        if (!checkInternetConnection())
         {
-            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
-            startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Brak połączenia z internetem.")
+                    .setMessage("Włącz dane komórkowe lub połącz się z siecią Wi-Fi.");
+            builder.setNeutralButton("WYJDŹ", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    finish();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            // Check if user is logged.
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (firebaseUser == null)
+            {
+                Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
+                startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
+            }
+
+            Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment, mapsActivity);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         }
 
-        Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, mapsActivity);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
@@ -211,5 +237,18 @@ public class MainActivity extends AppCompatActivity
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    public boolean checkInternetConnection()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return  isConnected;
+    }
+
 
 }
