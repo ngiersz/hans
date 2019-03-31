@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
@@ -105,7 +107,10 @@ public class DelivererOrderInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 order.setOrderStatus(OrderStatus.IN_TRANSIT);
+                order.setDelivererId(firebaseUser.getUid());
                 db.setOrder(order);
 
                 Fragment newFragment = new DelivererAllOrdersFragment();
