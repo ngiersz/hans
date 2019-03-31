@@ -99,7 +99,7 @@ public class DelivererOrderInfoFragment extends Fragment {
 
         transaction.addToBackStack(null);
         transaction.commit();
-        
+
         Button button = view.findViewById(R.id.accept_order_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +107,13 @@ public class DelivererOrderInfoFragment extends Fragment {
                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
                 order.setOrderStatus(OrderStatus.IN_TRANSIT);
                 db.setOrder(order);
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+                Fragment newFragment = new DelivererAllOrdersFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
