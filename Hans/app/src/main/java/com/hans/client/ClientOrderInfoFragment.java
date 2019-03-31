@@ -19,10 +19,10 @@ public class ClientOrderInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
     DatabaseFirebase db = new DatabaseFirebase();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
@@ -67,20 +67,19 @@ public class ClientOrderInfoFragment extends Fragment {
 
         ordersListView = view.findViewById(R.id.listView);
 
-        Button button = view.findViewById(R.id.cancel_order_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // TODO: FIX - button is null
 
-                db.deleteOrderByID(order);
-                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+//        Button button = view.findViewById(R.id.cancel_order_button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                db.deleteOrderByID(order);
+//                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+//                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 //db.insertOrderToDatabase(order);
-            }
-        });
+//            }
+//        });
 
-
-//
         return view;
     }
 }
