@@ -85,6 +85,7 @@ public class Order {
     public Order() {
     }
 
+
     public Double getLength() { return length; }
 
     public Map<String, Object> getDimensions() { return dimensions; }
@@ -117,14 +118,19 @@ public class Order {
         return description;
     }
 
+
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setDescription(String description) { this.description = description; }
+
     public void setDelivererId(String delivererId) { this.delivererId = delivererId; }
+
+    public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus; }
+
+
 
     @Override
     public String toString() {
