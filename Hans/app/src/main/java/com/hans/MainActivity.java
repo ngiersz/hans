@@ -91,12 +91,15 @@ public class MainActivity extends AppCompatActivity
                 Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
                 startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
             }
+            else
+            {
 
-            Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment, mapsActivity);
-            transaction.addToBackStack(null);
-            transaction.commit();
+                Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, mapsActivity);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
 
         }
 
@@ -115,6 +118,12 @@ public class MainActivity extends AppCompatActivity
                 firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
                 String userJSON = data.getStringExtra("userJSON");
                 user = User.createFromJSON(userJSON);
+
+                Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, mapsActivity);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         }
         else
