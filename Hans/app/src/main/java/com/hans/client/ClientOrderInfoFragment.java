@@ -24,7 +24,7 @@ public class ClientOrderInfoFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
 
         Bundle bundle = this.getArguments();
