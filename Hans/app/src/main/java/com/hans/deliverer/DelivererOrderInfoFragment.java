@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,9 @@ import com.hans.R;
 import com.hans.domain.Order;
 
 import com.hans.domain.OrderStatus;
+import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
+
 
 public class DelivererOrderInfoFragment extends Fragment {
     Order order;
@@ -144,6 +145,23 @@ public class DelivererOrderInfoFragment extends Fragment {
     }
 
     private void sendNotificationToClient() {
-
+        MailSender mailSender = new MailSender();
+        mailSender.execute(createNotificationEmail());
     }
+
+    private String[] createNotificationEmail() {
+        String emailTo = "ngiersz@gmail.com";
+        String subject = "Aktualizacja statusu zlecenia";
+
+        String pickupAddress = order.getPickupAddress().get("city").toString() + ", ul. " +
+                order.getPickupAddress().get("street").toString() + " " +
+                order.getPickupAddress().get("number").toString();
+        String deliveryAddress = order.getDeliveryAddress().get("city").toString() + ", ul. " +
+                order.getDeliveryAddress().get("street").toString() + " " +
+                order.getDeliveryAddress().get("number").toString();
+
+        String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus();
+        return new String[]{emailTo, subject, msg};
+    }
+
 }
