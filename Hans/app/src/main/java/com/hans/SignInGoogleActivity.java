@@ -91,7 +91,7 @@ public class SignInGoogleActivity extends AppCompatActivity
             Log.d("koy","mail of new user" +firebaseUser.getEmail());
             user.setGoogleEmail(firebaseUser.getEmail());
             Log.d("koy","id of new user" +firebaseUser.getUid());
-            user.setGoogleID(firebaseUser.getUid());
+            user.setGoogleId(firebaseUser.getUid());
             DatabaseFirebase db = new DatabaseFirebase();
             db.insertUserToDatabase(user);
 

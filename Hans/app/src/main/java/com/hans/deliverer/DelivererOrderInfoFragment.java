@@ -2,25 +2,34 @@ package com.hans.deliverer;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
 import com.hans.domain.OrderStatus;
+import com.hans.domain.User;
 import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
+
+import static android.support.constraint.Constraints.TAG;
 
 
 public class DelivererOrderInfoFragment extends Fragment {
@@ -145,12 +154,23 @@ public class DelivererOrderInfoFragment extends Fragment {
     }
 
     private void sendNotificationToClient() {
-        MailSender mailSender = new MailSender();
-        mailSender.execute(createNotificationEmail());
+        final MailSender mailSender = new MailSender();
+        db.getUser(order.getClientId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        User userFromDatabase = document.toObject(User.class);
+                        mailSender.execute(createNotificationEmail(userFromDatabase.getGoogleEmail()));
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 
-    private String[] createNotificationEmail() {
-        String emailTo = "ngiersz@gmail.com";
+    private String[] createNotificationEmail(String emailTo) {
         String subject = "Aktualizacja statusu zlecenia";
 
         String pickupAddress = order.getPickupAddress().get("city").toString() + ", ul. " +
@@ -163,5 +183,4 @@ public class DelivererOrderInfoFragment extends Fragment {
         String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus().getPolishName();
         return new String[]{emailTo, subject, msg};
     }
-
 }

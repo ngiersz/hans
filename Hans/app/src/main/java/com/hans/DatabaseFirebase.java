@@ -28,8 +28,7 @@ import static android.support.constraint.Constraints.TAG;
 /.-'       `\(-V-)/`       `-.\
 `            "   "
  */
-public class DatabaseFirebase
-{
+public class DatabaseFirebase {
     // Write a message to the database
 
     FirebaseFirestore db;
@@ -37,52 +36,47 @@ public class DatabaseFirebase
     private Task dbTask = dbSource.getTask();
 
 
-
-
-    public DatabaseFirebase(){
+    public DatabaseFirebase() {
         db = FirebaseFirestore.getInstance();
-
     }
 
-
-    public void insertUserToDatabase(User user){
-        Map<String,Object> userInsert = new HashMap<>();
-        userInsert.put("googleId",user.getGoogleId());
-        userInsert.put("googleEmail",user.getGoogleEmail());
-        userInsert.put("name",user.getName());
-        userInsert.put("surname",user.getSurname());
-        userInsert.put("phoneNumber",user.getPhoneNumber());
+    public void insertUserToDatabase(User user) {
+        Map<String, Object> userInsert = new HashMap<>();
+        userInsert.put("googleId", user.getGoogleId());
+        userInsert.put("googleEmail", user.getGoogleEmail());
+        userInsert.put("name", user.getName());
+        userInsert.put("surname", user.getSurname());
+        userInsert.put("phoneNumber", user.getPhoneNumber());
 
         db.collection("Users")
                 .add(userInsert)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG,"Order documentSnapshood added with ID: "+documentReference.getId());
+                        Log.d(TAG, "Order documentSnapshood added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding Order document",e);
+                        Log.w(TAG, "Error adding Order document", e);
                     }
                 });
-
     }
 
-    public void insertOrderToDatabase(Order order){
-        Map<String,Object> orderInsert = new HashMap<>();
-        orderInsert.put("id",order.getId());
-        orderInsert.put("orderStatus",order.getOrderStatus());
-        orderInsert.put("pickupAddress",order.getPickupAddress());
-        orderInsert.put("deliveryAddress",order.getDeliveryAddress());
-        orderInsert.put("price",order.getPrice());
-        orderInsert.put("weight",order.getWeight());
-        orderInsert.put("description",order.getDescription());
-        orderInsert.put("clientId",order.getClientId());
-        orderInsert.put("delivererId",order.getDelivererId());
-        orderInsert.put("length",order.getLength());
-        orderInsert.put("dimensions",order.getDimensions());
+    public void insertOrderToDatabase(Order order) {
+        Map<String, Object> orderInsert = new HashMap<>();
+        orderInsert.put("id", order.getId());
+        orderInsert.put("orderStatus", order.getOrderStatus());
+        orderInsert.put("pickupAddress", order.getPickupAddress());
+        orderInsert.put("deliveryAddress", order.getDeliveryAddress());
+        orderInsert.put("price", order.getPrice());
+        orderInsert.put("weight", order.getWeight());
+        orderInsert.put("description", order.getDescription());
+        orderInsert.put("clientId", order.getClientId());
+        orderInsert.put("delivererId", order.getDelivererId());
+        orderInsert.put("length", order.getLength());
+        orderInsert.put("dimensions", order.getDimensions());
 
         Log.d("addOrder", "przed db.collections");
         Log.d("addOrder", orderInsert.toString());
@@ -92,74 +86,71 @@ public class DatabaseFirebase
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG,"Order documentSnapshood added with ID: "+documentReference.getId());
+                        Log.d(TAG, "Order documentSnapshood added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding Order document",e);
+                        Log.w(TAG, "Error adding Order document", e);
                     }
                 });
     }
 
-    public void deleteOrderByID(Order order){
+    public void deleteOrderByID(Order order) {
         db.collection("Orders").document(order.getId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG,"Document successfully deleted!");
+                        Log.d(TAG, "Document successfully deleted!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG,"Error deleting document!",e);
+                        Log.d(TAG, "Error deleting document!", e);
 
                     }
                 });
-
     }
 
-    public void setOrder(Order order){
-        Map<String,Object> orderSet = new HashMap<>();
-        orderSet.put("id",order.getId());
-        orderSet.put("orderStatus",order.getOrderStatus());
-        orderSet.put("pickupAddress",order.getPickupAddress());
-        orderSet.put("deliveryAddress",order.getDeliveryAddress());
-        orderSet.put("price",order.getPrice());
-        orderSet.put("weight",order.getWeight());
-        orderSet.put("description",order.getDescription());
-        orderSet.put("clientId",order.getClientId());
-        orderSet.put("delivererId",order.getDelivererId());
-        orderSet.put("length",order.getLength());
-        orderSet.put("dimensions",order.getDimensions());
-
+    public void setOrder(Order order) {
+        Map<String, Object> orderSet = new HashMap<>();
+        orderSet.put("id", order.getId());
+        orderSet.put("orderStatus", order.getOrderStatus());
+        orderSet.put("pickupAddress", order.getPickupAddress());
+        orderSet.put("deliveryAddress", order.getDeliveryAddress());
+        orderSet.put("price", order.getPrice());
+        orderSet.put("weight", order.getWeight());
+        orderSet.put("description", order.getDescription());
+        orderSet.put("clientId", order.getClientId());
+        orderSet.put("delivererId", order.getDelivererId());
+        orderSet.put("length", order.getLength());
+        orderSet.put("dimensions", order.getDimensions());
 
         db.collection("Orders").document(order.getId())
                 .set(order)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG,"Document successfully deleted!");
+                        Log.d(TAG, "Document successfully deleted!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG,"Error deleting document!",e);
+                        Log.d(TAG, "Error deleting document!", e);
 
                     }
                 });
-
     }
-
 
     public Task getAllOrdersTask() {
         return db.collection("Orders")
                 .get();
     }
+
     public Task getAllOrdersForDelivererTask() {
         return db.collection("Orders")
                 .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
@@ -171,16 +162,18 @@ public class DatabaseFirebase
                 .whereEqualTo("clientId", googleId)
                 .get();
     }
+
     public Task getAllWaitingOrdersForClient(String googleId) {
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
-                .whereEqualTo("orderStatus","WAITING_FOR_DELIVERER")
+                .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
                 .get();
     }
+
     public Task getInTransitOrdersForClient(String googleId) {
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
-                .whereEqualTo("orderStatus","IN_TRANSIT")
+                .whereEqualTo("orderStatus", "IN_TRANSIT")
                 .get();
     }
 
