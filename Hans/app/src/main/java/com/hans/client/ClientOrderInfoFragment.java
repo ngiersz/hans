@@ -67,18 +67,17 @@ public class ClientOrderInfoFragment extends Fragment {
 
         ordersListView = view.findViewById(R.id.listView);
 
-        // TODO: FIX - button is null
 
-//        Button button = view.findViewById(R.id.cancel_order_button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                db.deleteOrderByID(order);
-//                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
-//                getActivity().getSupportFragmentManager().popBackStackImmediate();
-                //db.insertOrderToDatabase(order);
-//            }
-//        });
+        Button button = view.findViewById(R.id.cancel_order_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteOrderByID(order);
+                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+//                db.insertOrderToDatabase(order);
+            }
+        });
 
         return view;
     }
