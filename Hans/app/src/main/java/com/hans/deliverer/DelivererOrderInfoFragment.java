@@ -160,7 +160,7 @@ public class DelivererOrderInfoFragment extends Fragment {
                 order.getDeliveryAddress().get("street").toString() + " " +
                 order.getDeliveryAddress().get("number").toString();
 
-        String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus();
+        String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus().getPolishName();
         return new String[]{emailTo, subject, msg};
     }
 
