@@ -13,18 +13,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
+import com.hans.domain.OrderStatus;
 import com.hans.map.MapsFragment;
 
-public class DelivererOrderInfoFragment extends Fragment
-{
+public class DelivererOrderInfoFragment extends Fragment {
     Order order;
+
+    DatabaseFirebase db = new DatabaseFirebase();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
 
@@ -70,21 +75,17 @@ public class DelivererOrderInfoFragment extends Fragment
         final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();
 
         Button openNavigationStart = view.findViewById(R.id.openNavigationStart);
-        openNavigationStart.setOnClickListener(new View.OnClickListener()
-        {
+        openNavigationStart.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 openGoogleMapsNavigation(startPoint);
             }
         });
 
         Button openNavigationDestination = view.findViewById(R.id.openNavigationDestination);
-        openNavigationDestination.setOnClickListener(new View.OnClickListener()
-        {
+        openNavigationDestination.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 openGoogleMapsNavigation(destinationPoint);
             }
         });
@@ -101,25 +102,48 @@ public class DelivererOrderInfoFragment extends Fragment
         transaction.addToBackStack(null);
         transaction.commit();
 
+        Button button = view.findViewById(R.id.accept_order_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+
+                acceptOrder();
+                sendNotificationToClient();
+
+                Fragment newFragment = new DelivererAllOrdersFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         return view;
     }
 
-    public void openGoogleMapsNavigation(String destination)
-    {
+    public void openGoogleMapsNavigation(String destination) {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
 
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null)
-        {
+        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(mapIntent);
-        }
-        else
-        {
+        } else {
             Snackbar.make(getView(), "Nie posiadasz Map Google. Zainstaluj ze Sklepu Play.", Snackbar.LENGTH_SHORT).show();
             return;
         }
-
     }
 
+    private void acceptOrder() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        order.setOrderStatus(OrderStatus.IN_TRANSIT);
+        order.setDelivererId(firebaseUser.getUid());
+        db.setOrder(order);
+    }
+
+    private void sendNotificationToClient() {
+
+    }
 }
