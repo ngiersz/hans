@@ -1,5 +1,6 @@
 package com.hans;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,7 +21,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.hans.domain.Order;
 import com.hans.domain.User;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class SignInGoogleActivity extends AppCompatActivity
 {
@@ -125,17 +131,40 @@ public class SignInGoogleActivity extends AppCompatActivity
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                 {
+                    @SuppressLint("ResourceType")
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
                         if (task.isSuccessful())
                         {
+                            DatabaseFirebase db = new DatabaseFirebase();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("koy", "signInWithCredential:success");
+                            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                            db.getUser(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if(task.getResult().isEmpty()){
+                                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataActivity.class);
+                                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
+                                        }
+                                        else{
+                                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                            startActivity(intent);
+
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+
+
 
                             // activity for completing user info
-                            Intent intent = new Intent(getBaseContext(), CompleteAccountDataActivity.class);
-                            startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
+
 
                         } else
                         {

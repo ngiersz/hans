@@ -184,6 +184,12 @@ public class DatabaseFirebase
                 .get();
     }
 
+    public Task getUser(String googleId){
+        return db.collection("Users")
+                .whereEqualTo("googleId", googleId)
+                .get();
+    }
+
     public TaskCompletionSource<ArrayList<Order>> getDbSource() {
         return dbSource;
     }

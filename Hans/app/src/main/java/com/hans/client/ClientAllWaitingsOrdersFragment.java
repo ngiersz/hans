@@ -67,6 +67,7 @@ public class ClientAllWaitingsOrdersFragment extends Fragment {
 
 
     private void  orderListInit(){
+        Log.d("here", "HERE");
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
