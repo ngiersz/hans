@@ -19,12 +19,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hans.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public Polyline polyline;
     private String origin, destination;
     private  Activity activity;
-
+    private List<LatLng> markers = new ArrayList<>();
 //    @Override
 //    public void onAttach(Activity activity) {
 //        super.onAttach(activity);
@@ -101,6 +103,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void SetTwoPoints(String location1, String location2) {
         FindOnMap(location1);
         FindOnMap(location2);
+        LatLngBounds.Builder bounds = LatLngBounds.builder();
+        bounds.include(markers.get(0));
+        bounds.include(markers.get(1));
+        try {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150));
+        }
+        catch (Exception e){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0,0),15));
+        }
     }
 
     public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, Double weight) {
@@ -123,11 +134,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             double price = distance[0]/1000 * 0.8;
             if (price < 10)
                 price = 10;
+
+            double priceForWeigth = 0;
+            if (weight > 50)
+                priceForWeigth = weight / 15;
+            if (weight > 100)
+                priceForWeigth = weight / 12;
+            if (weight > 500)
+                priceForWeigth = weight / 10;
+
+            price += priceForWeigth;
+
             result.put("distance", Math.round((distance[0]/1000) * 100.0)/100.0);
             result.put("price", Math.round(price * 100.0)/100.0);
         }
         catch (Exception e){
-
+            result.put("distance", 0);
+            result.put("price", 0);
+            return result;
         }
         return result;
     }
@@ -140,8 +164,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             String locality = address.getLocality();
             double x = address.getLatitude();
             double y = address.getLongitude();
-            GoToPoint(x,y,11);
             mMap.addMarker(new MarkerOptions().position(new LatLng(x,y)).title(locationName));
+            markers.add(new LatLng(x,y));
             //FindTheWay(new LatLng(x,y), new LatLng(x+0.01, y));
 
         }
@@ -152,6 +176,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         catch (Exception e) {
             GoToPoint(0,0,2);
             mMap.addMarker(new MarkerOptions().position((new LatLng(0,0))));
+            markers.add(new LatLng(0,0));
         }
     }
 
