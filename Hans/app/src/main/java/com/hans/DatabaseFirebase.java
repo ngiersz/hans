@@ -165,7 +165,12 @@ public class DatabaseFirebase
                 .whereEqualTo("orderStatus", "WAITING_FOR_DELIVERER")
                 .get();
     }
-
+    public Task getInTransitOrdersForDeliverer(String googleId) {
+        return db.collection("Orders")
+                .whereEqualTo("delivererId", googleId)
+                .whereEqualTo("orderStatus","IN_TRANSIT")
+                .get();
+    }
     public Task getAllOrdersForClient(String googleId) {
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
@@ -187,6 +192,10 @@ public class DatabaseFirebase
     public Task getUser(String googleId){
         return db.collection("Users")
                 .whereEqualTo("googleId", googleId)
+                .get();
+    }
+    public Task getAllUsers(){
+        return db.collection("Users")
                 .get();
     }
 

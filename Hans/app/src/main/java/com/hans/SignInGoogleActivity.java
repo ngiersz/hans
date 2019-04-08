@@ -21,9 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.hans.domain.Order;
 import com.hans.domain.User;
 
 import static android.support.constraint.Constraints.TAG;
@@ -91,7 +89,7 @@ public class SignInGoogleActivity extends AppCompatActivity
             Log.d("koy","mail of new user" +firebaseUser.getEmail());
             user.setGoogleEmail(firebaseUser.getEmail());
             Log.d("koy","id of new user" +firebaseUser.getUid());
-            user.setGoogleID(firebaseUser.getUid());
+            user.setGoogleId(firebaseUser.getUid());
             DatabaseFirebase db = new DatabaseFirebase();
             db.insertUserToDatabase(user);
 
