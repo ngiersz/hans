@@ -1,5 +1,7 @@
 package com.hans.client;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
+
+import org.w3c.dom.Text;
 
 public class ClientOrderInfoFragment extends Fragment {
     Order order;
@@ -30,6 +34,8 @@ public class ClientOrderInfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
+
+        TextView status = view.findViewById(R.id.order_status);
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -58,6 +64,7 @@ public class ClientOrderInfoFragment extends Fragment {
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
+        status.setText(order.getOrderStatus().getPolishName());
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());
@@ -72,10 +79,29 @@ public class ClientOrderInfoFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteOrderByID(order);
-                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-//                db.insertOrderToDatabase(order);
+
+                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
+                buider.setMessage("Czy na pewno chcesz usunąć te zlecenie?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                db.deleteOrderByID(order);
+                                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+                                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                            }
+                        })
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                return;
+                            }
+                        });
+                buider.create().show();
+
             }
         });
 

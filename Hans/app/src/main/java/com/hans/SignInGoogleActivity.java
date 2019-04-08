@@ -79,16 +79,15 @@ public class SignInGoogleActivity extends AppCompatActivity
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }
-        else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
+        } else if (requestCode == RC_COMPLETE_ACCOUNT_DATA)
         {
             String userJSON = data.getStringExtra("userJSON");
             // firebaseUser ready to use
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             User user = User.createFromJSON(userJSON);
-            Log.d("koy","mail of new user" +firebaseUser.getEmail());
+            Log.d("koy", "mail of new user" + firebaseUser.getEmail());
             user.setGoogleEmail(firebaseUser.getEmail());
-            Log.d("koy","id of new user" +firebaseUser.getUid());
+            Log.d("koy", "id of new user" + firebaseUser.getUid());
             user.setGoogleId(firebaseUser.getUid());
             DatabaseFirebase db = new DatabaseFirebase();
             db.insertUserToDatabase(user);
@@ -103,14 +102,15 @@ public class SignInGoogleActivity extends AppCompatActivity
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
-    {        Log.d("koy", "handler");
+    {
+        Log.d("koy", "handler");
 
         try
         {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated email.
-            Log.w("koy","zalogowanie na google" + account.getEmail());
+            Log.w("koy", "zalogowanie na google" + account.getEmail());
             firebaseAuthWithGoogle(account);
 
         } catch (ApiException e)
@@ -140,25 +140,28 @@ public class SignInGoogleActivity extends AppCompatActivity
                             Log.d("koy", "signInWithCredential:success");
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                            db.getUser(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            db.getUser(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+                            {
                                 @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if(task.getResult().isEmpty()){
+                                public void onComplete(@NonNull Task<QuerySnapshot> task)
+                                {
+                                    if (task.isSuccessful())
+                                    {
+                                        if (task.getResult().isEmpty())
+                                        {
                                             Intent intent = new Intent(getBaseContext(), CompleteAccountDataActivity.class);
                                             startActivityForResult(intent, RC_COMPLETE_ACCOUNT_DATA);
-                                        }
-                                        else{
+                                        } else
+                                        {
                                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                             startActivity(intent);
-
                                         }
-                                    } else {
+                                    } else
+                                    {
                                         Log.d(TAG, "Error getting documents: ", task.getException());
                                     }
                                 }
                             });
-
 
 
                             // activity for completing user info
@@ -168,7 +171,7 @@ public class SignInGoogleActivity extends AppCompatActivity
                         {
                             // If sign in fails, display a message to the user.
                             Log.w("koy", "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.layout.activity_sign_in_with_google), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.layout.activity_sign_in_with_google), "Logowanie się nie powiodło.", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });

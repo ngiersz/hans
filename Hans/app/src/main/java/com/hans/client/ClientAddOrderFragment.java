@@ -127,13 +127,13 @@ public class ClientAddOrderFragment extends Fragment
                     return;
                 }
 
-                String location1 = fromCity.getText().toString() +
-                        fromZipCode.getText().toString() +
-                        fromStreet.getText().toString() +
+                String location1 = fromCity.getText().toString() + " " +
+                        fromZipCode.getText().toString() + " " +
+                        fromStreet.getText().toString() + " " +
                         fromNumber.getText().toString();
-                String location2 = toCity.getText().toString() +
-                        toZipCode.getText().toString() +
-                        toStreet.getText().toString() +
+                String location2 = toCity.getText().toString() + " " +
+                        toZipCode.getText().toString() + " " +
+                        toStreet.getText().toString() + " " +
                         toNumber.getText().toString();
 
                 Double weightDouble = Double.parseDouble(weight.getText().toString());
