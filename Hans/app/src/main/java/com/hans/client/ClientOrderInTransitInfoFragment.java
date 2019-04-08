@@ -60,6 +60,8 @@ public class ClientOrderInTransitInfoFragment extends Fragment {
         TextView delivererEmail = view.findViewById(R.id.delivererEmail);
         TextView delivererPhone = view.findViewById(R.id.delivererPhone);
 
+        TextView status = view.findViewById(R.id.order_status);
+
 
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
@@ -83,7 +85,7 @@ public class ClientOrderInTransitInfoFragment extends Fragment {
         delivererEmail.setText(deliverer.getGoogleEmail());
         delivererPhone.setText(deliverer.getPhoneNumber());
 
-
+        status.setText(order.getOrderStatus().getPolishName());
         ordersListView = view.findViewById(R.id.listView);
 
 
