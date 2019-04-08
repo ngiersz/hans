@@ -1,5 +1,7 @@
 package com.hans.client;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -77,10 +79,29 @@ public class ClientOrderInfoFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.deleteOrderByID(order);
-                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
-//                db.insertOrderToDatabase(order);
+
+                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
+                buider.setMessage("Czy na pewno chcesz usunąć te zlecenie?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                db.deleteOrderByID(order);
+                                Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+                                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                            }
+                        })
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                return;
+                            }
+                        });
+                buider.create().show();
+
             }
         });
 

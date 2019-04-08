@@ -21,7 +21,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -38,8 +38,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Miasto"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -47,8 +47,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Kod pocztowy"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -56,8 +56,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Ulica"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -65,14 +65,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Numer domu"
-                        android:textSize="20sp"
-                        android:inputType="numberSigned"/>
+                        android:inputType="numberSigned"
+                        android:textSize="20sp" />
 
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -89,8 +89,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Miasto"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -98,8 +98,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Kod pocztowy"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -107,8 +107,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Ulica"
-                        android:textSize="20sp"
-                        android:inputType="textPostalAddress"/>
+                        android:inputType="textPostalAddress"
+                        android:textSize="20sp" />
 
 
                     <EditText
@@ -116,8 +116,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Numer domu"
-                        android:textSize="20sp"
-                        android:inputType="numberSigned"/>
+                        android:inputType="numberSigned"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -135,8 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Opis"
-                android:textSize="20sp"
-                android:inputType="textMultiLine"/>
+                android:inputType="textMultiLine"
+                android:textSize="20sp" />
 
 
             <LinearLayout
@@ -248,8 +248,8 @@
                         android:id="@+id/width"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -270,8 +270,8 @@
                         android:id="@+id/height"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -292,8 +292,8 @@
                         android:id="@+id/depth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:inputType="numberDecimal"/>
+                        android:inputType="numberDecimal"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 

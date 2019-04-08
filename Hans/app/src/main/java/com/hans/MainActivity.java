@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity
             }
             else
             {
-
                 Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, mapsActivity);

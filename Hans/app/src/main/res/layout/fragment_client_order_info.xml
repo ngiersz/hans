@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,15 +7,14 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
 
-
-
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,100 +27,124 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:text="Status"/>
+                android:text="Status"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/order_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:editable="false"
+                android:textColor="#4CAF50"
                 android:textSize="20dp"
-                android:editable="false"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Punkt początkowy"
-                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/fromCity"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Miasto"
-                android:textSize="20sp"
-                android:editable="false"/>
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt początkowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/fromCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Miasto"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/fromZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp"
-                android:editable="false"/>
+                    <EditText
+                        android:id="@+id/fromZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/fromStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ulica"
-                android:textSize="20sp"
-                android:editable="false"/>
+                    <EditText
+                        android:id="@+id/fromStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Ulica"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/fromNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Numer domu"
-                android:textSize="20sp"
-                android:editable="false"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Punkt końcowy"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/toCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Miasto"
-                android:textSize="20sp"
-                android:editable="false"/>
+                    <EditText
+                        android:id="@+id/fromNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Numer domu"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Kod pocztowy"
-                android:textSize="20sp"
-                android:editable="false"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Punkt końcowy"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/toCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Miasto"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toStreet"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ulica"
-                android:textSize="20sp"
-                android:editable="false"/>
+                    <EditText
+                        android:id="@+id/toZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Kod pocztowy"
+                        android:textSize="20sp" />
 
 
-            <EditText
-                android:id="@+id/toNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Numer domu"
-                android:textSize="20sp"
-                android:editable="false"/>
+                    <EditText
+                        android:id="@+id/toStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Ulica"
+                        android:textSize="20sp" />
+
+
+                    <EditText
+                        android:id="@+id/toNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:hint="Numer domu"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
 
 
             <TextView
@@ -136,9 +158,9 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:editable="false"
                 android:hint="Opis"
-                android:textSize="20sp"
-                android:editable="false"/>
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,8 +170,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -162,15 +184,15 @@
                         android:id="@+id/price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -183,14 +205,13 @@
                         android:id="@+id/weight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
 
-
-
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,8 +234,8 @@
                         android:id="@+id/width"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -235,8 +256,8 @@
                         android:id="@+id/height"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -257,26 +278,25 @@
                         android:id="@+id/depth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:editable="false"/>
+                        android:editable="false"
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
             <Button
                 android:id="@+id/cancel_order_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                android:textColor="#FFFFFF"
-                android:text="Anuluj zlecenie" />
+                android:text="Anuluj zlecenie"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
 
     </ScrollView>
-
-
 
 
 </android.support.constraint.ConstraintLayout>

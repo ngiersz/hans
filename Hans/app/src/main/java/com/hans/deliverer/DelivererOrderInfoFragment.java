@@ -1,5 +1,7 @@
 package com.hans.deliverer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
@@ -107,17 +109,36 @@ public class DelivererOrderInfoFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
-                acceptOrder();
-                sendNotificationToClient();
+                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
+                buider.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
-                Fragment newFragment = new DelivererAllOrdersFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment, newFragment);
+                                acceptOrder();
+                                sendNotificationToClient();
 
-                transaction.addToBackStack(null);
-                transaction.commit();
+                                Fragment newFragment = new DelivererAllOrdersFragment();
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragment, newFragment);
+
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+                        })
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                return;
+                            }
+                        });
+                buider.create().show();
             }
         });
 
