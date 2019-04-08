@@ -18,7 +18,7 @@ import javax.mail.internet.MimeMessage;
 public class MailSender extends AsyncTask<String, Integer, Void> {
 
     // TODO: properties in another file
-    final String fromEmail = "";
+    final String fromEmail = ""; // mail i haslo do konta Google Hansa
     final String password = "";
 
     @Override
