@@ -22,6 +22,7 @@ import com.hans.MainActivity;
 import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
+import com.hans.domain.User;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,8 @@ import static android.support.constraint.Constraints.TAG;
 public class ClientInTransitOrdersFragment extends Fragment {
 
     ArrayList<Order> InTransitOrderList = new ArrayList<>();
+    ArrayList<User> InTransitDelivererList = new ArrayList<>();
+
     DatabaseFirebase db = new DatabaseFirebase();
     View v;
     ListView ordersListView;
@@ -43,9 +46,11 @@ public class ClientInTransitOrdersFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
+
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Log.d("LISTPOS", Integer.toString(position));
                 Fragment newFragment = new ClientOrderInTransitInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -53,6 +58,12 @@ public class ClientInTransitOrdersFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("order", InTransitOrderList.get(position).toJSON());
+
+                User client = getUserForOrder(InTransitOrderList.get(position).getClientId());
+                Log.d("Client22", client.toString());
+
+
+                bundle.putString("deliverer", getUserForOrder(InTransitOrderList.get(position).getClientId()).toJSON());
                 newFragment.setArguments(bundle);
 
                 transaction.addToBackStack(null);
@@ -89,5 +100,38 @@ public class ClientInTransitOrdersFragment extends Fragment {
                 }
             }
         });
+
+        db.getAllUsers().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    InTransitDelivererList.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        User userFromDatabase = document.toObject(User.class);
+                        InTransitDelivererList.add(userFromDatabase);
+                        Log.d("Client22", document.toObject(User.class).toString());
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+    private User getUserForOrder(String googleID){
+        User client = new User();
+        Log.d("Client22", googleID);
+
+        for(User e: InTransitDelivererList){
+            if(e.getGoogleId().equals(googleID)){
+                Log.d("Client22", e.toString());
+
+                client = e;
+                Log.d("Client22", client.toString());
+
+            }
+        }
+        return client;
     }
 }

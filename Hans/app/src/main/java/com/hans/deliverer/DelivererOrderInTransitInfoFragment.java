@@ -131,8 +131,6 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-
-
         return view;
     }
 

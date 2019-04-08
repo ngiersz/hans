@@ -14,9 +14,11 @@ import android.widget.TextView;
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
+import com.hans.domain.User;
 
 public class ClientOrderInTransitInfoFragment extends Fragment {
     Order order;
+    User deliverer;
     ListView ordersListView;
     DatabaseFirebase db = new DatabaseFirebase();
 
@@ -30,6 +32,11 @@ public class ClientOrderInTransitInfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
+
+        String delivererJSON = bundle.getString("deliverer");
+        deliverer = User.createFromJSON(delivererJSON);
+
+
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -48,6 +55,14 @@ public class ClientOrderInTransitInfoFragment extends Fragment {
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
 
+        TextView delivererName = view.findViewById(R.id.deliverertName);
+        TextView delivererSurName = view.findViewById(R.id.delivererSurname);
+        TextView delivererEmail = view.findViewById(R.id.delivererEmail);
+        TextView delivererPhone = view.findViewById(R.id.delivererPhone);
+
+        TextView status = view.findViewById(R.id.order_status);
+
+
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
         fromStreet.setText(order.getPickupAddress().get("street").toString());
@@ -65,6 +80,12 @@ public class ClientOrderInTransitInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
+        delivererName.setText(deliverer.getName());
+        delivererSurName.setText(deliverer.getSurname());
+        delivererEmail.setText(deliverer.getGoogleEmail());
+        delivererPhone.setText(deliverer.getPhoneNumber());
+
+        status.setText(order.getOrderStatus().getPolishName());
         ordersListView = view.findViewById(R.id.listView);
 
 
