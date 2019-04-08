@@ -19,33 +19,34 @@ public class User {
         this.surname = surname;
     }
 
-    public User(){}
+
     public User(String name,String surname, String phoneNumber){
         this.name=name;
         this.surname=surname;
         this.phoneNumber=phoneNumber;
     }
 
+    public User(){}
 
-    public void setGoogleEmail(String newGoogleEmail){
-        this.googleEmail =newGoogleEmail;
-    }
-    public void setGoogleID(String newGoogleID){
-        this.googleId =newGoogleID;
-    }
-    public void setName(String newName){
-        this.name=newName;
-    }
-    public void setSurName(String newSurName){
-        this.name=newSurName;
-    }
-    public void setAge(String newAge){
-        this.name=newAge;
-    }
-    public void setGender(String newGender){
-        this.name=newGender;
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
     }
 
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getGoogleEmail(){return this.googleEmail;}
     public String getGoogleId(){return  this.googleId;}

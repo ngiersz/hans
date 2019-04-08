@@ -27,8 +27,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.client.ClientAddOrderFragment;
 import com.hans.client.ClientAllWaitingsOrdersFragment;
+import com.hans.client.ClientInTransitOrdersFragment;
 import com.hans.client.ClientMenuFragment;
 import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
 
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders:
-                fragmentClass =  ClientMenuFragment.class;
+                fragmentClass =  ClientInTransitOrdersFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.search_new_orders:
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "szukaj zleceń");
                 break;
             case R.id.in_process_order:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = DelivererInTransitOrdersFragment.class;
                 Log.d("menu", "zlecenie w trakcie wykonywania");
                 break;
             case R.id.my_account:
