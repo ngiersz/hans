@@ -15,6 +15,8 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
+import org.w3c.dom.Text;
+
 public class ClientOrderInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
@@ -30,6 +32,8 @@ public class ClientOrderInfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
+
+        TextView status = view.findViewById(R.id.order_status);
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -58,6 +62,7 @@ public class ClientOrderInfoFragment extends Fragment {
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
+        status.setText(order.getOrderStatus().getPolishName());
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());
