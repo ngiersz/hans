@@ -250,12 +250,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Imie klienta"
+                        android:text="Imie dostawcy"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/clientName"
+                        android:id="@+id/deliverertName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
@@ -272,12 +272,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nazwisko klienta"
+                        android:text="Nazwisko dostawcy"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/clientSurname"
+                        android:id="@+id/delivererSurname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
@@ -299,7 +299,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/clientPhone"
+                        android:id="@+id/delivererPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
@@ -322,7 +322,7 @@
                         android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/clientEmail"
+                        android:id="@+id/delivererEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
