@@ -59,7 +59,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("order", InTransitOrderList.get(position).toJSON());
 
-                User client = getUserForOrder(InTransitOrderList.get(position).getClientId());
+                User client = getUserForOrder(InTransitOrderList.get(position).getDelivererId());
                 Log.d("Client22", client.toString());
 
 
