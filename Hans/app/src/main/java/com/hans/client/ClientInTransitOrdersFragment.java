@@ -63,7 +63,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
                 Log.d("Client22", client.toString());
 
 
-                bundle.putString("deliverer", getUserForOrder(InTransitOrderList.get(position).getClientId()).toJSON());
+                bundle.putString("deliverer",client.toJSON());
                 newFragment.setArguments(bundle);
 
                 transaction.addToBackStack(null);
