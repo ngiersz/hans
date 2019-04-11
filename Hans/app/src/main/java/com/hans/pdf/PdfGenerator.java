@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class PdfGenerator {
 
-    public Uri getPdf(String text) {
+    public File getPdf(String text) {
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder
                 (300, 600, 1).create();
@@ -43,11 +43,18 @@ public class PdfGenerator {
 
         Log.d("pdf", "PDF was created");
 
-        File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf//");
-        Uri path = Uri.fromFile(pdfFile);
-        Log.d("pdf", "PDF was written to " + path.getPath());
+        File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf.pdf");
+//        Uri path = Uri.fromFile(pdfFile);
+        try {
+            document.writeTo(new FileOutputStream(pdfFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        return path;
+
+        Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
+
+        return pdfFile;
 
 
 //        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/mypdf/";

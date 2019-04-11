@@ -44,6 +44,15 @@
         <activity
             android:name=".CompleteAccountDataActivity"
             android:label="Uzupełnij swoje dane"></activity>
+        <provider
+            android:name="com.hans.pdf.PdfFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

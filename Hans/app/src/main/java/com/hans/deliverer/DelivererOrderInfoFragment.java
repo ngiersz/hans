@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ import com.hans.domain.User;
 import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
 import com.hans.pdf.PdfGenerator;
+
+import java.io.File;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -87,11 +90,22 @@ public class DelivererOrderInfoFragment extends Fragment {
 
         // test
         PdfGenerator pdfGenerator = new PdfGenerator();
-        Uri path = pdfGenerator.getPdf("Nasz nowy dokument PDF");
+        File pdf = pdfGenerator.getPdf("Nasz nowy dokument PDF");
+        if (pdf.exists()) {
+            Log.d("pdf", "Pdf exists. Path: " + pdf.getAbsolutePath());
+        } else {
+            Log.d("pdf", "Pdf does not exist. Path: " + pdf.getAbsolutePath());
+        }
+        Log.d("pdf", getContext().getApplicationContext().getPackageName() +
+                ".pdf.PdfFileProvider");
+        Uri path = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() +
+                ".pdf.PdfFileProvider", pdf);
+
         // Setting the intent for pdf reader
         Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
         pdfIntent.setDataAndType(path, "application/pdf");
         pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try {
             startActivity(pdfIntent);
         } catch (ActivityNotFoundException e) {
@@ -137,11 +151,9 @@ public class DelivererOrderInfoFragment extends Fragment {
 
                 AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
                 buider.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
-                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
-                        {
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
+                            public void onClick(DialogInterface dialog, int which) {
                                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
                                 acceptOrder();
@@ -155,11 +167,9 @@ public class DelivererOrderInfoFragment extends Fragment {
                                 transaction.commit();
                             }
                         })
-                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
-                        {
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
+                            public void onClick(DialogInterface dialog, int which) {
                                 return;
                             }
                         });
