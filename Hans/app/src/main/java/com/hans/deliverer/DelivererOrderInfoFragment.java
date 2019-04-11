@@ -1,6 +1,7 @@
 package com.hans.deliverer;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
+import com.hans.pdf.PdfGenerator;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -82,6 +84,20 @@ public class DelivererOrderInfoFragment extends Fragment {
         width.setText(order.getDimensions().get("width").toString());
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
+
+        // test
+        PdfGenerator pdfGenerator = new PdfGenerator();
+        Uri path = pdfGenerator.getPdf("Nasz nowy dokument PDF");
+        // Setting the intent for pdf reader
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        try {
+            startActivity(pdfIntent);
+        } catch (ActivityNotFoundException e) {
+//            Toast.makeText(TableActivity.this, "Can't read pdf file", Toast.LENGTH_SHORT).show();
+            Log.d("pdf", "PDF was shown");
+        }
 
         final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();
         final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();
