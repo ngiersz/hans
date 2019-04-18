@@ -23,10 +23,10 @@ public class PdfGenerator {
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        canvas.drawCircle(50, 50, 30, paint);
+//        paint.setColor(Color.RED);
+//        canvas.drawCircle(50, 50, 30, paint);
         paint.setColor(Color.BLACK);
-        canvas.drawText(text, 80, 50, paint);
+        canvas.drawText(text, 10, 10, paint);
         document.finishPage(page);
 
         // page 2
@@ -38,9 +38,6 @@ public class PdfGenerator {
         canvas.drawCircle(100, 100, 100, paint);
         document.finishPage(page);
 
-        // close the document
-        document.close();
-
         Log.d("pdf", "PDF was created");
 
         File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf.pdf");
@@ -50,9 +47,9 @@ public class PdfGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
+        // close the document
+        document.close();
 
         return pdfFile;
 

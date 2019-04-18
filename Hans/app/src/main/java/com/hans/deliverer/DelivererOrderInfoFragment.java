@@ -90,7 +90,7 @@ public class DelivererOrderInfoFragment extends Fragment {
 
         // test
         PdfGenerator pdfGenerator = new PdfGenerator();
-        File pdf = pdfGenerator.getPdf("Nasz nowy dokument PDF");
+        File pdf = pdfGenerator.getPdf("---- ąęółń Nasz nowy dokument PDF ąęółńaaaaaa -----");
         if (pdf.exists()) {
             Log.d("pdf", "Pdf exists. Path: " + pdf.getAbsolutePath());
         } else {
