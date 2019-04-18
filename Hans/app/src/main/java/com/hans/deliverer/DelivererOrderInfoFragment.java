@@ -34,8 +34,6 @@ import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
 import com.hans.pdf.PdfGenerator;
 
-import java.io.File;
-
 import static android.support.constraint.Constraints.TAG;
 
 
@@ -88,30 +86,11 @@ public class DelivererOrderInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        // test
+        // test: creating PDF when entering orders info
         PdfGenerator pdfGenerator = new PdfGenerator();
-        File pdf = pdfGenerator.getPdf("---- ąęółń Nasz nowy dokument PDF ąęółńaaaaaa -----");
-        if (pdf.exists()) {
-            Log.d("pdf", "Pdf exists. Path: " + pdf.getAbsolutePath());
-        } else {
-            Log.d("pdf", "Pdf does not exist. Path: " + pdf.getAbsolutePath());
-        }
-        Log.d("pdf", getContext().getApplicationContext().getPackageName() +
-                ".pdf.PdfFileProvider");
-        Uri path = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() +
-                ".pdf.PdfFileProvider", pdf);
+        String pdfPath = pdfGenerator.createPdf("---- ąęółń Nasz nowy dokument PDF ąęółńaaaaaa -----");
+        Snackbar.make(getActivity().findViewById(android.R.id.content), "Plik PDF został zapisany na: " + pdfPath, Snackbar.LENGTH_LONG).show();
 
-        // Setting the intent for pdf reader
-        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
-        pdfIntent.setDataAndType(path, "application/pdf");
-        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-            startActivity(pdfIntent);
-        } catch (ActivityNotFoundException e) {
-//            Toast.makeText(TableActivity.this, "Can't read pdf file", Toast.LENGTH_SHORT).show();
-            Log.d("pdf", "PDF was shown");
-        }
 
         final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();
         final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();

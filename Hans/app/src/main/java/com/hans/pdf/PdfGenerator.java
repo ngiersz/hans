@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 public class PdfGenerator {
 
-    public File getPdf(String text) {
+    public String createPdf(String text) {
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder
                 (300, 600, 1).create();
@@ -51,7 +50,7 @@ public class PdfGenerator {
         // close the document
         document.close();
 
-        return pdfFile;
+        return pdfFile.getAbsolutePath();
 
 
 //        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/mypdf/";
