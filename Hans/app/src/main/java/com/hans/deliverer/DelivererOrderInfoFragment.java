@@ -86,10 +86,6 @@ public class DelivererOrderInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        // test: creating PDF when entering orders info
-        PdfGenerator pdfGenerator = new PdfGenerator();
-        String pdfPath = pdfGenerator.createPdf("---- ąęółń Nasz nowy dokument PDF ąęółńaaaaaa -----");
-        Snackbar.make(getActivity().findViewById(android.R.id.content), "Plik PDF został zapisany na: " + pdfPath, Snackbar.LENGTH_LONG).show();
 
 
         final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();

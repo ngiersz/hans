@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -33,6 +34,7 @@ import com.hans.deliverer.DelivererAllOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
+import com.hans.pdf.PdfGenerator;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -48,6 +50,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        // test: creating PDF when entering orders info
+        PdfGenerator pdfGenerator = new PdfGenerator();
+        String pdfPath = pdfGenerator.createPdf();
+        Snackbar.make(findViewById(android.R.id.content), "Plik PDF został zapisany na: " + pdfPath, Snackbar.LENGTH_LONG).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
