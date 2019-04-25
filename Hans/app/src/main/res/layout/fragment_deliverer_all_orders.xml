@@ -6,9 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".deliverer.DelivererAllOrdersFragment">
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listView"/>
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Sortowanie po:"
+                android:textSize="16dp"
+                android:paddingTop="16dp"
+                android:paddingLeft="8dp"/>
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listView"/>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
