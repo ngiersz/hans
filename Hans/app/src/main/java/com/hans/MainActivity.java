@@ -50,11 +50,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        // test: creating PDF when entering orders info
-        PdfGenerator pdfGenerator = new PdfGenerator();
-        String pdfPath = pdfGenerator.createPdf();
-        Snackbar.make(findViewById(android.R.id.content), "Plik PDF został zapisany na: " + pdfPath, Snackbar.LENGTH_LONG).show();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -197,7 +192,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = SignDocumentFragment.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:

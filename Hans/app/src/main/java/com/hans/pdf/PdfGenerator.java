@@ -16,7 +16,7 @@ public class PdfGenerator
     private static int PAGE_WIDTH = 842;
     private static int PAGE_HEIGHT = 595;
 
-    public String createPdf()
+    public String createPdf(Canvas c)
     {
         String date = "14.07.2019 15:33";
         String deliverer = "Marcin Hradowicz";
@@ -75,6 +75,7 @@ public class PdfGenerator
 
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawLine(PAGE_WIDTH-50-200, 350, PAGE_WIDTH-50, 350, paint);
+
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(11);
         canvas.drawText("podpis odbierającego", PAGE_WIDTH-50-100, 370, paint);
@@ -83,6 +84,7 @@ public class PdfGenerator
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         canvas.drawRect(50, 200, PAGE_WIDTH-50, 230, paint);
+
 
 
         document.finishPage(page);
