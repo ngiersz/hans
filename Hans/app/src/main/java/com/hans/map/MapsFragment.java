@@ -131,19 +131,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             float[] distance = new float[1];
             Location.distanceBetween(x1,y1,x2,y2,distance);
-            double price = distance[0]/1000 * 0.8;
+
+            double price = Math.log(((distance[0]/1000)+30)/30)*55;
+
             if (price < 10)
                 price = 10;
 
-            double priceForWeigth = 0;
+            double priceForWeight = weight/20;
             if (weight > 50)
-                priceForWeigth = weight / 15;
+                priceForWeight = weight / 15;
             if (weight > 100)
-                priceForWeigth = weight / 12;
+                priceForWeight = weight / 12;
             if (weight > 500)
-                priceForWeigth = weight / 10;
+                priceForWeight = weight / 10;
 
-            price += priceForWeigth;
+            price += priceForWeight;
 
             result.put("distance", Math.round((distance[0]/1000) * 100.0)/100.0);
             result.put("price", Math.round(price * 100.0)/100.0);
