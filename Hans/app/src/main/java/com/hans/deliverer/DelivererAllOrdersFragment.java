@@ -24,6 +24,8 @@ import com.hans.R;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -66,13 +68,30 @@ public class DelivererAllOrdersFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("spinner", Integer.toString(position));
+                if(receivedOrderList.size() > 1) {
+                   switch(position) {
+                       case 3:
+                           sortByDistanceDesc();
+                           break;
+                       case 4:
+                           sortByPriceAsc();
+                           break;
+                       case 5:
+                           sortByPriceDesc();
+                           break;
+                   }
+                   OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
+                   ordersListView.setAdapter(orderListAdapter);
+                   Log.d("spinner", "Orders list replaced by sorted list");
+                }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+
+
         return view;
     }
 
@@ -105,4 +124,41 @@ public class DelivererAllOrdersFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }
+
+    private void sortByPriceDesc(){
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getPrice() < o2.getPrice()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
+
+    private void sortByPriceAsc(){
+//        Collections.sort(receivedOrderList, new Comparator<Order>() {
+//            @Override
+//            public int compare(Order o1, Order o2) {
+//                if (o1.getPrice() > o2.getPrice()) {
+//                    return 1;
+//                }
+//                return -1;
+//            }
+//        });
+    }
+
+    private void sortByDistanceDesc(){
+//        Collections.sort(receivedOrderList, new Comparator<Order>() {
+//            @Override
+//            public int compare(Order o1, Order o2) {
+//                if (o1.gwtd() < o2.getPrice()) {
+//                    return 1;
+//                }
+//                return -1;
+//            }
+//        });
+    }
+
 }
