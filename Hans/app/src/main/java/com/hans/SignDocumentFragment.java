@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,19 +23,40 @@ import android.widget.LinearLayout;
 
 import com.hans.pdf.PdfGenerator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class SignDocumentFragment extends Fragment
 {
     View view;
     DrawingView dv;
     private Paint mPaint;
-    Canvas canvas;
+    private Path mPath;
+
+    PdfDocument document;
+    PdfDocument.Page page;
+    private static int PAGE_WIDTH = 1080;
+    private static int PAGE_HEIGHT = 1920;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+
         ((MainActivity) getActivity()).setActionBarTitle("Złóż podpis");
         view = inflater.inflate(R.layout.fragment_sign_document, container, false);
+
+
+        document = new PdfDocument();
+
+        PdfDocument.PageInfo pageInfo;
+        pageInfo = new PdfDocument.PageInfo.Builder
+                (PAGE_WIDTH, PAGE_HEIGHT, 1).create();
+
+        page = document.startPage(pageInfo);
+
 
         Button confirmButton = view.findViewById(R.id.confirm_button);
         confirmButton.setOnClickListener(new View.OnClickListener()
@@ -39,11 +64,49 @@ public class SignDocumentFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                canvas = dv.getmCanvas();
 
-                // test: creating PDF when entering orders info
+//                Matrix scaleMatrix = new Matrix();
+
+////                scaleMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
+//                scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(),rectF.centerY());
+//                mPath.transform(scaleMatrix);
+
+                RectF rectF = new RectF();
+                mPath.computeBounds(rectF, true);
+                Matrix rotateMatrix = new Matrix();
+                rotateMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
+                mPath.transform(rotateMatrix);
+
                 PdfGenerator pdfGenerator = new PdfGenerator();
-                String pdfPath = pdfGenerator.createPdf(canvas);
+                pdfGenerator.createPdf();
+                pdfGenerator.signInDocument(mPath);
+                pdfGenerator.savePdf();
+//                Canvas canvas = page.getCanvas();
+//                Matrix scaleMatrix = new Matrix();
+//                RectF rectF = new RectF();
+//                mPath.computeBounds(rectF, true);
+//                scaleMatrix.setScale(0.5f, 0.5f, rectF.centerX(),rectF.centerY());
+//                scaleMatrix.setRotate(90f, rectF.centerX(),rectF.centerY());
+//
+//                mPath.transform(scaleMatrix);
+//                canvas.drawPath(mPath, mPaint);
+//
+//                document.finishPage(page);
+//
+//                Log.d("pdf", "PDF was created");
+//
+//                File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf.pdf");
+////        Uri path = Uri.fromFile(pdfFile);
+//                try
+//                {
+//                    document.writeTo(new FileOutputStream(pdfFile));
+//                } catch (IOException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//                Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
+//                // close the document
+//                document.close();
 
             }
         });
@@ -66,20 +129,29 @@ public class SignDocumentFragment extends Fragment
 
     public class DrawingView extends View
     {
-
         public int width;
         public int height;
         private Bitmap mBitmap;
         private Canvas mCanvas;
-        private Path mPath;
+//        private Path mPath;
         private Paint mBitmapPaint;
         Context context;
         private Paint circlePaint;
         private Path circlePath;
 
+
         public DrawingView(Context c)
         {
             super(c);
+
+//            mCanvas = page.getCanvas();
+//            width = mCanvas.getWidth();
+//            height = mCanvas.getHeight();
+//            width = this.getLayoutParams().width;
+//            height = this.getLayoutParams().height;
+//            this.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+
+
             context = c;
             mPath = new Path();
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -90,6 +162,9 @@ public class SignDocumentFragment extends Fragment
             circlePaint.setStyle(Paint.Style.STROKE);
             circlePaint.setStrokeJoin(Paint.Join.MITER);
             circlePaint.setStrokeWidth(4f);
+
+            Log.d("psint", "consctuctor");
+
         }
 
         @Override
@@ -99,6 +174,8 @@ public class SignDocumentFragment extends Fragment
 
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
+            Log.d("psint", "onSizeChanged");
+
         }
 
         @Override
@@ -109,6 +186,7 @@ public class SignDocumentFragment extends Fragment
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath(mPath, mPaint);
             canvas.drawPath(circlePath, circlePaint);
+            Log.d("psint", "onDraw");
         }
 
         private float mX, mY;
@@ -116,10 +194,12 @@ public class SignDocumentFragment extends Fragment
 
         private void touch_start(float x, float y)
         {
-            mPath.reset();
+//            mPath.reset();
             mPath.moveTo(x, y);
             mX = x;
             mY = y;
+            Log.d("psint", "touch_start");
+
         }
 
         private void touch_move(float x, float y)
@@ -135,6 +215,8 @@ public class SignDocumentFragment extends Fragment
                 circlePath.reset();
                 circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
             }
+            Log.d("psint", "touch_move");
+
         }
 
         private void touch_up()
@@ -144,7 +226,14 @@ public class SignDocumentFragment extends Fragment
             // commit the path to our offscreen
             mCanvas.drawPath(mPath, mPaint);
             // kill this so we don't double draw
-            mPath.reset();
+//            mPath.reset();
+
+
+
+//            mPdfGenerator.setCanvas(mCanvas);
+//            mPdfGenerator.createPdf();
+            Log.d("psint", "touch_up");
+
         }
 
         @Override
@@ -168,12 +257,9 @@ public class SignDocumentFragment extends Fragment
                     invalidate();
                     break;
             }
-            return true;
-        }
+            Log.d("psint", "onTouchEvent");
 
-        public Canvas getmCanvas()
-        {
-            return mCanvas;
+            return true;
         }
 
     }
