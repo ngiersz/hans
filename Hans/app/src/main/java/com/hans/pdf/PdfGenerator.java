@@ -7,12 +7,25 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import io.grpc.internal.IoUtils;
 
 public class PdfGenerator
 {
@@ -40,18 +53,12 @@ public class PdfGenerator
         Matrix scaleMatrix = new Matrix();
         RectF rectF = new RectF();
         mPath.computeBounds(rectF, true);
-        scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(),rectF.centerY());
+        scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(), rectF.centerY());
         mPath.transform(scaleMatrix);
 
         Matrix translateMatrix = new Matrix();
         translateMatrix.setTranslate(130f, -300f);
         mPath.transform(translateMatrix);
-
-//        scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(),rectF.centerY());
-
-//        scaleMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
-//        mPath.transform(scaleMatrix);
-
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -71,7 +78,7 @@ public class PdfGenerator
         String client = "Jan Kowalski";
         String name1 = "Przedmiot1";
         String description1 = "opis1";
-        String amount1 =  "ilość1";
+        String amount1 = "ilość1";
         String weight1 = "waga1";
         String measurmentsW1 = "W1";
         String measurmentsH1 = "H1";
@@ -86,26 +93,26 @@ public class PdfGenerator
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setFakeBoldText(true);
         paint.setTextSize(16);
-        canvas.drawText("PROTOKÓŁ PRZEKAZANIA TOWARU",PAGE_WIDTH/2, 80, paint);
+        canvas.drawText("PROTOKÓŁ PRZEKAZANIA TOWARU", PAGE_WIDTH / 2, 80, paint);
 
         paint.setTextSize(14);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Data wystawienia:",300, 110, paint);
-        canvas.drawText("Wykonawca usługi transportowej:",300, 130, paint);
-        canvas.drawText("Zleceniodawca usługi transportowej:",300, 150, paint);
+        canvas.drawText("Data wystawienia:", 300, 110, paint);
+        canvas.drawText("Wykonawca usługi transportowej:", 300, 130, paint);
+        canvas.drawText("Zleceniodawca usługi transportowej:", 300, 150, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setFakeBoldText(false);
-        canvas.drawText(date,310, 110, paint);
-        canvas.drawText(deliverer,310, 130, paint);
-        canvas.drawText(client,310, 150, paint);
+        canvas.drawText(date, 310, 110, paint);
+        canvas.drawText(deliverer, 310, 130, paint);
+        canvas.drawText(client, 310, 150, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(11);
-        canvas.drawText("Tabela 1. Przyjęte towary", PAGE_WIDTH/2, 190, paint);
+        canvas.drawText("Tabela 1. Przyjęte towary", PAGE_WIDTH / 2, 190, paint);
 
         paint.setTextSize(12);
-        canvas.drawText(item1, PAGE_WIDTH/2, 220, paint);
+        canvas.drawText(item1, PAGE_WIDTH / 2, 220, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("* - szerokość x długość x głębokość", 100, 250, paint);
@@ -117,17 +124,16 @@ public class PdfGenerator
         canvas.drawText(affirmationLine2, 50, 320, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawLine(PAGE_WIDTH-50-200, 450, PAGE_WIDTH-50, 450, paint);
+        canvas.drawLine(PAGE_WIDTH - 50 - 200, 450, PAGE_WIDTH - 50, 450, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(11);
-        canvas.drawText("podpis odbierającego", PAGE_WIDTH-50-100, 470, paint);
+        canvas.drawText("podpis odbierającego", PAGE_WIDTH - 50 - 100, 470, paint);
 
         // border
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
-        canvas.drawRect(50, 200, PAGE_WIDTH-50, 230, paint);
-
+        canvas.drawRect(50, 200, PAGE_WIDTH - 50, 230, paint);
 
 
 //        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/mypdf/";
@@ -146,13 +152,13 @@ public class PdfGenerator
 //        }
     }
 
-    public void savePdf()
+    public void saveLocal(String filename)
     {
         document.finishPage(page);
 
         Log.d("pdf", "PDF was created");
 
-        File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf.pdf");
+        File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//" + filename + ".pdf");
 //        Uri path = Uri.fromFile(pdfFile);
         try
         {
@@ -164,5 +170,86 @@ public class PdfGenerator
         Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
         // close the document
         document.close();
+        try
+        {
+            downloadFileFromFirebaseStorage(filename);
+        } catch (Exception e)
+        {
+
+        }
+    }
+
+    public void saveInFirebaseStorage(final String filename)
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        Uri file = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//" + filename + ".pdf"));
+        StorageReference catalogRef = storageRef.child(user.getUid() + "/" + filename + ".pdf");
+        catalogRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                    {
+                        // Get a URL to the uploaded content
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.d("storage", "yay");
+                        try
+                        {
+                            downloadFileFromFirebaseStorage(filename);
+                        } catch (Exception e)
+                        {
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener()
+                {
+                    @Override
+                    public void onFailure(@NonNull Exception exception)
+                    {
+                        // Handle unsuccessful uploads
+                        // ...
+                        Log.d("storage", "nieyay");
+
+                    }
+                });
+
+    }
+
+    public void downloadFileFromFirebaseStorage(String filename) throws IOException
+    {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        File TEMP_FOLDER = new File(Environment.getExternalStorageDirectory().toString(), "HansTemp");
+        if (!TEMP_FOLDER.exists())
+            TEMP_FOLDER.mkdirs();
+
+        StorageReference catalogRef = storageRef.child(user.getUid() + "/" + filename + ".pdf");
+
+        File localFile = File.createTempFile(filename, ".pdf", TEMP_FOLDER);
+        catalogRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
+                {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot)
+                    {
+                        // Successfully downloaded data to local file
+                        // ...
+                        Log.d("storage", "yay2");
+                    }
+                }).addOnFailureListener(new OnFailureListener()
+        {
+            @Override
+            public void onFailure(@NonNull Exception exception)
+            {
+                // Handle failed download
+                // ...
+                Log.d("storage", "nieyay2");
+
+            }
+        });
     }
 }

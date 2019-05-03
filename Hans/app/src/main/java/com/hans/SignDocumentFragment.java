@@ -8,10 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,21 +20,18 @@ import android.widget.LinearLayout;
 
 import com.hans.pdf.PdfGenerator;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class SignDocumentFragment extends Fragment
 {
     View view;
     DrawingView dv;
     private Paint mPaint;
     private Path mPath;
+    private Canvas canvas;
 
-    PdfDocument document;
-    PdfDocument.Page page;
-    private static int PAGE_WIDTH = 1080;
-    private static int PAGE_HEIGHT = 1920;
+//    PdfDocument document;
+//    PdfDocument.Page page;
+//    private static int PAGE_WIDTH = 1080;
+//    private static int PAGE_HEIGHT = 1920;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -46,17 +40,8 @@ public class SignDocumentFragment extends Fragment
 
 
         ((MainActivity) getActivity()).setActionBarTitle("Złóż podpis");
+
         view = inflater.inflate(R.layout.fragment_sign_document, container, false);
-
-
-        document = new PdfDocument();
-
-        PdfDocument.PageInfo pageInfo;
-        pageInfo = new PdfDocument.PageInfo.Builder
-                (PAGE_WIDTH, PAGE_HEIGHT, 1).create();
-
-        page = document.startPage(pageInfo);
-
 
         Button confirmButton = view.findViewById(R.id.confirm_button);
         confirmButton.setOnClickListener(new View.OnClickListener()
@@ -65,48 +50,32 @@ public class SignDocumentFragment extends Fragment
             public void onClick(View v)
             {
 
-//                Matrix scaleMatrix = new Matrix();
-
-////                scaleMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
-//                scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(),rectF.centerY());
-//                mPath.transform(scaleMatrix);
-
                 RectF rectF = new RectF();
                 mPath.computeBounds(rectF, true);
                 Matrix rotateMatrix = new Matrix();
                 rotateMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
                 mPath.transform(rotateMatrix);
-
                 PdfGenerator pdfGenerator = new PdfGenerator();
                 pdfGenerator.createPdf();
                 pdfGenerator.signInDocument(mPath);
-                pdfGenerator.savePdf();
-//                Canvas canvas = page.getCanvas();
-//                Matrix scaleMatrix = new Matrix();
-//                RectF rectF = new RectF();
-//                mPath.computeBounds(rectF, true);
-//                scaleMatrix.setScale(0.5f, 0.5f, rectF.centerX(),rectF.centerY());
-//                scaleMatrix.setRotate(90f, rectF.centerX(),rectF.centerY());
-//
-//                mPath.transform(scaleMatrix);
-//                canvas.drawPath(mPath, mPaint);
-//
-//                document.finishPage(page);
-//
-//                Log.d("pdf", "PDF was created");
-//
-//                File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//mypdf.pdf");
-////        Uri path = Uri.fromFile(pdfFile);
-//                try
-//                {
-//                    document.writeTo(new FileOutputStream(pdfFile));
-//                } catch (IOException e)
-//                {
-//                    e.printStackTrace();
-//                }
-//                Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
-//                // close the document
-//                document.close();
+                pdfGenerator.saveLocal("mypdf");
+
+                mPath.reset();
+                canvas.drawColor(Color.WHITE);
+                dv.invalidate();
+            }
+        });
+
+        Button clearButton = view.findViewById(R.id.clear_button);
+        clearButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                mPath.reset();
+                canvas.drawColor(Color.WHITE);
+                dv.invalidate();
 
             }
         });
@@ -132,7 +101,7 @@ public class SignDocumentFragment extends Fragment
         public int width;
         public int height;
         private Bitmap mBitmap;
-        private Canvas mCanvas;
+//        private Canvas mCanvas;
 //        private Path mPath;
         private Paint mBitmapPaint;
         Context context;
@@ -143,14 +112,6 @@ public class SignDocumentFragment extends Fragment
         public DrawingView(Context c)
         {
             super(c);
-
-//            mCanvas = page.getCanvas();
-//            width = mCanvas.getWidth();
-//            height = mCanvas.getHeight();
-//            width = this.getLayoutParams().width;
-//            height = this.getLayoutParams().height;
-//            this.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-
 
             context = c;
             mPath = new Path();
@@ -173,7 +134,7 @@ public class SignDocumentFragment extends Fragment
             super.onSizeChanged(w, h, oldw, oldh);
 
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mCanvas = new Canvas(mBitmap);
+            canvas = new Canvas(mBitmap);
             Log.d("psint", "onSizeChanged");
 
         }
@@ -224,14 +185,10 @@ public class SignDocumentFragment extends Fragment
             mPath.lineTo(mX, mY);
             circlePath.reset();
             // commit the path to our offscreen
-            mCanvas.drawPath(mPath, mPaint);
+            canvas.drawPath(mPath, mPaint);
             // kill this so we don't double draw
 //            mPath.reset();
 
-
-
-//            mPdfGenerator.setCanvas(mCanvas);
-//            mPdfGenerator.createPdf();
             Log.d("psint", "touch_up");
 
         }

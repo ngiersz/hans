@@ -47,7 +47,6 @@ public class SignInGoogleActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Log.d("koy", "signIn");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }

@@ -47,5 +47,8 @@ dependencies {
     // mail
     implementation 'com.sun.mail:android-mail:1.6.0'
 
+    // firebase storage
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

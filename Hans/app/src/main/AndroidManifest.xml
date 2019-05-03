@@ -34,7 +34,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,20 +43,12 @@
         </activity>
         <activity
             android:name=".SignInGoogleActivity"
-            android:label="Zaloguj się do HANS"></activity>
+            android:label="Zaloguj się do HANS"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".CompleteAccountDataActivity"
-            android:label="Uzupełnij swoje dane"></activity>
-        <provider
-            android:name="com.hans.pdf.PdfFileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
-
+            android:label="Uzupełnij swoje dane"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
