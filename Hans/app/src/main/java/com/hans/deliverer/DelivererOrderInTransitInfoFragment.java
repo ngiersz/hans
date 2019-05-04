@@ -1,5 +1,7 @@
 package com.hans.deliverer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -131,9 +133,48 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
+        Button button = view.findViewById(R.id.finish_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
+                buider.setMessage("Czy na pewno zakonczyc zlecenie?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                Snackbar.make(getView(), "zakonczono zlecenie", Snackbar.LENGTH_SHORT).show();
+
+                                finishOrder();
+                                //sendNotificationToClient();
+
+                                Fragment newFragment = new DelivererInTransitOrdersFragment();
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragment, newFragment);
+
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+                        })
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                return;
+                            }
+                        });
+                buider.create().show();
+            }
+        });
         return view;
     }
-
+    private void finishOrder(){
+        order.setOrderStatus(OrderStatus.CLOSED);
+        db.setOrder(order);
+    }
     public void openGoogleMapsNavigation(String destination) {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
 
@@ -157,10 +198,6 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
                         Log.d("Client", document.toObject(User.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-
-
-
-
 
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
