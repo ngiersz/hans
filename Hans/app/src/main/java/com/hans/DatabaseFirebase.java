@@ -162,6 +162,12 @@ public class DatabaseFirebase {
                 .whereEqualTo("orderStatus","IN_TRANSIT")
                 .get();
     }
+    public Task getClosedOrdersForDeliverer(String googleID){
+        return db.collection("Orders")
+                .whereEqualTo("delivererID",googleID)
+                .whereEqualTo("orderStatus","CLOSED")
+                .get();
+    }
     public Task getAllOrdersForClient(String googleId) {
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
@@ -181,7 +187,12 @@ public class DatabaseFirebase {
                 .whereEqualTo("orderStatus", "IN_TRANSIT")
                 .get();
     }
-
+    public Task getClosedOrdersForClient(String googleID){
+        return db.collection("Orders")
+                .whereEqualTo("clientId",googleID)
+                .whereEqualTo("orderStatus","CLOSED")
+                .get();
+    }
     public Task getUser(String googleId){
         return db.collection("Users")
                 .whereEqualTo("googleId", googleId)
