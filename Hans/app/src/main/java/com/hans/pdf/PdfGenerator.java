@@ -1,5 +1,11 @@
 package com.hans.pdf;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -8,8 +14,12 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,15 +30,19 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.hans.BuildConfig;
+import com.hans.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import io.grpc.internal.IoUtils;
-
 public class PdfGenerator
 {
+    private Context context;
+    private String CHANNEL_ID_DOWNLOAD = "0";
+    private int NOTIFICATION_ID_DOWNLOAD = 0;
+
     private static int PAGE_WIDTH = 842;
     private static int PAGE_HEIGHT = 595;
     private Canvas canvas;
@@ -37,8 +51,9 @@ public class PdfGenerator
     PdfDocument.Page page;
     PdfDocument.PageInfo pageInfo;
 
-    public PdfGenerator()
+    public PdfGenerator(Context context)
     {
+        this.context = context;
         document = new PdfDocument();
         pageInfo = new PdfDocument.PageInfo.Builder
                 (PAGE_WIDTH, PAGE_HEIGHT, 1).create();
@@ -154,11 +169,11 @@ public class PdfGenerator
 
     public void saveLocal(String filename)
     {
+        // saveLocal in local storage
         document.finishPage(page);
-
         Log.d("pdf", "PDF was created");
 
-        File pdfFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//" + filename + ".pdf");
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "//" + filename + ".pdf");
 //        Uri path = Uri.fromFile(pdfFile);
         try
         {
@@ -170,21 +185,16 @@ public class PdfGenerator
         Log.d("pdf", "PDF was created with path " + pdfFile.getAbsolutePath());
         // close the document
         document.close();
-        try
-        {
-            downloadFileFromFirebaseStorage(filename);
-        } catch (Exception e)
-        {
-
-        }
     }
 
-    public void saveInFirebaseStorage(final String filename)
+    public void sendToFirebaseStorage(String filename)
     {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-        Uri file = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "//" + filename + ".pdf"));
+        final File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "//" + filename + ".pdf");
+        Uri file = Uri.fromFile(localFile);
+
         StorageReference catalogRef = storageRef.child(user.getUid() + "/" + filename + ".pdf");
         catalogRef.putFile(file)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
@@ -195,13 +205,16 @@ public class PdfGenerator
                         // Get a URL to the uploaded content
 //                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Log.d("storage", "yay");
-                        try
-                        {
-                            downloadFileFromFirebaseStorage(filename);
-                        } catch (Exception e)
-                        {
+//                        try
+//                        {
+//                            downloadFileFromFirebaseStorage(filename);
+//                        } catch (Exception e)
+//                        {
+//
+//                        }
+                        boolean g = localFile.delete();
+                        Log.d("storage", Boolean.toString(g));
 
-                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener()
@@ -220,16 +233,27 @@ public class PdfGenerator
 
     public void downloadFileFromFirebaseStorage(String filename) throws IOException
     {
+        createNotificationChannel();
+
+        final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID_DOWNLOAD);
+        builder.setContentTitle(filename)
+                .setContentText("Pobieranie w trakcie")
+                .setSmallIcon(R.drawable.ic_file_download_white)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+// Issue the initial notification with zero progress
+        int PROGRESS_MAX = 100;
+        int PROGRESS_CURRENT = 0;
+        builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, true);
+        notificationManager.notify(NOTIFICATION_ID_DOWNLOAD, builder.build());
+
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-
-        File TEMP_FOLDER = new File(Environment.getExternalStorageDirectory().toString(), "HansTemp");
-        if (!TEMP_FOLDER.exists())
-            TEMP_FOLDER.mkdirs();
-
         StorageReference catalogRef = storageRef.child(user.getUid() + "/" + filename + ".pdf");
 
-        File localFile = File.createTempFile(filename, ".pdf", TEMP_FOLDER);
+        final File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + filename + ".pdf");
         catalogRef.getFile(localFile)
                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>()
                 {
@@ -238,7 +262,29 @@ public class PdfGenerator
                     {
                         // Successfully downloaded data to local file
                         // ...
+                        Intent target = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", localFile);
+
+                        target.setDataAndType(uri, "application/pdf");
+                        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        Intent intent = Intent.createChooser(target, "Open File");
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        // Create the TaskStackBuilder and add the intent, which inflates the back stack
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                        stackBuilder.addNextIntentWithParentStack(intent);
+                        // Get the PendingIntent containing the entire back stack
+                        PendingIntent resultPendingIntent =
+                                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                        builder.setContentText("Ukończono pobieranie")
+                                .setProgress(0, 0, false)
+                                .setContentIntent(resultPendingIntent)
+                                .setAutoCancel(true);
+                        notificationManager.notify(NOTIFICATION_ID_DOWNLOAD, builder.build());
+
                         Log.d("storage", "yay2");
+
                     }
                 }).addOnFailureListener(new OnFailureListener()
         {
@@ -251,5 +297,23 @@ public class PdfGenerator
 
             }
         });
+    }
+
+    private void createNotificationChannel()
+    {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            CharSequence name = "download files";
+            String description = "download files";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_DOWNLOAD, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

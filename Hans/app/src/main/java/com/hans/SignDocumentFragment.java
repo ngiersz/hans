@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,14 +56,26 @@ public class SignDocumentFragment extends Fragment
                 Matrix rotateMatrix = new Matrix();
                 rotateMatrix.setRotate(270f, rectF.centerX(),rectF.centerY());
                 mPath.transform(rotateMatrix);
-                PdfGenerator pdfGenerator = new PdfGenerator();
+                PdfGenerator pdfGenerator = new PdfGenerator(getContext());
                 pdfGenerator.createPdf();
                 pdfGenerator.signInDocument(mPath);
                 pdfGenerator.saveLocal("mypdf");
+                pdfGenerator.sendToFirebaseStorage("mypdf");
+//                try
+//                {
+//                    Thread.sleep(2000);
+//                    pdfGenerator.downloadFileFromFirebaseStorage("mypdf");
+//                } catch (Exception e)
+//                {
+//
+//                }
+
 
                 mPath.reset();
                 canvas.drawColor(Color.WHITE);
                 dv.invalidate();
+
+                Snackbar.make(view, "Gotowy do pobrania dokument dostępny w zakładce 'Zakończone' w szczegółach zlecenia.", Snackbar.LENGTH_LONG).show();
             }
         });
 
