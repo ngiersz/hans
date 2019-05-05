@@ -70,6 +70,15 @@ public class DelivererAllOrdersFragment extends Fragment {
                 Log.d("spinner", Integer.toString(position));
                 if(receivedOrderList.size() > 1) {
                    switch(position) {
+                       case 0:
+                           sortByOrderTimeAsc();
+                           break;
+                       case 1:
+                           sortByOrderTimeDesc();
+                           break;
+                       case 2:
+                           sortByDistanceAsc();
+                           break;
                        case 3:
                            sortByDistanceDesc();
                            break;
@@ -138,27 +147,60 @@ public class DelivererAllOrdersFragment extends Fragment {
     }
 
     private void sortByPriceAsc(){
-//        Collections.sort(receivedOrderList, new Comparator<Order>() {
-//            @Override
-//            public int compare(Order o1, Order o2) {
-//                if (o1.getPrice() > o2.getPrice()) {
-//                    return 1;
-//                }
-//                return -1;
-//            }
-//        });
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getPrice() > o2.getPrice()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
     }
 
     private void sortByDistanceDesc(){
-//        Collections.sort(receivedOrderList, new Comparator<Order>() {
-//            @Override
-//            public int compare(Order o1, Order o2) {
-//                if (o1.gwtd() < o2.getPrice()) {
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getLength() < o2.getLength()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
+
+    private void sortByDistanceAsc(){
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getLength() > o2.getLength()) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
+
+    private void sortByOrderTimeAsc(){
+        Log.d("spinner", "Not implemented method");
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                Log.d("spinner", "date: " + o1.getOrderDate());
+                Log.d("spinner", "date: " + o2.getOrderDate());
+                Log.d("spinner", "place 1:" + o1.getPickupAddress());
+                Log.d("spinner", "place 2:" + o2.getPickupAddress());
+//                if (o1.getOrderDate().after(o2.getOrderDate())) {
 //                    return 1;
 //                }
-//                return -1;
-//            }
-//        });
+                return -1;
+            }
+        });
+    }
+
+    private void sortByOrderTimeDesc(){
+        Log.d("spinner", "Not implemented method");
     }
 
 }
