@@ -68,32 +68,33 @@ public class DelivererAllOrdersFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("spinner", Integer.toString(position));
-                if(receivedOrderList.size() > 1) {
-                   switch(position) {
-                       case 0:
-                           sortByOrderTimeAsc();
-                           break;
-                       case 1:
-                           sortByOrderTimeDesc();
-                           break;
-                       case 2:
-                           sortByDistanceAsc();
-                           break;
-                       case 3:
-                           sortByDistanceDesc();
-                           break;
-                       case 4:
-                           sortByPriceAsc();
-                           break;
-                       case 5:
-                           sortByPriceDesc();
-                           break;
-                   }
-                   OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
-                   ordersListView.setAdapter(orderListAdapter);
-                   Log.d("spinner", "Orders list replaced by sorted list");
+                if (receivedOrderList.size() > 1) {
+                    switch (position) {
+                        case 0:
+                            sortByOrderTimeAsc();
+                            break;
+                        case 1:
+                            sortByOrderTimeDesc();
+                            break;
+                        case 2:
+                            sortByDistanceAsc();
+                            break;
+                        case 3:
+                            sortByDistanceDesc();
+                            break;
+                        case 4:
+                            sortByPriceAsc();
+                            break;
+                        case 5:
+                            sortByPriceDesc();
+                            break;
+                    }
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
+                    ordersListView.setAdapter(orderListAdapter);
+                    Log.d("spinner", "Orders list replaced by sorted list");
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -111,6 +112,7 @@ public class DelivererAllOrdersFragment extends Fragment {
                 if (task.isSuccessful()) {
                     receivedOrderList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d("Document", document.toString());
                         Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         receivedOrderList.add(orderFromDatabase);
@@ -119,7 +121,7 @@ public class DelivererAllOrdersFragment extends Fragment {
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
-
+                    sortByOrderTimeAsc();
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
@@ -134,7 +136,7 @@ public class DelivererAllOrdersFragment extends Fragment {
         dropdown.setAdapter(adapter);
     }
 
-    private void sortByPriceDesc(){
+    private void sortByPriceDesc() {
         Collections.sort(receivedOrderList, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
@@ -146,7 +148,7 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByPriceAsc(){
+    private void sortByPriceAsc() {
         Collections.sort(receivedOrderList, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
@@ -158,7 +160,7 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByDistanceDesc(){
+    private void sortByDistanceDesc() {
         Collections.sort(receivedOrderList, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
@@ -170,7 +172,7 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByDistanceAsc(){
+    private void sortByDistanceAsc() {
         Collections.sort(receivedOrderList, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
@@ -182,25 +184,32 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByOrderTimeAsc(){
-        Log.d("spinner", "Not implemented method");
+    private void sortByOrderTimeAsc() {
         Collections.sort(receivedOrderList, new Comparator<Order>() {
             @Override
             public int compare(Order o1, Order o2) {
-                Log.d("spinner", "date: " + o1.getOrderDate());
-                Log.d("spinner", "date: " + o2.getOrderDate());
-                Log.d("spinner", "place 1:" + o1.getPickupAddress());
-                Log.d("spinner", "place 2:" + o2.getPickupAddress());
-//                if (o1.getOrderDate().after(o2.getOrderDate())) {
-//                    return 1;
-//                }
+                if (o1.getDate() != null && o2.getDate() != null) {
+                    if (o1.getDate().compareTo(o2.getDate()) > 0) {
+                        return 1;
+                    }
+                }
                 return -1;
             }
         });
     }
 
-    private void sortByOrderTimeDesc(){
-        Log.d("spinner", "Not implemented method");
+    private void sortByOrderTimeDesc() {
+        Collections.sort(receivedOrderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order o1, Order o2) {
+                if (o1.getDate() != null && o2.getDate() != null) {
+                    if (o1.getDate().compareTo(o2.getDate()) < 0) {
+                        return 1;
+                    }
+                }
+                return -1;
+            }
+        });
     }
 
 }

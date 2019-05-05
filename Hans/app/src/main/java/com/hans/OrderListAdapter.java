@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
@@ -40,8 +41,9 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
+        Timestamp date = getItem(position).getDate();
 
-        Order order = new Order(pickupAddress, deliveryAddress, price, weight, description);
+        Order order = new Order(pickupAddress, deliveryAddress, price, weight, description, date);
 
         final View view;
         ViewHolder viewHolder = null;

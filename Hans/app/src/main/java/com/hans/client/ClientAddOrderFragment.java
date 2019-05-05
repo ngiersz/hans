@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.DatabaseFirebase;
@@ -20,6 +21,7 @@ import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.map.MapsFragment;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,9 +103,13 @@ public class ClientAddOrderFragment extends Fragment
                 Double distanceDouble = Double.parseDouble(distance.getText().toString());
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                Timestamp currentDate = Timestamp.now();
+                Log.d("add", "date: " + currentDate);
+
                 Order order = new Order(pickupAddress, deliveryAddress,
                         distanceDouble, priceDouble, weightDouble, dimensions,
-                        description.getText().toString(), firebaseUser.getUid());
+                        description.getText().toString(), firebaseUser.getUid(), currentDate);
 
                 DatabaseFirebase db = new DatabaseFirebase();
                 db.insertOrderToDatabase(order);

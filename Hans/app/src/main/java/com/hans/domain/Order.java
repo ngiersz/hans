@@ -3,6 +3,7 @@ package com.hans.domain;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.Timestamp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,9 @@ public class Order {
 
     private String delivererId;
 
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
+    private Timestamp date;
+
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, Timestamp currentDate) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.length = length;
@@ -43,48 +46,49 @@ public class Order {
         this.description = description;
         this.clientId = clientId;
         this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
+        this.date = currentDate;
     }
 
-    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
-        this.id = id;
-        this.orderStatus = orderStatus;
+//    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
+//        this.id = id;
+//        this.orderStatus = orderStatus;
+//        this.pickupAddress = pickupAddress;
+//        this.deliveryAddress = deliveryAddress;
+//        this.length = length;
+//        this.price = price;
+//        this.weight = weight;
+//        this.dimensions = dimensions;
+//        this.description = description;
+//        this.clientId = clientId;
+//        this.delivererId = "-";
+//
+//    }
+
+//    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions,  String description, String clientId, String delivererId) {
+//        this.id = id;
+//        this.orderStatus = orderStatus;
+//        this.pickupAddress = pickupAddress;
+//        this.deliveryAddress = deliveryAddress;
+//        this.length = length;
+//        this.price = price;
+//        this.weight = weight;
+//        this.dimensions = dimensions;
+//        this.description = description;
+//        this.clientId = clientId;
+//        this.delivererId = delivererId;
+//    }
+
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String description, Timestamp date) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
-        this.length = length;
-        this.price = price;
-        this.weight = weight;
-        this.dimensions = dimensions;
-        this.description = description;
-        this.clientId = clientId;
-        this.delivererId = "-";
-
-    }
-
-    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions,  String description, String clientId, String delivererId) {
-        this.id = id;
-        this.orderStatus = orderStatus;
-        this.pickupAddress = pickupAddress;
-        this.deliveryAddress = deliveryAddress;
-        this.length = length;
-        this.price = price;
-        this.weight = weight;
-        this.dimensions = dimensions;
-        this.description = description;
-        this.clientId = clientId;
-        this.delivererId = delivererId;
-    }
-
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String description) {
-        this.pickupAddress = pickupAddress;
-        this.deliveryAddress = deliveryAddress;
         this.price = price;
         this.weight = weight;
         this.description = description;
+        this.date = date;
     }
 
     public Order() {
     }
-
 
     public Double getLength() { return length; }
 
@@ -118,6 +122,9 @@ public class Order {
         return description;
     }
 
+    public Timestamp getDate() {
+        return date;
+    }
 
 
     public void setId(String id) {
@@ -131,14 +138,13 @@ public class Order {
     public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus; }
 
 
-
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", orderStatus=" + orderStatus +
-                ", pickupAddress='" + pickupAddress + '\'' +
-                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", pickupAddress=" + pickupAddress +
+                ", deliveryAddress=" + deliveryAddress +
                 ", length=" + length +
                 ", price=" + price +
                 ", weight=" + weight +
@@ -146,6 +152,7 @@ public class Order {
                 ", description='" + description + '\'' +
                 ", clientId='" + clientId + '\'' +
                 ", delivererId='" + delivererId + '\'' +
+                ", date=" + date +
                 '}';
     }
 

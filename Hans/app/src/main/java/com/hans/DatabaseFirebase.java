@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
 import java.util.ArrayList;
@@ -77,6 +76,7 @@ public class DatabaseFirebase {
         orderInsert.put("delivererId", order.getDelivererId());
         orderInsert.put("length", order.getLength());
         orderInsert.put("dimensions", order.getDimensions());
+        orderInsert.put("date", order.getDate());
 
         Log.d("addOrder", "przed db.collections");
         Log.d("addOrder", orderInsert.toString());
@@ -128,6 +128,7 @@ public class DatabaseFirebase {
         orderSet.put("delivererId", order.getDelivererId());
         orderSet.put("length", order.getLength());
         orderSet.put("dimensions", order.getDimensions());
+        orderSet.put("date", order.getDate());
 
         db.collection("Orders").document(order.getId())
                 .set(order)
