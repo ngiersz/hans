@@ -16,7 +16,9 @@ import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.FileProvider;
@@ -31,11 +33,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hans.BuildConfig;
+import com.hans.DatabaseFirebase;
 import com.hans.R;
+import com.hans.domain.Order;
+import com.hans.domain.OrderStatus;
+import com.hans.domain.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 
 public class PdfGenerator
 {
@@ -47,12 +58,14 @@ public class PdfGenerator
     private static int PAGE_HEIGHT = 595;
     private Canvas canvas;
 
-    PdfDocument document;
-    PdfDocument.Page page;
-    PdfDocument.PageInfo pageInfo;
+    private PdfDocument document;
+    private PdfDocument.Page page;
+    private PdfDocument.PageInfo pageInfo;
+    private Order order;
 
-    public PdfGenerator(Context context)
+    public PdfGenerator(Context context, Order order)
     {
+        this.order = order;
         this.context = context;
         document = new PdfDocument();
         pageInfo = new PdfDocument.PageInfo.Builder
@@ -72,7 +85,7 @@ public class PdfGenerator
         mPath.transform(scaleMatrix);
 
         Matrix translateMatrix = new Matrix();
-        translateMatrix.setTranslate(130f, -300f);
+        translateMatrix.setTranslate(130f, -250f);
         mPath.transform(translateMatrix);
 
         Paint paint = new Paint();
@@ -86,21 +99,32 @@ public class PdfGenerator
         canvas.drawPath(mPath, paint);
     }
 
-    public void createPdf()
+    public void createPdf(User clientOb, User delivererOb)
     {
-        String date = "14.07.2019 15:33";
-        String deliverer = "Marcin Hradowicz";
-        String client = "Jan Kowalski";
-        String name1 = "Przedmiot1";
-        String description1 = "opis1";
-        String amount1 = "ilość1";
-        String weight1 = "waga1";
-        String measurmentsW1 = "W1";
-        String measurmentsH1 = "H1";
-        String measurmentsD1 = "D1";
+        DatabaseFirebase db = new DatabaseFirebase();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm ", new Locale("pl", "PL"));
+        String date = sdf.format(new Date());
+        String deliverer = delivererOb.getName();
+        String client = clientOb.getName();
+        String description1 = order.getDescription();
+        String weight1 = order.getWeight().toString();
+        String measurmentsW1 = order.getDimensions().get("width").toString();
+        String measurmentsH1 = order.getDimensions().get("height").toString();
+        String measurmentsD1 = order.getDimensions().get("depth").toString();
+        String reciverName = "RECEIVER NAME";
 
-        String item1 = "Numer: 1.      Nazwa: " + name1 + "      Opis: " + description1 + "      Ilość: "
-                + amount1 + "      Waga [kg]: " + weight1 + "      Wymiary [*] " + measurmentsW1 + "x" + measurmentsH1 + "x" + measurmentsD1 + "x";
+//        String date = "14.07.2019 15:33";
+//        String deliverer = "Marcin Hradowicz";
+//        String client = "Jan Kowalski";
+//        String name1 = "Przedmiot1";
+//        String description1 = "opis1";
+//        String amount1 = "ilość1";
+//        String weight1 = "waga1";
+//        String measurmentsW1 = "W1";
+//        String measurmentsH1 = "H1";
+//        String measurmentsD1 = "D1";
+
+        String item1 = "Lp. 1." + "      Opis: " + description1 + "      Waga [kg]: " + weight1 + "      Wymiary [*] " + measurmentsW1 + " x " + measurmentsH1 + " x " + measurmentsD1;
 
 
         Paint paint = new Paint();
@@ -130,20 +154,22 @@ public class PdfGenerator
         canvas.drawText(item1, PAGE_WIDTH / 2, 220, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("* - szerokość x długość x głębokość", 100, 250, paint);
+        canvas.drawText("* - szerokość[cm] x długość[cm] x głębokość[cm]", 100, 250, paint);
 
         paint.setTextSize(14);
-        String affirmationLine1 = "Ja, niżej podpisany .............................................................................. oświadczam, ze w dniu " + date.substring(0, 10);
-        String affirmationLine2 = " odebrałem od " + deliverer + " wszystkie towary zamieszczone w Tabeli 1. w zadowalającym mnie stanie.";
+        String affirmationLine1 = "Ja, niżej podpisany " + reciverName + " oświadczam, że w dniu " + date.substring(0, 11);
+        String affirmationLine2 = " odebrałem od " + deliverer;
+        String affirmationLine3 = " wszystkie towary zamieszczone w Tabeli 1. w zadowalającym mnie stanie.";
         canvas.drawText(affirmationLine1, 80, 300, paint);
         canvas.drawText(affirmationLine2, 50, 320, paint);
+        canvas.drawText(affirmationLine3, 50, 340, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawLine(PAGE_WIDTH - 50 - 200, 450, PAGE_WIDTH - 50, 450, paint);
+        canvas.drawLine(PAGE_WIDTH - 50 - 200, 550, PAGE_WIDTH - 50, 550, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(11);
-        canvas.drawText("podpis odbierającego", PAGE_WIDTH - 50 - 100, 470, paint);
+        canvas.drawText("podpis odbierającego", PAGE_WIDTH - 50 - 100, 570, paint);
 
         // border
         paint.setStyle(Paint.Style.STROKE);
@@ -189,6 +215,7 @@ public class PdfGenerator
 
     public void sendToFirebaseStorage(String filename)
     {
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -202,18 +229,15 @@ public class PdfGenerator
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                     {
-                        // Get a URL to the uploaded content
-//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Log.d("storage", "yay");
-//                        try
-//                        {
-//                            downloadFileFromFirebaseStorage(filename);
-//                        } catch (Exception e)
-//                        {
-//
-//                        }
-                        boolean g = localFile.delete();
-                        Log.d("storage", Boolean.toString(g));
+                        localFile.delete();
+
+//                      Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
+                        // finish order
+                        DatabaseFirebase db = new DatabaseFirebase();
+                        order.setOrderStatus(OrderStatus.CLOSED);
+                        db.setOrder(order);
+
+//                sendNotificationToClient();
 
                     }
                 })
@@ -224,12 +248,12 @@ public class PdfGenerator
                     {
                         // Handle unsuccessful uploads
                         // ...
-                        Log.d("storage", "nieyay");
 
                     }
                 });
 
     }
+
 
     public void downloadFileFromFirebaseStorage(String filename) throws IOException
     {

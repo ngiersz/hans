@@ -35,7 +35,7 @@ import com.hans.deliverer.DelivererAllOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
-import com.hans.pdf.PdfGenerator;
+import com.hans.pdf.SignDocumentFragment;
 
 public class MainActivity extends AppCompatActivity
 {

@@ -8,7 +8,7 @@
                 <group android:checkableBehavior="single">
                     <item android:id="@+id/search_new_orders" android:title="Przeglądaj nowe" />
                     <item android:id="@+id/in_process_orders_deliverer" android:title="Aktualnie wykonywane" />
-                    <item android:id="@+id/archive_orders_deliverer" android:title="Historia" />
+                    <item android:id="@+id/archive_orders_deliverer" android:title="Zakończone" />
                 </group>
             </menu>
         </item>

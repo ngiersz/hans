@@ -30,12 +30,13 @@ import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
+import com.hans.pdf.SignDocumentFragment;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class DelivererOrderInTransitInfoFragment extends Fragment {
     Order order;
-    User client;
+    User client, deliverer;
     View view;
     DatabaseFirebase db = new DatabaseFirebase();
 
@@ -47,10 +48,12 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_deliverer_order_in_transit_info, container, false);
 
         Bundle bundle = this.getArguments();
-        String orderJSON = bundle.getString("order");
+        final String orderJSON = bundle.getString("order");
         String clientJSON = bundle.getString("client");
+        String delivererJSON = bundle.getString("client");
         order = Order.createFromJSON(orderJSON);
         client = User.createFromJSON(clientJSON);
+        deliverer = User.createFromJSON(delivererJSON);
         Log.d("Client22", client.toString());
 
 
@@ -139,23 +142,35 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                buider.setMessage("Czy na pewno zakonczyc zlecenie?")
+                buider.setMessage("Czy na pewno zakończyc zlecenie?")
                         .setPositiveButton("TAK", new DialogInterface.OnClickListener()
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                Snackbar.make(getView(), "zakonczono zlecenie", Snackbar.LENGTH_SHORT).show();
 
-                                finishOrder();
-                                //sendNotificationToClient();
-
-                                Fragment newFragment = new DelivererInTransitOrdersFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("order", order.toJSON());
+                                bundle.putString("client", client.toJSON());
+                                bundle.putString("deliverer", deliverer.toJSON());
+                                Log.d("finish", order.toJSON());
+                                Fragment newFragment = new SignDocumentFragment();
+                                newFragment.setArguments(bundle);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment, newFragment);
-
                                 transaction.addToBackStack(null);
                                 transaction.commit();
+
+//                                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
+//
+//                                finishOrder();
+//                                sendNotificationToClient();
+
+//                                Fragment newFragment = new DelivererInTransitOrdersFragment();
+//                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                                transaction.replace(R.id.fragment, newFragment);
+//                                transaction.addToBackStack(null);
+//                                transaction.commit();
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()

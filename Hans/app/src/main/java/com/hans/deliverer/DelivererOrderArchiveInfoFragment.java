@@ -153,10 +153,6 @@ public class DelivererOrderArchiveInfoFragment extends Fragment {
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
 
-
-
-
-
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

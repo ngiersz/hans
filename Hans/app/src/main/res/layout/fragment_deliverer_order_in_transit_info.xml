@@ -371,7 +371,7 @@
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
                 android:textColor="#FFFFFF"
-                android:text="Zakoncz zlecenie" />
+                android:text="Zakończ zlecenie" />
         </LinearLayout>
 
     </ScrollView>

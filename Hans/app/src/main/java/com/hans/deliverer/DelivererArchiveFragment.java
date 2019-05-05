@@ -67,6 +67,8 @@ public class DelivererArchiveFragment extends Fragment {
 
 
                 bundle.putString("client", getUserForOrder(closedOrderList.get(position).getClientId()).toJSON());
+                bundle.putString("deliverer", getUserForOrder(closedOrderList.get(position).getDelivererId()).toJSON());
+
                 newFragment.setArguments(bundle);
 
                 transaction.addToBackStack(null);
