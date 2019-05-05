@@ -1,10 +1,7 @@
 package com.hans.deliverer;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,7 +22,6 @@ import com.hans.MainActivity;
 import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
 import java.util.ArrayList;
@@ -49,7 +44,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity) getActivity()).setActionBarTitle("Przyjęte zlecenia");
+        ((MainActivity) getActivity()).setActionBarTitle("Aktualnie wykonywane zlecenia");
         v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
@@ -62,17 +57,14 @@ public class DelivererInTransitOrdersFragment extends Fragment
             {
 
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new DelivererOrderInTransitInfoFragment();
+                Fragment newFragment = new DelivererInTransitOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("order", inTransitOrderList.get(position).toJSON());
 
-                Log.d("Client22", inTransitOrderList.get(position).getClientId().toString());
-
                 User client = getUserForOrder(inTransitOrderList.get(position).getClientId());
-                Log.d("Client22", client.toString());
 
 
                 bundle.putString("client", getUserForOrder(inTransitOrderList.get(position).getClientId()).toJSON());

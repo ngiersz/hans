@@ -99,19 +99,20 @@ public class PdfGenerator
         canvas.drawPath(mPath, paint);
     }
 
-    public void createPdf(User clientOb, User delivererOb)
+    public void createPdf(User clientOb, User delivererOb, String receiver_firstname, String receiver_lastname)
     {
         DatabaseFirebase db = new DatabaseFirebase();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm ", new Locale("pl", "PL"));
         String date = sdf.format(new Date());
-        String deliverer = delivererOb.getName();
-        String client = clientOb.getName();
+        String deliverer = delivererOb.getName() + " " + delivererOb.getSurname();
+        String client = clientOb.getName() + " " + delivererOb.getSurname();
         String description1 = order.getDescription();
         String weight1 = order.getWeight().toString();
         String measurmentsW1 = order.getDimensions().get("width").toString();
         String measurmentsH1 = order.getDimensions().get("height").toString();
         String measurmentsD1 = order.getDimensions().get("depth").toString();
-        String reciverName = "RECEIVER NAME";
+        String reciverName = receiver_firstname + " " + receiver_lastname;
+
 
 //        String date = "14.07.2019 15:33";
 //        String deliverer = "Marcin Hradowicz";

@@ -40,7 +40,7 @@ public class ClientAllWaitingsOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity)getActivity()).setActionBarTitle("Twoje oczekujące zlecenia");
+        ((MainActivity)getActivity()).setActionBarTitle("Oczekujące zlecenia");
 
         v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
         orderListInit();

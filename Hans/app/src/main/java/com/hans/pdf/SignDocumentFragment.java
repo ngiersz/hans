@@ -11,7 +11,7 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,13 +19,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.hans.DatabaseFirebase;
 import com.hans.MainActivity;
 import com.hans.R;
+import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
-import com.hans.pdf.PdfGenerator;
 
 public class SignDocumentFragment extends Fragment
 {
@@ -43,8 +41,11 @@ public class SignDocumentFragment extends Fragment
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
-        String clientJSON = bundle.getString("order");
-        String delivererJSON = bundle.getString("order");
+        String clientJSON = bundle.getString("client");
+        String delivererJSON = bundle.getString("deliverer");
+        final String receiver_firstname = bundle.getString("receiver_firstname");
+        final String receiver_lastname = bundle.getString("receiver_lastname");
+
         order = Order.createFromJSON(orderJSON);
         client = User.createFromJSON(clientJSON);
         deliverer = User.createFromJSON(delivererJSON);
@@ -67,10 +68,16 @@ public class SignDocumentFragment extends Fragment
                 rotateMatrix.setRotate(270f, rectF.centerX(), rectF.centerY());
                 mPath.transform(rotateMatrix);
                 PdfGenerator pdfGenerator = new PdfGenerator(getContext(), order);
-                pdfGenerator.createPdf(client, deliverer);
+                pdfGenerator.createPdf(client, deliverer, receiver_firstname, receiver_lastname);
                 pdfGenerator.signInDocument(mPath);
                 pdfGenerator.saveLocal(order.getId());
                 pdfGenerator.sendToFirebaseStorage(order.getId());
+
+                Fragment newFragment = new DelivererArchiveOrdersFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
 
 //                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
 //                finishOrder();

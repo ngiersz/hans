@@ -18,23 +18,19 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
-import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
-import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
-import com.hans.pdf.SignDocumentFragment;
+import com.hans.pdf.GetReceiverNameFragment;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererOrderInTransitInfoFragment extends Fragment {
+public class DelivererInTransitOrderInfoFragment extends Fragment {
     Order order;
     User client, deliverer;
     View view;
@@ -45,7 +41,8 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_deliverer_order_in_transit_info, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_in_transit_order_info, container, false);
+        getActivity().setTitle("Szczegóły zlecenia");
 
         Bundle bundle = this.getArguments();
         final String orderJSON = bundle.getString("order");
@@ -154,7 +151,7 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
                                 bundle.putString("client", client.toJSON());
                                 bundle.putString("deliverer", deliverer.toJSON());
                                 Log.d("finish", order.toJSON());
-                                Fragment newFragment = new SignDocumentFragment();
+                                Fragment newFragment = new GetReceiverNameFragment();
                                 newFragment.setArguments(bundle);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment, newFragment);

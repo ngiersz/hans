@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,12 +27,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.client.ClientAddOrderFragment;
 import com.hans.client.ClientAllWaitingsOrdersFragment;
-import com.hans.client.ClientArchiveFragment;
+import com.hans.client.ClientArchiveOrdersFragment;
 import com.hans.client.ClientInTransitOrdersFragment;
 import com.hans.client.ClientMenuFragment;
 import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
-import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
 import com.hans.pdf.SignDocumentFragment;
 
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.archive_orders_client:
-                fragmentClass =  ClientArchiveFragment.class;
+                fragmentClass =  ClientArchiveOrdersFragment.class;
                 Log.d("menu", "historia klienta");
                 break;
             case R.id.search_new_orders:
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "zlecenie w trakcie wykonywania");
                 break;
             case R.id.archive_orders_deliverer:
-                fragmentClass =  ClientArchiveFragment.class;
+                fragmentClass =  DelivererArchiveOrdersFragment.class;
                 Log.d("menu", "historia dostawcy");
                 break;
             case R.id.my_account:

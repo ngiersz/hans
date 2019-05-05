@@ -365,6 +365,15 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/download_transfer_protocol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:text="Pobierz protokół przekazania towaru" />
+
         </LinearLayout>
 
     </ScrollView>

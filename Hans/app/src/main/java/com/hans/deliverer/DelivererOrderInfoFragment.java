@@ -47,6 +47,7 @@ public class DelivererOrderInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
+        getActivity().setTitle("Szczegóły zlecenia");
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");

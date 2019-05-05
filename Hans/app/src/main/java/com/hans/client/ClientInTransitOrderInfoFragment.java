@@ -14,7 +14,7 @@ import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
 
-public class ClientOrderArchiveInfoFragment extends Fragment {
+public class ClientInTransitOrderInfoFragment extends Fragment {
     Order order;
     User deliverer;
     ListView ordersListView;
@@ -24,7 +24,7 @@ public class ClientOrderArchiveInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_in_transit_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_client_in_transit_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
 
         Bundle bundle = this.getArguments();

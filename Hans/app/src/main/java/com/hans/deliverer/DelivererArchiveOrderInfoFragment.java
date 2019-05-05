@@ -23,10 +23,13 @@ import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
 import com.hans.map.MapsFragment;
+import com.hans.pdf.PdfGenerator;
+
+import java.io.IOException;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererOrderArchiveInfoFragment extends Fragment {
+public class DelivererArchiveOrderInfoFragment extends Fragment {
     Order order;
     User client;
     View view;
@@ -37,14 +40,33 @@ public class DelivererOrderArchiveInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_deliverer_order_archive_info, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_archive_order_info, container, false);
+        getActivity().setTitle("Szczegóły zlecenia");
+
+
+        Button downloadButton = view.findViewById(R.id.download_transfer_protocol);
+        downloadButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                PdfGenerator  pdfGenerator = new PdfGenerator(getContext(), order);
+                try
+                {
+                    pdfGenerator.downloadFileFromFirebaseStorage(order.getId());
+                }
+                catch (IOException e)
+                {
+                    Log.d("exception", e.getMessage());
+                }
+            }
+        });
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         String clientJSON = bundle.getString("client");
         order = Order.createFromJSON(orderJSON);
         client = User.createFromJSON(clientJSON);
-        Log.d("Client22", client.toString());
 
 
         TextView fromCity = view.findViewById(R.id.fromCity);
