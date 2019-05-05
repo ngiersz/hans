@@ -34,70 +34,67 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Imie"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:text="Imię"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/usertName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:textSize="20sp" />
+                        android:textSize="30sp"
+                        android:inputType="textPersonName"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nazwisko"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/userSurName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:textSize="20sp" />
+                        android:textSize="30sp"
+                        android:inputType="textPersonName"/>
+
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="numer telefonu"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:text="Numer telefonu"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/userPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:textSize="20sp" />
+                        android:textSize="30sp"
+                        android:inputType="phone"/>
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="email"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:text="Imię"
+                        android:textSize="20sp" />
 
                     <EditText
                         android:id="@+id/userEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:editable="false"
-                        android:textSize="20sp" />
+                        android:textSize="30sp"
+                        android:inputType="textPersonName"/>
 
                 </LinearLayout>
             </LinearLayout>
             <Button
-                android:id="@+id/edit_button"
+                android:id="@+id/accept_changes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
                 android:textColor="#FFFFFF"
-                android:text="Edytuj profil" />
+                android:text="Zapisz dane" />
         </LinearLayout>
 
     </ScrollView>
