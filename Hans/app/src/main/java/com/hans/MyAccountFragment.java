@@ -29,6 +29,8 @@ public class MyAccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        v = inflater.inflate(R.layout.fragment_my_account, container, false);
+
         ((MainActivity)getActivity()).setActionBarTitle("Twoje konto");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         getAccount(firebaseUser.getUid());
