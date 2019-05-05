@@ -1,7 +1,5 @@
 package com.hans.deliverer;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,22 +16,17 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
-import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
-import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererOrderInTransitInfoFragment extends Fragment {
+public class DelivererOrderArchiveInfoFragment extends Fragment {
     Order order;
     User client;
     View view;
@@ -44,7 +37,7 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_deliverer_order_in_transit_info, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_order_archive_info, container, false);
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
@@ -133,48 +126,9 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        Button button = view.findViewById(R.id.finish_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                buider.setMessage("Czy na pewno zakonczyc zlecenie?")
-                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                Snackbar.make(getView(), "zakonczono zlecenie", Snackbar.LENGTH_SHORT).show();
-
-                                finishOrder();
-                                //sendNotificationToClient();
-
-                                Fragment newFragment = new DelivererInTransitOrdersFragment();
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
-
-                                transaction.addToBackStack(null);
-                                transaction.commit();
-                            }
-                        })
-                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                return;
-                            }
-                        });
-                buider.create().show();
-            }
-        });
         return view;
     }
-    private void finishOrder(){
-        order.setOrderStatus(OrderStatus.CLOSED);
-        db.setOrder(order);
-    }
+
     public void openGoogleMapsNavigation(String destination) {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
 
@@ -198,6 +152,10 @@ public class DelivererOrderInTransitInfoFragment extends Fragment {
                         Log.d("Client", document.toObject(User.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
+
+
+
+
 
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());

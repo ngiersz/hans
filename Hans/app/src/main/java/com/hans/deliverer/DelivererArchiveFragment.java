@@ -1,10 +1,7 @@
 package com.hans.deliverer;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -12,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,17 +22,16 @@ import com.hans.MainActivity;
 import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
-import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
 import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererInTransitOrdersFragment extends Fragment {
+public class DelivererArchiveFragment extends Fragment {
 
-    ArrayList<Order> inTransitOrderList = new ArrayList<>();
-    ArrayList<User> inTransitUserList = new ArrayList<>();
+    ArrayList<Order> closedOrderList = new ArrayList<>();
+    ArrayList<User> closedOrdersUserList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
     View v;
@@ -47,7 +42,7 @@ public class DelivererInTransitOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity)getActivity()).setActionBarTitle("Przyjęte zlecenia");
+        ((MainActivity)getActivity()).setActionBarTitle("Historia");
         v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
@@ -57,54 +52,52 @@ public class DelivererInTransitOrdersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,  int position, long id) {
 
-                                Log.d("LISTPOS", Integer.toString(position));
-                                Fragment newFragment = new DelivererOrderInTransitInfoFragment();
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
+                Log.d("LISTPOS", Integer.toString(position));
+                Fragment newFragment = new DelivererOrderArchiveInfoFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
 
-                                Bundle bundle = new Bundle();
-                                bundle.putString("order", inTransitOrderList.get(position).toJSON());
+                Bundle bundle = new Bundle();
+                bundle.putString("order", closedOrderList.get(position).toJSON());
 
-                                Log.d("Client22",inTransitOrderList.get(position).getClientId().toString() );
+                Log.d("Client22", closedOrderList.get(position).getClientId().toString() );
 
-                                User client = getUserForOrder(inTransitOrderList.get(position).getClientId());
-                                Log.d("Client22", client.toString());
+                User client = getUserForOrder(closedOrderList.get(position).getClientId());
+                Log.d("Client22", client.toString());
 
 
-                                 bundle.putString("client", getUserForOrder(inTransitOrderList.get(position).getClientId()).toJSON());
-                                newFragment.setArguments(bundle);
+                bundle.putString("client", getUserForOrder(closedOrderList.get(position).getClientId()).toJSON());
+                newFragment.setArguments(bundle);
 
-                                transaction.addToBackStack(null);
-                                transaction.commit();
+                transaction.addToBackStack(null);
+                transaction.commit();
 
-                }
+            }
 
 
         });
 
-
         return v;
     }
-
 
     private void orderListInit() {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        db.getInTransitOrdersForDeliverer(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.getClosedOrdersForDeliverer(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    inTransitOrderList.clear();
+                    closedOrderList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Order orderFromDatabase =document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
-                        inTransitOrderList.add(orderFromDatabase);
+                        closedOrderList.add(orderFromDatabase);
                         Log.d("Order", document.toObject(Order.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, inTransitOrderList);
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, closedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
 
                 } else {
@@ -117,10 +110,10 @@ public class DelivererInTransitOrdersFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    inTransitUserList.clear();
+                    closedOrdersUserList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         User userFromDatabase = document.toObject(User.class);
-                        inTransitUserList.add(userFromDatabase);
+                        closedOrdersUserList.add(userFromDatabase);
                         Log.d("Client22", document.toObject(User.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
@@ -137,7 +130,7 @@ public class DelivererInTransitOrdersFragment extends Fragment {
         User client = new User();
         Log.d("Client22", googleID);
 
-        for(User e: inTransitUserList){
+        for(User e: closedOrdersUserList){
             if(e.getGoogleId().equals(googleID)){
                 Log.d("Client22", e.toString());
 

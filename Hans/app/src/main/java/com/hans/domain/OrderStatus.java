@@ -3,7 +3,7 @@ package com.hans.domain;
 public enum OrderStatus {
     WAITING_FOR_DELIVERER ("Oczekiwanie na przyjęcie przez dostawcę"),
     IN_TRANSIT ("W drodze"),
-    DELIVERED ("Dostarczone");
+    CLOSED ("Zakończone");
 
     private final String polishName;
 
