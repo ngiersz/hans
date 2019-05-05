@@ -41,7 +41,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity)getActivity()).setActionBarTitle("Twoje zlecenia w trakcie wykonywania");
+        ((MainActivity)getActivity()).setActionBarTitle("Zlecenia w trakcie wykonywania");
 
         v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
         orderListInit();
@@ -52,7 +52,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new ClientOrderInTransitInfoFragment();
+                Fragment newFragment = new ClientInTransitOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 

@@ -1,16 +1,14 @@
 package com.hans.deliverer;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,38 +18,41 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
-
 import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
-import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
-import com.hans.pdf.PdfGenerator;
+import com.hans.pdf.GetReceiverNameFragment;
 
 import static android.support.constraint.Constraints.TAG;
 
-
-public class DelivererOrderInfoFragment extends Fragment {
+public class DelivererInTransitOrderInfoFragment extends Fragment {
     Order order;
-
+    User client, deliverer;
+    View view;
     DatabaseFirebase db = new DatabaseFirebase();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_in_transit_order_info, container, false);
         getActivity().setTitle("Szczegóły zlecenia");
 
         Bundle bundle = this.getArguments();
-        String orderJSON = bundle.getString("order");
+        final String orderJSON = bundle.getString("order");
+        String clientJSON = bundle.getString("client");
+        String delivererJSON = bundle.getString("client");
         order = Order.createFromJSON(orderJSON);
+        client = User.createFromJSON(clientJSON);
+        deliverer = User.createFromJSON(delivererJSON);
+        Log.d("Client22", client.toString());
+
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -69,6 +70,18 @@ public class DelivererOrderInfoFragment extends Fragment {
         TextView width = view.findViewById(R.id.width);
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
+
+        TextView clientPhone = view.findViewById(R.id.clientPhone);
+        TextView clientName = view.findViewById(R.id.clientName);
+        TextView clientSurname = view.findViewById(R.id.clientSurname);
+        TextView clientEmail = view.findViewById(R.id.clientEmail);
+
+        clientEmail.setText(client.getGoogleEmail());
+        clientName.setText(client.getName());
+        clientSurname.setText(client.getSurname());
+        clientPhone.setText(client.getPhoneNumber());
+
+
 
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
@@ -120,42 +133,60 @@ public class DelivererOrderInfoFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        Button button = view.findViewById(R.id.accept_order_button);
+        Button button = view.findViewById(R.id.finish_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                buider.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
-                        .setPositiveButton("TAK", new DialogInterface.OnClickListener() {
+                buider.setMessage("Czy na pewno zakończyc zlecenie?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+                            public void onClick(DialogInterface dialog, int which)
+                            {
 
-                                acceptOrder();
-                                sendNotificationToClient();
-
-                                Fragment newFragment = new DelivererAllOrdersFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("order", order.toJSON());
+                                bundle.putString("client", client.toJSON());
+                                bundle.putString("deliverer", deliverer.toJSON());
+                                Log.d("finish", order.toJSON());
+                                Fragment newFragment = new GetReceiverNameFragment();
+                                newFragment.setArguments(bundle);
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment, newFragment);
-
                                 transaction.addToBackStack(null);
                                 transaction.commit();
+
+//                                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
+//
+//                                finishOrder();
+//                                sendNotificationToClient();
+
+//                                Fragment newFragment = new DelivererInTransitOrdersFragment();
+//                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//                                transaction.replace(R.id.fragment, newFragment);
+//                                transaction.addToBackStack(null);
+//                                transaction.commit();
                             }
                         })
-                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
                                 return;
                             }
                         });
                 buider.create().show();
             }
         });
-
         return view;
     }
-
+    private void finishOrder(){
+        order.setOrderStatus(OrderStatus.CLOSED);
+        db.setOrder(order);
+    }
     public void openGoogleMapsNavigation(String destination) {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
 
@@ -169,41 +200,24 @@ public class DelivererOrderInfoFragment extends Fragment {
         }
     }
 
-    private void acceptOrder() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        order.setOrderStatus(OrderStatus.IN_TRANSIT);
-        order.setDelivererId(firebaseUser.getUid());
-        db.setOrder(order);
-    }
-
-    private void sendNotificationToClient() {
-        final MailSender mailSender = new MailSender();
-        db.getUser(order.getClientId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void getUserInfo(String googleId){
+        db.getUser(googleId).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        User userFromDatabase = document.toObject(User.class);
-                        mailSender.execute(createNotificationEmail(userFromDatabase.getGoogleEmail()));
+                        client = document.toObject(User.class);
+                        Log.d("Client", document.toObject(User.class).toString());
+                        Log.d(TAG, document.getId() + " => " + document.getData());
                     }
+
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
+
             }
         });
+
     }
 
-    private String[] createNotificationEmail(String emailTo) {
-        String subject = "Aktualizacja statusu zlecenia";
-
-        String pickupAddress = order.getPickupAddress().get("city").toString() + ", ul. " +
-                order.getPickupAddress().get("street").toString() + " " +
-                order.getPickupAddress().get("number").toString();
-        String deliveryAddress = order.getDeliveryAddress().get("city").toString() + ", ul. " +
-                order.getDeliveryAddress().get("street").toString() + " " +
-                order.getDeliveryAddress().get("number").toString();
-
-        String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus().getPolishName();
-        return new String[]{emailTo, subject, msg};
-    }
 }

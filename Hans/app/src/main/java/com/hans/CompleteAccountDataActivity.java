@@ -17,7 +17,6 @@ public class CompleteAccountDataActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_account_data);
-
     }
 
     public void onClickCreateAcoount(View v)

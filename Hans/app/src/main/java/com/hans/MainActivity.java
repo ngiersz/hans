@@ -27,12 +27,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.client.ClientAddOrderFragment;
 import com.hans.client.ClientAllWaitingsOrdersFragment;
+import com.hans.client.ClientArchiveOrdersFragment;
 import com.hans.client.ClientInTransitOrdersFragment;
 import com.hans.client.ClientMenuFragment;
 import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
-import com.hans.deliverer.DelivererMenuFragment;
 import com.hans.domain.User;
+import com.hans.pdf.SignDocumentFragment;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -173,24 +175,32 @@ public class MainActivity extends AppCompatActivity
                 fragmentClass = ClientAllWaitingsOrdersFragment.class;
                 Log.d("menu", "oczekujące");
                 break;
-            case R.id.in_process_orders:
+            case R.id.in_process_orders_client:
                 fragmentClass =  ClientInTransitOrdersFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
+                break;
+            case R.id.archive_orders_client:
+                fragmentClass =  ClientArchiveOrdersFragment.class;
+                Log.d("menu", "historia klienta");
                 break;
             case R.id.search_new_orders:
                 fragmentClass = DelivererAllOrdersFragment.class;
                 Log.d("menu", "szukaj zleceń");
                 break;
-            case R.id.in_process_order:
+            case R.id.in_process_orders_deliverer:
                 fragmentClass = DelivererInTransitOrdersFragment.class;
                 Log.d("menu", "zlecenie w trakcie wykonywania");
                 break;
+            case R.id.archive_orders_deliverer:
+                fragmentClass =  DelivererArchiveOrdersFragment.class;
+                Log.d("menu", "historia dostawcy");
+                break;
             case R.id.my_account:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = MyAccountFragment.class;
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = DelivererMenuFragment.class;
+                fragmentClass = SignDocumentFragment.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:

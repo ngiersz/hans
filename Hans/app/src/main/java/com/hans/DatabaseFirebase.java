@@ -47,18 +47,19 @@ public class DatabaseFirebase {
         userInsert.put("surname", user.getSurname());
         userInsert.put("phoneNumber", user.getPhoneNumber());
 
-        db.collection("Users")
-                .add(userInsert)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection("Users").document(user.getGoogleId())
+                .set(userInsert)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "Order documentSnapshood added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Document successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding Order document", e);
+                        Log.d(TAG, "Error updating document!", e);
+
                     }
                 });
     }
@@ -96,7 +97,30 @@ public class DatabaseFirebase {
                     }
                 });
     }
-
+//    public void updateUser(User user) {
+//        Map<String, Object> userSet = new HashMap<>();
+//        userSet.put("googleId", user.getGoogleId());
+//        userSet.put("googleEmail", user.getGoogleEmail());
+//        userSet.put("name", user.getName());
+//        userSet.put("surname", user.getSurname());
+//        userSet.put("phoneNumber", user.getPhoneNumber());
+//
+//        db.collection("Users")
+//                .whereEqualTo("googleId", user.getGoogleId())
+//                .set(userSet)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "Order documentSnapshood added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding Order document", e);
+//                    }
+//                });
+//    }
     public void deleteOrderByID(Order order) {
         db.collection("Orders").document(order.getId())
                 .delete()
@@ -135,13 +159,13 @@ public class DatabaseFirebase {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Document successfully deleted!");
+                        Log.d(TAG, "Document successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error deleting document!", e);
+                        Log.d(TAG, "Error updating document!", e);
 
                     }
                 });
@@ -163,6 +187,12 @@ public class DatabaseFirebase {
                 .whereEqualTo("orderStatus","IN_TRANSIT")
                 .get();
     }
+    public Task getClosedOrdersForDeliverer(String googleID){
+        return db.collection("Orders")
+                .whereEqualTo("delivererId", googleID)
+                .whereEqualTo("orderStatus","CLOSED")
+                .get();
+    }
     public Task getAllOrdersForClient(String googleId) {
         return db.collection("Orders")
                 .whereEqualTo("clientId", googleId)
@@ -182,7 +212,12 @@ public class DatabaseFirebase {
                 .whereEqualTo("orderStatus", "IN_TRANSIT")
                 .get();
     }
-
+    public Task getClosedOrdersForClient(String googleID){
+        return db.collection("Orders")
+                .whereEqualTo("clientId",googleID)
+                .whereEqualTo("orderStatus","CLOSED")
+                .get();
+    }
     public Task getUser(String googleId){
         return db.collection("Users")
                 .whereEqualTo("googleId", googleId)

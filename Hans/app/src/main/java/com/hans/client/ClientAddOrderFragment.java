@@ -48,6 +48,7 @@ public class ClientAddOrderFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_client_add_order, container, false);
+        ((MainActivity)getActivity()).setActionBarTitle("Nowe zlecenie");
 
         fromCity = view.findViewById(R.id.fromCity);
         fromZipCode = view.findViewById(R.id.fromZipCode);

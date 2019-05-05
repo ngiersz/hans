@@ -1,4 +1,4 @@
-package com.hans.deliverer;
+package com.hans.client;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,129 +28,102 @@ import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererInTransitOrdersFragment extends Fragment
-{
-
-    ArrayList<Order> inTransitOrderList = new ArrayList<>();
-    ArrayList<User> inTransitUserList = new ArrayList<>();
+public class ClientArchiveOrdersFragment extends Fragment {
+    ArrayList<Order> InTransitOrderList = new ArrayList<>();
+    ArrayList<User> InTransitDelivererList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
     View v;
     ListView ordersListView;
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity) getActivity()).setActionBarTitle("Aktualnie wykonywane zlecenia");
-        v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
-        orderListInit();
+        ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
+
+        v = inflater.inflate(R.layout.fragment_client_archive_orders, container, false);
         ordersListView = v.findViewById(R.id.listView);
+        orderListInit();
 
-
-        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new DelivererInTransitOrderInfoFragment();
+                Fragment newFragment = new ClientArchiveOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("order", inTransitOrderList.get(position).toJSON());
+                bundle.putString("order", InTransitOrderList.get(position).toJSON());
 
-                User client = getUserForOrder(inTransitOrderList.get(position).getClientId());
+                User client = getUserForOrder(InTransitOrderList.get(position).getDelivererId());
+                Log.d("Client22", client.toString());
 
 
-                bundle.putString("client", getUserForOrder(inTransitOrderList.get(position).getClientId()).toJSON());
-                bundle.putString("deliverer", getUserForOrder(inTransitOrderList.get(position).getDelivererId()).toJSON());
-
+                bundle.putString("deliverer",client.toJSON());
                 newFragment.setArguments(bundle);
 
                 transaction.addToBackStack(null);
                 transaction.commit();
-
             }
-
-
         });
-
 
         return v;
     }
 
 
-    private void orderListInit()
-    {
+    private void  orderListInit(){
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
-        db.getInTransitOrdersForDeliverer(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
-        {
+        db.getClosedOrdersForClient(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task)
-            {
-                if (task.isSuccessful())
-                {
-                    inTransitOrderList.clear();
-                    for (QueryDocumentSnapshot document : task.getResult())
-                    {
-                        Order orderFromDatabase = document.toObject(Order.class);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    InTransitOrderList.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Order orderFromDatabase =document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
-                        inTransitOrderList.add(orderFromDatabase);
+                        InTransitOrderList.add(orderFromDatabase);
                         Log.d("Order", document.toObject(Order.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
+
                     }
-                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, inTransitOrderList);
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, InTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
 
-                } else
-                {
+                } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
 
-        db.getAllUsers().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
-        {
+        db.getAllUsers().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task)
-            {
-                if (task.isSuccessful())
-                {
-                    inTransitUserList.clear();
-                    for (QueryDocumentSnapshot document : task.getResult())
-                    {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    InTransitDelivererList.clear();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
                         User userFromDatabase = document.toObject(User.class);
-                        inTransitUserList.add(userFromDatabase);
+                        InTransitDelivererList.add(userFromDatabase);
                         Log.d("Client22", document.toObject(User.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
 
-                } else
-                {
+                } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
-
     }
-
-    private User getUserForOrder(String googleID)
-    {
+    private User getUserForOrder(String googleID){
         User client = new User();
         Log.d("Client22", googleID);
 
-        for (User e : inTransitUserList)
-        {
-            if (e.getGoogleId().equals(googleID))
-            {
+        for(User e: InTransitDelivererList){
+            if(e.getGoogleId().equals(googleID)){
                 Log.d("Client22", e.toString());
 
                 client = e;
@@ -160,6 +133,4 @@ public class DelivererInTransitOrdersFragment extends Fragment
         }
         return client;
     }
-
-
 }

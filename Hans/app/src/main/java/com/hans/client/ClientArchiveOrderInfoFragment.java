@@ -1,7 +1,6 @@
 package com.hans.client;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,19 +14,25 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
+import com.hans.pdf.PdfGenerator;
 
-public class ClientOrderInTransitInfoFragment extends Fragment {
+import java.io.IOException;
+
+public class ClientArchiveOrderInfoFragment extends Fragment {
     Order order;
     User deliverer;
     ListView ordersListView;
     DatabaseFirebase db = new DatabaseFirebase();
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_in_transit_info, container, false);
+        view = inflater.inflate(R.layout.fragment_client_archive_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
+
+
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
