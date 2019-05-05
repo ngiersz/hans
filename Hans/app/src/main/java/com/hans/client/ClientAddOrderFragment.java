@@ -146,8 +146,13 @@ public class ClientAddOrderFragment extends Fragment
                 Double weightDouble = Double.parseDouble(weight.getText().toString());
                 Map<String, Object> result = new MapsFragment().GetPriceAndDistance(getContext(), location1, location2, weightDouble);
                 Log.d("price", "distance=" + result.get("distance").toString() + " price=" + result.get("price").toString());
-                price.setText(result.get("price").toString());
-                distance.setText(result.get("distance").toString());
+                if (result.get("price").toString().equals("0") || result.get("distance").toString().equals("0")) {
+                    Snackbar.make(getView(), "Conajmniej jedna podana lokacja nie została odnaleziona.", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    price.setText(result.get("price").toString());
+                    distance.setText(result.get("distance").toString());
+                }
 
             }
         });
