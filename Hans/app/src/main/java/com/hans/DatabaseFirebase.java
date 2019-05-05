@@ -164,7 +164,7 @@ public class DatabaseFirebase {
     }
     public Task getClosedOrdersForDeliverer(String googleID){
         return db.collection("Orders")
-                .whereEqualTo("delivererID",googleID)
+                .whereEqualTo("delivererId", googleID)
                 .whereEqualTo("orderStatus","CLOSED")
                 .get();
     }

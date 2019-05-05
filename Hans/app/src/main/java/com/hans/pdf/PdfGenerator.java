@@ -262,7 +262,7 @@ public class PdfGenerator
 
         final NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID_DOWNLOAD);
-        builder.setContentTitle(filename)
+        builder.setContentTitle("Protokół przekazania towaru")
                 .setContentText("Pobieranie w trakcie")
                 .setSmallIcon(R.drawable.ic_file_download_white)
                 .setPriority(NotificationCompat.PRIORITY_LOW);

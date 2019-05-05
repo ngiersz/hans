@@ -87,8 +87,10 @@ public class DelivererArchiveOrdersFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
                     closedOrderList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
+
                         Order orderFromDatabase =document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         closedOrderList.add(orderFromDatabase);
