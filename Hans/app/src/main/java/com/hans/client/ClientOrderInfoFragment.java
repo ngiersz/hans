@@ -2,6 +2,7 @@ package com.hans.client;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ public class ClientOrderInfoFragment extends Fragment {
         order = Order.createFromJSON(orderJSON);
 
         TextView status = view.findViewById(R.id.order_status);
+        TextView isPaid = view.findViewById(R.id.is_paid);
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -65,6 +67,13 @@ public class ClientOrderInfoFragment extends Fragment {
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
         status.setText(order.getOrderStatus().getPolishName());
+        if(order.getisPaid()){
+            isPaid.setText("Tak");
+            isPaid.setTextColor(Color.GREEN);
+        }else{
+            isPaid.setText("Nie");
+            isPaid.setTextColor(Color.RED);
+        }
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());

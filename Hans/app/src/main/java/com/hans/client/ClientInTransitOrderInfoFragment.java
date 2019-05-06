@@ -1,5 +1,6 @@
 package com.hans.client;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,7 +36,6 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
         deliverer = User.createFromJSON(delivererJSON);
 
 
-
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
         TextView fromStreet = view.findViewById(R.id.fromStreet);
@@ -59,6 +59,7 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
         TextView delivererPhone = view.findViewById(R.id.delivererPhone);
 
         TextView status = view.findViewById(R.id.order_status);
+        TextView isPaid = view.findViewById(R.id.is_paid);
 
 
         fromCity.setText(order.getPickupAddress().get("city").toString());
@@ -78,6 +79,13 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
+        if(order.getisPaid()){
+            isPaid.setText("Tak");
+            isPaid.setTextColor(Color.GREEN);
+        }else{
+            isPaid.setText("Nie");
+            isPaid.setTextColor(Color.RED);
+        }
         delivererName.setText(deliverer.getName());
         delivererSurName.setText(deliverer.getSurname());
         delivererEmail.setText(deliverer.getGoogleEmail());

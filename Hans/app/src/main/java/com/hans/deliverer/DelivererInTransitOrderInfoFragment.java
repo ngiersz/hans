@@ -3,6 +3,7 @@ package com.hans.deliverer;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -76,6 +77,8 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         TextView clientSurname = view.findViewById(R.id.clientSurname);
         TextView clientEmail = view.findViewById(R.id.clientEmail);
 
+        TextView isPaid = view.findViewById(R.id.is_paid);
+
         clientEmail.setText(client.getGoogleEmail());
         clientName.setText(client.getName());
         clientSurname.setText(client.getSurname());
@@ -93,6 +96,13 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
+        if(order.getisPaid()){
+            isPaid.setText("Tak");
+            isPaid.setTextColor(Color.GREEN);
+        }else{
+            isPaid.setText("Nie");
+            isPaid.setTextColor(Color.RED);
+        }
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());

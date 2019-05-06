@@ -30,7 +30,7 @@ public class GetReceiverNameFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_get_receiver_name, container, false);
-        getActivity().setTitle("Imię i nazwisko odbiorcy");
+        ((MainActivity) getActivity()).setActionBarTitle("Dane odbiorcy");
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
