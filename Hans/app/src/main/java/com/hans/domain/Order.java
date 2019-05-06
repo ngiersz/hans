@@ -148,7 +148,7 @@ public class Order {
         return date;
     }
 
-    public boolean getisPaid() { return isPaid; }
+    public boolean getIsPaid() { return isPaid; }
 
     public void setId(String id) {
         this.id = id;

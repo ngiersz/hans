@@ -79,7 +79,7 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        if(order.getisPaid()){
+        if(order.getIsPaid()){
             isPaid.setText("Tak");
             isPaid.setTextColor(Color.GREEN);
         }else{

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,9 +14,6 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
-import com.hans.pdf.PdfGenerator;
-
-import java.io.IOException;
 
 public class ClientArchiveOrderInfoFragment extends Fragment {
     Order order;
@@ -87,7 +83,7 @@ public class ClientArchiveOrderInfoFragment extends Fragment {
         height.setText(order.getDimensions().get("height").toString());
         depth.setText(order.getDimensions().get("depth").toString());
 
-        if(order.getisPaid()){
+        if(order.getIsPaid()){
             isPaid.setText("Tak");
             isPaid.setTextColor(Color.GREEN);
         }else{

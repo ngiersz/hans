@@ -1,5 +1,7 @@
 package com.hans.client;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -64,8 +66,8 @@ public class ClientAddOrderFragment extends Fragment
         distance = view.findViewById(R.id.distance);
         weight = view.findViewById(R.id.weight);
 
-        Button button = view.findViewById(R.id.addOrderButton);
-        button.setOnClickListener(new View.OnClickListener()
+        Button addOrderButton = view.findViewById(R.id.addOrderButton);
+        addOrderButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -75,7 +77,6 @@ public class ClientAddOrderFragment extends Fragment
                     Snackbar.make(getView(), "Należy obliczyć cenę", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-
                 TextView description = view.findViewById(R.id.description);
                 TextView width = view.findViewById(R.id.width);
                 TextView height = view.findViewById(R.id.height);
@@ -106,16 +107,38 @@ public class ClientAddOrderFragment extends Fragment
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 Timestamp currentDate = Timestamp.now();
-                Log.d("add", "date: " + currentDate);
 
-                Order order = new Order(pickupAddress, deliveryAddress,
+                final Order order = new Order(pickupAddress, deliveryAddress,
                         distanceDouble, priceDouble, weightDouble, dimensions,
                         description.getText().toString(), firebaseUser.getUid(), currentDate);
 
-                DatabaseFirebase db = new DatabaseFirebase();
-                db.insertOrderToDatabase(order);
-                Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("Czy chcesz dokonać płatności z góry?\n Kwota: " + order.getPrice() + " zł");
+                builder.setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        order.setIsPaid(true);
+                        DatabaseFirebase db = new DatabaseFirebase();
+                        db.insertOrderToDatabase(order);
+                        Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStackImmediate();
+                    }
+                });
+                builder.setNegativeButton("Wybieram płatność przy odbiorze", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        DatabaseFirebase db = new DatabaseFirebase();
+                        db.insertOrderToDatabase(order);
+                        Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStackImmediate();
+                    }
+                });
+                builder.create().show();
 
             }
         });
@@ -147,7 +170,7 @@ public class ClientAddOrderFragment extends Fragment
                 Map<String, Object> result = new MapsFragment().GetPriceAndDistance(getContext(), location1, location2, weightDouble);
                 Log.d("price", "distance=" + result.get("distance").toString() + " price=" + result.get("price").toString());
                 if (result.get("price").toString().equals("0") || result.get("distance").toString().equals("0")) {
-                    Snackbar.make(getView(), "Conajmniej jedna podana lokacja nie została odnaleziona.", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), "Co najmniej jedna podana lokacja nie została odnaleziona.", Snackbar.LENGTH_LONG).show();
                 }
                 else {
                     price.setText(result.get("price").toString());

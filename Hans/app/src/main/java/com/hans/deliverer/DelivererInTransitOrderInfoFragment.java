@@ -96,7 +96,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
-        if(order.getisPaid()){
+        if(order.getIsPaid()){
             isPaid.setText("Tak");
             isPaid.setTextColor(Color.GREEN);
         }else{
@@ -143,30 +143,55 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
 
-        Button button = view.findViewById(R.id.finish_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button finishButton = view.findViewById(R.id.finish_button);
+        finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                buider.setMessage("Czy na pewno zakończyc zlecenie?")
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Czy na pewno zakończyc zlecenie?")
                         .setPositiveButton("TAK", new DialogInterface.OnClickListener()
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
+                                if (!order.getIsPaid())
+                                {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setMessage("Zlecenie nie zostało opłacone! Pamiętaj o odebraniu zapłaty.");
+                                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which)
+                                        {
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("order", order.toJSON());
+                                            bundle.putString("client", client.toJSON());
+                                            bundle.putString("deliverer", deliverer.toJSON());
+                                            Fragment newFragment = new GetReceiverNameFragment();
+                                            newFragment.setArguments(bundle);
+                                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.fragment, newFragment);
+                                            transaction.addToBackStack(null);
+                                            transaction.commit();
+                                        }
+                                    });
+                                    builder.create().show();
+                                }
+                                else
+                                {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("order", order.toJSON());
+                                    bundle.putString("client", client.toJSON());
+                                    bundle.putString("deliverer", deliverer.toJSON());
+                                    Fragment newFragment = new GetReceiverNameFragment();
+                                    newFragment.setArguments(bundle);
+                                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.fragment, newFragment);
+                                    transaction.addToBackStack(null);
+                                    transaction.commit();
+                                }
 
-                                Bundle bundle = new Bundle();
-                                bundle.putString("order", order.toJSON());
-                                bundle.putString("client", client.toJSON());
-                                bundle.putString("deliverer", deliverer.toJSON());
-                                Log.d("finish", order.toJSON());
-                                Fragment newFragment = new GetReceiverNameFragment();
-                                newFragment.setArguments(bundle);
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
-                                transaction.addToBackStack(null);
-                                transaction.commit();
 
 //                                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
 //
@@ -188,7 +213,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                                 return;
                             }
                         });
-                buider.create().show();
+                builder.create().show();
             }
         });
         return view;

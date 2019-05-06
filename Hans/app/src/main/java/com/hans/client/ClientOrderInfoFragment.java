@@ -18,8 +18,6 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
-import org.w3c.dom.Text;
-
 public class ClientOrderInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
@@ -67,7 +65,7 @@ public class ClientOrderInfoFragment extends Fragment {
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
         status.setText(order.getOrderStatus().getPolishName());
-        if(order.getisPaid()){
+        if(order.getIsPaid()){
             isPaid.setText("Tak");
             isPaid.setTextColor(Color.GREEN);
         }else{
