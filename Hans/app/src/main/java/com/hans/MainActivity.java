@@ -1,18 +1,27 @@
 package com.hans;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -25,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hans.BroadcastReceivers.CheckInternetConnectionReceiver;
 import com.hans.client.ClientAddOrderFragment;
 import com.hans.client.ClientAllWaitingsOrdersFragment;
 import com.hans.client.ClientArchiveOrdersFragment;
@@ -33,25 +43,26 @@ import com.hans.client.ClientMenuFragment;
 import com.hans.deliverer.DelivererAllOrdersFragment;
 import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
-import com.hans.domain.User;
 import com.hans.pdf.SignDocumentFragment;
 
 public class MainActivity extends AppCompatActivity
 {
     private final int RC_SIGN_IN_WITH_GOOGLE = 1;
-
+    private final int MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE = 2;
 
     private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
     private NavigationView navigationView;
     private FirebaseUser firebaseUser;
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BroadcastReceiver br = new CheckInternetConnectionReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(br, filter);
 
         // Set a Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,46 +79,84 @@ public class MainActivity extends AppCompatActivity
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
 
-        // Check internet connection
-        if (!checkInternetConnection())
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Brak połączenia z internetem.")
-                    .setMessage("Włącz dane komórkowe lub połącz się z siecią Wi-Fi.");
-            builder.setNeutralButton("WYJDŹ", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    finish();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-        else
-        {
-            // Check if user is logged.
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        // Check if user is logged.
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            if (firebaseUser == null)
-            {
-                Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
-                startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
-            }
-            else
-            {
-                Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment, mapsActivity);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-
+        if (firebaseUser == null)
+        {
+            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
+            startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
+        } else
+        {
+            Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment, mapsActivity);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.d("onStart", "OSDGFSGFS");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    // Permission granted.
+                } else
+                {
+                    // Permission not granted.
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage("Brak dostepu do pamięci wewnętrznej. Proszę dać uprawnienia aplikacji do poprawnego funkcjonowania.")
+                            .setPositiveButton("Ok. Zrobię to!", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                    intent.setData(uri);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("Wyjdź", new DialogInterface.OnClickListener()
+                            {
+                                public void onClick(DialogInterface dialog, int id)
+                                {
+                                    // User cancelled the dialog
+                                    finish();
+                                }
+                            });
+                    builder.create().show();
+                }
+                return;
+            }
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
@@ -118,9 +167,9 @@ public class MainActivity extends AppCompatActivity
         {
             if (requestCode == RC_SIGN_IN_WITH_GOOGLE)
             {
-                firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
-                String userJSON = data.getStringExtra("userJSON");
-                user = User.createFromJSON(userJSON);
+//                firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
+//                String userJSON = data.getStringExtra("userJSON");
+//                user = User.createFromJSON(userJSON);
 
                 Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -128,8 +177,7 @@ public class MainActivity extends AppCompatActivity
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
-        }
-        else
+        } else
             finish();
     }
 
@@ -176,11 +224,11 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders_client:
-                fragmentClass =  ClientInTransitOrdersFragment.class;
+                fragmentClass = ClientInTransitOrdersFragment.class;
                 Log.d("menu", "zlecenia w trakcie");
                 break;
             case R.id.archive_orders_client:
-                fragmentClass =  ClientArchiveOrdersFragment.class;
+                fragmentClass = ClientArchiveOrdersFragment.class;
                 Log.d("menu", "historia klienta");
                 break;
             case R.id.search_new_orders:
@@ -192,7 +240,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "zlecenie w trakcie wykonywania");
                 break;
             case R.id.archive_orders_deliverer:
-                fragmentClass =  DelivererArchiveOrdersFragment.class;
+                fragmentClass = DelivererArchiveOrdersFragment.class;
                 Log.d("menu", "historia dostawcy");
                 break;
             case R.id.my_account:
@@ -244,7 +292,8 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.closeDrawers();
     }
 
-    public void setActionBarTitle(String title) {
+    public void setActionBarTitle(String title)
+    {
         getSupportActionBar().setTitle(title);
     }
 
@@ -253,22 +302,9 @@ public class MainActivity extends AppCompatActivity
         View view = activity.getCurrentFocus();
         if (view != null)
         {
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
-    public boolean checkInternetConnection()
-    {
-        ConnectivityManager cm =
-                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-
-        return  isConnected;
-    }
-
 
 }
