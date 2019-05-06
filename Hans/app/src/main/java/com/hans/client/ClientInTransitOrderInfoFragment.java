@@ -61,6 +61,7 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
 
         TextView status = view.findViewById(R.id.order_status);
         TextView isPaid = view.findViewById(R.id.is_paid);
+        TextView isReceived = view.findViewById(R.id.is_received);
 
 
         fromCity.setText(order.getPickupAddress().get("city").toString());
@@ -86,6 +87,14 @@ public class ClientInTransitOrderInfoFragment extends Fragment {
         }else{
             isPaid.setText("Nie");
             isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
+
+        if(order.getIsReceived()){
+            isReceived.setText("Została odebrana z miejsca początkowego");
+            isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+        }else{
+            isReceived.setText("Czeka na odbiór z miejsca początkowego");
+            isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
         }
         delivererName.setText(deliverer.getName());
         delivererSurName.setText(deliverer.getSurname());

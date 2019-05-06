@@ -38,6 +38,8 @@ public class Order {
 
     private boolean isPaid;
 
+    private boolean isReceived;
+
     public Order() {
     }
 
@@ -53,6 +55,7 @@ public class Order {
         this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
         this.date = date;
         this.isPaid = false;
+        this.isReceived = false;
     }
 
 //    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
@@ -92,6 +95,8 @@ public class Order {
         this.description = description;
         this.date = date;
         this.isPaid = false;
+        this.isReceived = false;
+
 
     }
 
@@ -109,6 +114,8 @@ public class Order {
         this.delivererId = delivererId;
         this.date = date;
         this.isPaid = false;
+        this.isReceived = false;
+
 
     }
 
@@ -149,6 +156,8 @@ public class Order {
     }
 
     public boolean getIsPaid() { return isPaid; }
+    public boolean getIsReceived() { return isReceived; }
+
 
     public void setId(String id) {
         this.id = id;
@@ -160,7 +169,9 @@ public class Order {
 
     public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus; }
 
-    public void setIsPaid(boolean paid) { isPaid = paid; }
+    public void setIsPaid(boolean paid) { this.isPaid = paid; }
+    public void setIsReceived(boolean received) { this.isReceived = received; }
+
 
     @Override
     public String toString() {

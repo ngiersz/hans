@@ -79,6 +79,8 @@ public class DatabaseFirebase {
         orderInsert.put("dimensions", order.getDimensions());
         orderInsert.put("date", order.getDate());
         orderInsert.put("isPaid", order.getIsPaid());
+        orderInsert.put("isReceived", order.getIsReceived());
+
 
 
         Log.d("addOrder", "przed db.collections");
@@ -156,6 +158,8 @@ public class DatabaseFirebase {
         orderSet.put("dimensions", order.getDimensions());
         orderSet.put("date", order.getDate());
         orderSet.put("isPaid", order.getIsPaid());
+        orderSet.put("isReceived", order.getIsReceived());
+
 
 
         db.collection("Orders").document(order.getId())

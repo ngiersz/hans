@@ -19,14 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/map">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:ignore="ExtraText">
-            
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,6 +39,28 @@
                 android:editable="false"
                 android:textSize="20dp"
                 android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stan paczki"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/is_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/received_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:text="Potwierdź odebranie" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -388,6 +408,7 @@
                 android:background="@color/colorPrimary"
                 android:textColor="#FFFFFF"
                 android:text="Zakończ zlecenie" />
+
         </LinearLayout>
 
     </ScrollView>

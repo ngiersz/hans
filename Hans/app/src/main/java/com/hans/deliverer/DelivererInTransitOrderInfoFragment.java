@@ -79,6 +79,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         TextView clientEmail = view.findViewById(R.id.clientEmail);
 
         TextView isPaid = view.findViewById(R.id.is_paid);
+        TextView isReceived = view.findViewById(R.id.is_received);
 
         clientEmail.setText(client.getGoogleEmail());
         clientName.setText(client.getName());
@@ -103,6 +104,13 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         }else{
             isPaid.setText("Nie");
             isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
+        if(order.getIsReceived()){
+            isReceived.setText("Została odebrana z miejsca początkowego");
+            isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+        }else{
+            isReceived.setText("Czeka na odbiór z miejsca początkowego");
+            isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
         }
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
@@ -215,10 +223,56 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                 builder.create().show();
             }
         });
+
+        Button receivedButton = view.findViewById(R.id.received_button);
+        if(order.getIsReceived()){
+            receivedButton.setVisibility(View.GONE);
+        }
+        receivedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Czy na pewno chcesz potwierdzić odiór?")
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                                Snackbar.make(getView(), "Odebrano paczke", Snackbar.LENGTH_SHORT).show();
+
+                                receiveOrder();
+                                Log.d("rec", "Odebralem");
+
+                                //sendNotificationToClient();
+
+                                Fragment newFragment = new DelivererInTransitOrdersFragment();
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragment, newFragment);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }
+                        })
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                return;
+                            }
+                        });
+                builder.create().show();
+            }
+        });
         return view;
     }
     private void finishOrder(){
         order.setOrderStatus(OrderStatus.CLOSED);
+        db.setOrder(order);
+    }
+    private void receiveOrder(){
+        order.setIsReceived(true);
         db.setOrder(order);
     }
     public void openGoogleMapsNavigation(String destination) {
