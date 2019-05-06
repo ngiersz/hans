@@ -36,7 +36,10 @@ public class Order {
 
     private Timestamp date;
 
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, Timestamp currentDate) {
+    public Order() {
+    }
+
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, Timestamp date) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.length = length;
@@ -46,7 +49,7 @@ public class Order {
         this.description = description;
         this.clientId = clientId;
         this.orderStatus = OrderStatus.WAITING_FOR_DELIVERER;
-        this.date = currentDate;
+        this.date = date;
     }
 
 //    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
@@ -87,7 +90,19 @@ public class Order {
         this.date = date;
     }
 
-    public Order() {
+    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, String delivererId, Timestamp date) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.pickupAddress = pickupAddress;
+        this.deliveryAddress = deliveryAddress;
+        this.length = length;
+        this.price = price;
+        this.weight = weight;
+        this.dimensions = dimensions;
+        this.description = description;
+        this.clientId = clientId;
+        this.delivererId = delivererId;
+        this.date = date;
     }
 
     public Double getLength() { return length; }
@@ -176,6 +191,8 @@ public class Order {
     {
         ObjectMapper objectMapper = new ObjectMapper();
         Order order = null;
+        userJSON = userJSON.replaceAll(",\"date\":\\{[^}]*\\}", "");
+        Log.d("json", "replaced:\n" + userJSON);
         try
         {
             order = objectMapper.readValue(userJSON, Order.class);
