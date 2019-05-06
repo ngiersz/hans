@@ -19,7 +19,7 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
-public class ClientOrderInfoFragment extends Fragment {
+public class ClientWaitingsOrderInfoFragment extends Fragment {
     Order order;
     ListView ordersListView;
     DatabaseFirebase db = new DatabaseFirebase();

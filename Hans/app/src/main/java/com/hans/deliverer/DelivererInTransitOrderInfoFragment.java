@@ -233,7 +233,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
             public void onClick(View v) {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("Czy na pewno chcesz potwierdzić odiór?")
+                builder.setMessage("Czy na pewno chcesz potwierdzić odbiór?")
                         .setPositiveButton("TAK", new DialogInterface.OnClickListener()
                         {
                             @Override

@@ -9,8 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -36,11 +36,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.BroadcastReceivers.CheckInternetConnectionReceiver;
 import com.hans.client.ClientAddOrderFragment;
-import com.hans.client.ClientAllWaitingsOrdersFragment;
+import com.hans.client.ClientWaitingsOrdersFragment;
 import com.hans.client.ClientArchiveOrdersFragment;
 import com.hans.client.ClientInTransitOrdersFragment;
 import com.hans.client.ClientMenuFragment;
-import com.hans.deliverer.DelivererAllOrdersFragment;
+import com.hans.deliverer.DelivererAvailableOrdersFragment;
 import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.pdf.SignDocumentFragment;
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
         } else
         {
-            Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+            Fragment mapsActivity = new ClientWaitingsOrdersFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment, mapsActivity);
             transaction.addToBackStack(null);
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity
 //                String userJSON = data.getStringExtra("userJSON");
 //                user = User.createFromJSON(userJSON);
 
-                Fragment mapsActivity = new ClientAllWaitingsOrdersFragment();
+                Fragment mapsActivity = new ClientWaitingsOrdersFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, mapsActivity);
                 transaction.addToBackStack(null);
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "nowe zlecenie");
                 break;
             case R.id.waiting_orders:
-                fragmentClass = ClientAllWaitingsOrdersFragment.class;
+                fragmentClass = ClientWaitingsOrdersFragment.class;
                 Log.d("menu", "oczekujące");
                 break;
             case R.id.in_process_orders_client:
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "historia klienta");
                 break;
             case R.id.search_new_orders:
-                fragmentClass = DelivererAllOrdersFragment.class;
+                fragmentClass = DelivererAvailableOrdersFragment.class;
                 Log.d("menu", "szukaj zleceń");
                 break;
             case R.id.in_process_orders_deliverer:
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_client:
                 Log.d("menu", "klient");
-                fragmentClass = ClientAllWaitingsOrdersFragment.class;
+                fragmentClass = ClientWaitingsOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.removeHeaderView(navigationView.getHeaderView(R.layout.menu_header_deliverer));
                 navigationView.getHeaderView(1).setVisibility(View.GONE);
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.change_to_deliverer:
                 Log.d("menu", "dostawca");
-                fragmentClass = DelivererAllOrdersFragment.class;
+                fragmentClass = DelivererAvailableOrdersFragment.class;
                 navigationView.getMenu().clear();
                 navigationView.getHeaderView(0).setVisibility(View.GONE);
                 navigationView.getHeaderView(1).setVisibility(View.VISIBLE);

@@ -114,7 +114,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, Double weight) {
+    public static Map<String, Object> GetPriceAndDistance(Context context, String location1, String location2, Double weight) {
 
         Map<String, Object> result = new HashMap<String, Object>();
         Geocoder geocoder = new Geocoder(context);

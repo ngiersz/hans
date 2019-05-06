@@ -29,7 +29,8 @@ import java.util.Comparator;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class DelivererAllOrdersFragment extends Fragment {
+public class DelivererAvailableOrdersFragment extends Fragment
+{
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     DatabaseFirebase db = new DatabaseFirebase();
@@ -39,17 +40,20 @@ public class DelivererAllOrdersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         ((MainActivity) getActivity()).setActionBarTitle("Dostępne zlecenia");
         view = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
         orderListInit();
         ordersListView = view.findViewById(R.id.listView);
-        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment newFragment = new DelivererOrderInfoFragment();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Fragment newFragment = new DelivererAvailableOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 
@@ -64,12 +68,16 @@ public class DelivererAllOrdersFragment extends Fragment {
 
         spinner = view.findViewById(R.id.spinner);
         spinnerInit();
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
                 Log.d("spinner", Integer.toString(position));
-                if (receivedOrderList.size() > 1) {
-                    switch (position) {
+                if (receivedOrderList.size() > 1)
+                {
+                    switch (position)
+                    {
                         case 0:
                             sortByOrderTimeAsc();
                             break;
@@ -96,7 +104,8 @@ public class DelivererAllOrdersFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent)
+            {
 
             }
         });
@@ -105,13 +114,18 @@ public class DelivererAllOrdersFragment extends Fragment {
         return view;
     }
 
-    private void orderListInit() {
-        db.getAllOrdersForDelivererTask().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    private void orderListInit()
+    {
+        db.getAllOrdersForDelivererTask().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
                     receivedOrderList.clear();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : task.getResult())
+                    {
                         Log.d("Document", document.toString());
                         Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
@@ -122,25 +136,31 @@ public class DelivererAllOrdersFragment extends Fragment {
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
                     sortByOrderTimeAsc();
-                } else {
+                } else
+                {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
     }
 
-    private void spinnerInit() {
+    private void spinnerInit()
+    {
         Spinner dropdown = view.findViewById(R.id.spinner);
         String[] items = new String[]{"czasie złożenia zamówienia - rosnąco", "czasie złożenia zamówienia - malejąco", "odległości - rosnąco", "odległości - malejąco", "cenie - rosnąco", "cenie - malejąco"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }
 
-    private void sortByPriceDesc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByPriceDesc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getPrice() < o2.getPrice()) {
+            public int compare(Order o1, Order o2)
+            {
+                if (o1.getPrice() < o2.getPrice())
+                {
                     return 1;
                 }
                 return -1;
@@ -148,11 +168,15 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByPriceAsc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByPriceAsc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getPrice() > o2.getPrice()) {
+            public int compare(Order o1, Order o2)
+            {
+                if (o1.getPrice() > o2.getPrice())
+                {
                     return 1;
                 }
                 return -1;
@@ -160,11 +184,17 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByDistanceDesc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByDistanceDesc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getLength() < o2.getLength()) {
+            public int compare(Order o1, Order o2)
+            {
+//                MapsFragment.GetPriceAndDistance(getContext(), o1.getPickupAddress(), )
+
+                if (o1.getLength() < o2.getLength())
+                {
                     return 1;
                 }
                 return -1;
@@ -172,11 +202,15 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByDistanceAsc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByDistanceAsc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getLength() > o2.getLength()) {
+            public int compare(Order o1, Order o2)
+            {
+                if (o1.getLength() > o2.getLength())
+                {
                     return 1;
                 }
                 return -1;
@@ -184,12 +218,17 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByOrderTimeAsc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByOrderTimeAsc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getDate() != null && o2.getDate() != null) {
-                    if (o1.getDate().compareTo(o2.getDate()) > 0) {
+            public int compare(Order o1, Order o2)
+            {
+                if (o1.getDate() != null && o2.getDate() != null)
+                {
+                    if (o1.getDate().compareTo(o2.getDate()) > 0)
+                    {
                         return 1;
                     }
                 }
@@ -198,12 +237,17 @@ public class DelivererAllOrdersFragment extends Fragment {
         });
     }
 
-    private void sortByOrderTimeDesc() {
-        Collections.sort(receivedOrderList, new Comparator<Order>() {
+    private void sortByOrderTimeDesc()
+    {
+        Collections.sort(receivedOrderList, new Comparator<Order>()
+        {
             @Override
-            public int compare(Order o1, Order o2) {
-                if (o1.getDate() != null && o2.getDate() != null) {
-                    if (o1.getDate().compareTo(o2.getDate()) < 0) {
+            public int compare(Order o1, Order o2)
+            {
+                if (o1.getDate() != null && o2.getDate() != null)
+                {
+                    if (o1.getDate().compareTo(o2.getDate()) < 0)
+                    {
                         return 1;
                     }
                 }

@@ -1,7 +1,6 @@
 package com.hans.deliverer;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +30,11 @@ import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 import com.hans.mail.MailSender;
 import com.hans.map.MapsFragment;
-import com.hans.pdf.PdfGenerator;
 
 import static android.support.constraint.Constraints.TAG;
 
 
-public class DelivererOrderInfoFragment extends Fragment {
+public class DelivererAvailableOrderInfoFragment extends Fragment {
     Order order;
 
     DatabaseFirebase db = new DatabaseFirebase();
@@ -118,22 +115,22 @@ public class DelivererOrderInfoFragment extends Fragment {
         mapsActivity.setArguments(mapsBundle);
         transaction.commit();
 
-        Button button = view.findViewById(R.id.accept_order_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button acceptOrderButton = view.findViewById(R.id.accept_order_button);
+        acceptOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder buider = new AlertDialog.Builder(getActivity());
-                buider.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
                         .setPositiveButton("TAK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
                                 acceptOrder();
-                                sendNotificationToClient();
+//                                sendNotificationToClient();
 
-                                Fragment newFragment = new DelivererAllOrdersFragment();
+                                Fragment newFragment = new DelivererAvailableOrdersFragment();
                                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment, newFragment);
 
@@ -147,7 +144,7 @@ public class DelivererOrderInfoFragment extends Fragment {
                                 return;
                             }
                         });
-                buider.create().show();
+                builder.create().show();
             }
         });
 

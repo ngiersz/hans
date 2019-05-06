@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class ClientAllWaitingsOrdersFragment extends Fragment {
+public class ClientWaitingsOrdersFragment extends Fragment {
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     DatabaseFirebase db = new DatabaseFirebase();
@@ -49,7 +49,7 @@ public class ClientAllWaitingsOrdersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("LISTPOS", Integer.toString(position));
-                Fragment newFragment = new ClientOrderInfoFragment();
+                Fragment newFragment = new ClientWaitingsOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
 
