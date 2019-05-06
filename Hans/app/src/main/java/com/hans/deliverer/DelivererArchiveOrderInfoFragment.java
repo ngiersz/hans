@@ -144,8 +144,6 @@ public class DelivererArchiveOrderInfoFragment extends Fragment {
         mapsBundle.putString("origin", startPoint);
         mapsBundle.putString("destination", destinationPoint);
         mapsActivity.setArguments(mapsBundle);
-
-        transaction.addToBackStack(null);
         transaction.commit();
 
         return view;

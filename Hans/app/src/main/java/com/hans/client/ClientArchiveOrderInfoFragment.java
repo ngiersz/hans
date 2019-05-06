@@ -3,6 +3,7 @@ package com.hans.client;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,11 +86,12 @@ public class ClientArchiveOrderInfoFragment extends Fragment {
 
         if(order.getIsPaid()){
             isPaid.setText("Tak");
-            isPaid.setTextColor(Color.GREEN);
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
         }else{
             isPaid.setText("Nie");
-            isPaid.setTextColor(Color.RED);
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
         }
+
         delivererName.setText(deliverer.getName());
         delivererSurName.setText(deliverer.getSurname());
         delivererEmail.setText(deliverer.getGoogleEmail());

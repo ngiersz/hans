@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,11 +68,12 @@ public class ClientOrderInfoFragment extends Fragment {
         status.setText(order.getOrderStatus().getPolishName());
         if(order.getIsPaid()){
             isPaid.setText("Tak");
-            isPaid.setTextColor(Color.GREEN);
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
         }else{
             isPaid.setText("Nie");
-            isPaid.setTextColor(Color.RED);
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
         }
+
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());

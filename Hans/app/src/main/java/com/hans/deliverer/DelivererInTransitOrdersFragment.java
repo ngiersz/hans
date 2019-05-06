@@ -45,7 +45,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         ((MainActivity) getActivity()).setActionBarTitle("Aktualnie wykonywane zlecenia");
-        v = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
+        v = inflater.inflate(R.layout.fragment_deliverer_in_transit_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
 

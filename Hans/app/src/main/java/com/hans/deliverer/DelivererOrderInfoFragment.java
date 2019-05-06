@@ -116,8 +116,6 @@ public class DelivererOrderInfoFragment extends Fragment {
         mapsBundle.putString("origin", startPoint);
         mapsBundle.putString("destination", destinationPoint);
         mapsActivity.setArguments(mapsBundle);
-
-        transaction.addToBackStack(null);
         transaction.commit();
 
         Button button = view.findViewById(R.id.accept_order_button);
