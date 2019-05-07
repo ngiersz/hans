@@ -78,15 +78,6 @@ public class PdfGenerator
     public void signInDocument(Path mPath)
     {
         Canvas canvas = page.getCanvas();
-        Matrix scaleMatrix = new Matrix();
-        RectF rectF = new RectF();
-        mPath.computeBounds(rectF, true);
-        scaleMatrix.setScale(0.1f, 0.1f, rectF.centerX(), rectF.centerY());
-        mPath.transform(scaleMatrix);
-
-        Matrix translateMatrix = new Matrix();
-        translateMatrix.setTranslate(130f, -250f);
-        mPath.transform(translateMatrix);
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -113,17 +104,16 @@ public class PdfGenerator
         String measurmentsD1 = order.getDimensions().get("depth").toString();
         String reciverName = receiver_firstname + " " + receiver_lastname;
 
-
+//
 //        String date = "14.07.2019 15:33";
 //        String deliverer = "Marcin Hradowicz";
 //        String client = "Jan Kowalski";
-//        String name1 = "Przedmiot1";
 //        String description1 = "opis1";
-//        String amount1 = "ilość1";
 //        String weight1 = "waga1";
 //        String measurmentsW1 = "W1";
 //        String measurmentsH1 = "H1";
 //        String measurmentsD1 = "D1";
+//        String reciverName = "RECEIVER_NAME";
 
         String item1 = "Lp. 1." + "      Opis: " + description1 + "      Waga [kg]: " + weight1 + "      Wymiary [*] " + measurmentsW1 + " x " + measurmentsH1 + " x " + measurmentsD1;
 

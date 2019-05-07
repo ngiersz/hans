@@ -1,6 +1,7 @@
 package com.hans.pdf;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowId;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -34,6 +37,8 @@ public class SignDocumentFragment extends Fragment
     private Canvas canvas;
     private Order order;
     private User client, deliverer;
+    private static int PAGE_WIDTH = 842;
+    private static int PAGE_HEIGHT = 595;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -62,16 +67,30 @@ public class SignDocumentFragment extends Fragment
             public void onClick(View v)
             {
 
-                RectF rectF = new RectF();
-                mPath.computeBounds(rectF, true);
                 Matrix rotateMatrix = new Matrix();
-                rotateMatrix.setRotate(270f, rectF.centerX(), rectF.centerY());
+                rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
                 mPath.transform(rotateMatrix);
+
+                Float scaleX = (float)PAGE_WIDTH/(float)canvas.getHeight();
+                Float scaleY = (float)PAGE_HEIGHT/(float)canvas.getWidth();
+                Matrix scaleMatrix = new Matrix();
+                scaleMatrix.setScale(scaleX, scaleY, 0f, PAGE_HEIGHT*scaleY);
+                mPath.transform(scaleMatrix);
+
+                Matrix scaleMatrix2 = new Matrix();
+                scaleMatrix2.setScale(0.25f, 0.25f, (float)PAGE_HEIGHT/2, (float)PAGE_WIDTH/2);
+                mPath.transform(scaleMatrix2);
+
+                Matrix translateMatrix = new Matrix();
+                translateMatrix.setTranslate(400f, 50f);
+                mPath.transform(translateMatrix);
+
                 PdfGenerator pdfGenerator = new PdfGenerator(getContext(), order);
                 pdfGenerator.createPdf(client, deliverer, receiver_firstname, receiver_lastname);
                 pdfGenerator.signInDocument(mPath);
                 pdfGenerator.saveLocal(order.getId());
                 pdfGenerator.sendToFirebaseStorage(order.getId());
+
 
                 Fragment newFragment = new DelivererArchiveOrdersFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -167,6 +186,7 @@ public class SignDocumentFragment extends Fragment
             super.onSizeChanged(w, h, oldw, oldh);
 
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Log.d("signnn", Integer.toString(w) + " " + Integer.toString(h));
             canvas = new Canvas(mBitmap);
         }
 
