@@ -79,12 +79,18 @@ public class MainActivity extends AppCompatActivity
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
         // Check if user is logged.
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser == null)
         {
-            Intent signInIntent = new Intent(getBaseContext(), SignInGoogleActivity.class);
+            Intent signInIntent = new Intent(this, SignInGoogleActivity.class);
             startActivityForResult(signInIntent, RC_SIGN_IN_WITH_GOOGLE);
         } else
         {
@@ -95,19 +101,14 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
         }
 
-    }
 
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-        Log.d("onStart", "OSDGFSGFS");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             // Permission is not granted
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE);
         }
     }

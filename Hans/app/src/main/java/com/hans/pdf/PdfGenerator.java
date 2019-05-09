@@ -245,8 +245,7 @@ public class PdfGenerator
 
     }
 
-
-    public void downloadFileFromFirebaseStorage(String filename) throws IOException
+    public void downloadFileFromFirebaseStorage(String filename)
     {
         createNotificationChannel();
 

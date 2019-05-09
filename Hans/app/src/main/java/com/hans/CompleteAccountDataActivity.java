@@ -1,22 +1,30 @@
 package com.hans;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.hans.BroadcastReceivers.CheckInternetConnectionReceiver;
 import com.hans.domain.User;
 
 public class CompleteAccountDataActivity extends AppCompatActivity
 {
-    View view;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_account_data);
+
+        BroadcastReceiver br = new CheckInternetConnectionReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(br, filter);;
+
     }
 
     public void onClickCreateAcoount(View v)
