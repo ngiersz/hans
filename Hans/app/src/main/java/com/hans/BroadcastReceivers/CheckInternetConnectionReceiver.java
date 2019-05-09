@@ -41,6 +41,7 @@ public class CheckInternetConnectionReceiver extends BroadcastReceiver
                     ((Activity)context).finish();
                 }
             });
+            builder.setCancelable(false);
             AlertDialog dialog = builder.create();
             dialog.show();
         }
