@@ -1,6 +1,10 @@
 package com.hans.deliverer;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +17,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,10 +29,14 @@ import com.hans.MainActivity;
 import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
+import com.hans.map.MapsFragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -37,6 +48,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
     View view;
     ListView ordersListView;
     Spinner spinner;
+    FusedLocationProviderClient fusedLocationClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +60,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
         orderListInit();
         ordersListView = view.findViewById(R.id.listView);
+
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -65,6 +78,9 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 transaction.commit();
             }
         });
+
+        // current location for sorting by distance
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         spinner = view.findViewById(R.id.spinner);
         spinnerInit();
@@ -186,36 +202,88 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void sortByDistanceDesc()
     {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-//                MapsFragment.GetPriceAndDistance(getContext(), o1.getPickupAddress(), )
-
-                if (o1.getLength() < o2.getLength())
-                {
-                    return 1;
-                }
-                return -1;
-            }
-        });
+        try {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                final Location location1 = location;
+                                Collections.sort(receivedOrderList, new Comparator<Order>() {
+                                    @Override
+                                    public int compare(final Order o1, final Order o2) {
+                                        if (getDistanceToPickupAddress(o1, location1) > getDistanceToPickupAddress(o2, location1)) {
+                                            return 1;
+                                        }
+                                        return -1;
+                                    }
+                                });
+                            }
+                            else {
+                                Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
+                            }
+                            ordersListView.invalidate();
+                        }
+                    });
+        }
+        catch (SecurityException e) {
+            Log.d("excepioton", "Permission for getting location denied");
+        }
     }
 
     private void sortByDistanceAsc()
     {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-                if (o1.getLength() > o2.getLength())
-                {
-                    return 1;
-                }
-                return -1;
-            }
-        });
+        try {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                final Location location1 = location;
+                                Collections.sort(receivedOrderList, new Comparator<Order>() {
+                                    @Override
+                                    public int compare(final Order o1, final Order o2) {
+                                        if (getDistanceToPickupAddress(o1, location1) <= getDistanceToPickupAddress(o2, location1)) {
+                                            return 1;
+                                        }
+                                        return -1;
+                                    }
+                                });
+                            }
+                            else {
+                                Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
+                            }
+                            ordersListView.invalidate();
+                        }
+                    });
+        }
+        catch (SecurityException e) {
+            Log.d("excepioton", "Permission for getting location denied");
+        }
+    }
+
+    private float getDistanceToPickupAddress(Order order, Location location) {
+        Geocoder geocoder = new Geocoder(getContext());
+        String pickupAddress1 = order.getPickupAddress().get("city") + " " +
+                order.getPickupAddress().get("zipcode") + " " +
+                order.getPickupAddress().get("street") + " " +
+                order.getPickupAddress().get("number");
+        List<Address> addressList = null;
+        try {
+            addressList = geocoder.getFromLocationName(pickupAddress1, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Address address = addressList.get(0);
+        double x1 = address.getLatitude();
+        double y1 = address.getLongitude();
+
+        float[] distance = new float[1];
+        Location.distanceBetween(location.getLatitude(), location.getLongitude(), x1, y1, distance);
+
+        Log.d("distance", "address: " + pickupAddress1);
+        Log.d("distance", Float.toString(distance[0]));
+        return distance[0];
     }
 
     private void sortByOrderTimeAsc()
