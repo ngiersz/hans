@@ -42,7 +42,7 @@ public class ClientWaitingsOrdersFragment extends Fragment {
 
         ((MainActivity)getActivity()).setActionBarTitle("Oczekujące zlecenia");
 
-        v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
+        v = inflater.inflate(R.layout.fragment_client_available_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

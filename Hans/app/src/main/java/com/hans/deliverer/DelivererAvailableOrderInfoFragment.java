@@ -9,12 +9,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,38 +35,41 @@ import com.hans.map.MapsFragment;
 import static android.support.constraint.Constraints.TAG;
 
 
-public class DelivererAvailableOrderInfoFragment extends Fragment {
+public class DelivererAvailableOrderInfoFragment extends Fragment
+{
     Order order;
 
     DatabaseFirebase db = new DatabaseFirebase();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_deliverer_order_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_deliverer_available_order_info, container, false);
         getActivity().setTitle("Szczegóły zlecenia");
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
 
-        TextView fromCity = view.findViewById(R.id.fromCity);
-        TextView fromZipCode = view.findViewById(R.id.fromZipCode);
-        TextView fromStreet = view.findViewById(R.id.fromStreet);
-        TextView fromNumber = view.findViewById(R.id.fromNumber);
+        EditText fromCity = view.findViewById(R.id.fromCity);
+        EditText fromZipCode = view.findViewById(R.id.fromZipCode);
+        EditText fromStreet = view.findViewById(R.id.fromStreet);
+        EditText fromNumber = view.findViewById(R.id.fromNumber);
 
-        TextView toCity = view.findViewById(R.id.toCity);
-        TextView toZipCode = view.findViewById(R.id.toZipCode);
-        TextView toStreet = view.findViewById(R.id.toStreet);
-        TextView toNumber = view.findViewById(R.id.toNumber);
+        EditText toCity = view.findViewById(R.id.toCity);
+        EditText toZipCode = view.findViewById(R.id.toZipCode);
+        EditText toStreet = view.findViewById(R.id.toStreet);
+        EditText toNumber = view.findViewById(R.id.toNumber);
 
-        TextView price = view.findViewById(R.id.price);
-        TextView description = view.findViewById(R.id.description);
-        TextView weight = view.findViewById(R.id.weight);
-        TextView width = view.findViewById(R.id.width);
-        TextView height = view.findViewById(R.id.height);
-        TextView depth = view.findViewById(R.id.depth);
+        EditText isPaid = view.findViewById(R.id.is_paid);
+        EditText price = view.findViewById(R.id.price);
+        EditText description = view.findViewById(R.id.description);
+        EditText weight = view.findViewById(R.id.weight);
+        EditText width = view.findViewById(R.id.width);
+        EditText height = view.findViewById(R.id.height);
+        EditText depth = view.findViewById(R.id.depth);
 
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
@@ -77,6 +81,15 @@ public class DelivererAvailableOrderInfoFragment extends Fragment {
         toStreet.setText(order.getDeliveryAddress().get("street").toString());
         toNumber.setText(order.getDeliveryAddress().get("number").toString());
 
+        if (order.getIsPaid())
+        {
+            isPaid.setText("Tak");
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+        } else
+        {
+            isPaid.setText("Nie");
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
         price.setText(order.getPrice().toString());
         description.setText(order.getDescription());
         weight.setText(order.getWeight().toString());
@@ -85,22 +98,25 @@ public class DelivererAvailableOrderInfoFragment extends Fragment {
         depth.setText(order.getDimensions().get("depth").toString());
 
 
-
         final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();
         final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();
 
         Button openNavigationStart = view.findViewById(R.id.openNavigationStart);
-        openNavigationStart.setOnClickListener(new View.OnClickListener() {
+        openNavigationStart.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 openGoogleMapsNavigation(startPoint);
             }
         });
 
         Button openNavigationDestination = view.findViewById(R.id.openNavigationDestination);
-        openNavigationDestination.setOnClickListener(new View.OnClickListener() {
+        openNavigationDestination.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 openGoogleMapsNavigation(destinationPoint);
             }
         });
@@ -116,15 +132,19 @@ public class DelivererAvailableOrderInfoFragment extends Fragment {
         transaction.commit();
 
         Button acceptOrderButton = view.findViewById(R.id.accept_order_button);
-        acceptOrderButton.setOnClickListener(new View.OnClickListener() {
+        acceptOrderButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Czy na pewno chcesz przyjąć te zlecenie?")
-                        .setPositiveButton("TAK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("TAK", new DialogInterface.OnClickListener()
+                        {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
                                 Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
                                 acceptOrder();
@@ -138,9 +158,11 @@ public class DelivererAvailableOrderInfoFragment extends Fragment {
                                 transaction.commit();
                             }
                         })
-                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
+                        {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
                                 return;
                             }
                         });
@@ -151,44 +173,55 @@ public class DelivererAvailableOrderInfoFragment extends Fragment {
         return view;
     }
 
-    public void openGoogleMapsNavigation(String destination) {
+    public void openGoogleMapsNavigation(String destination)
+    {
         Uri gmmIntentUri = Uri.parse("google.navigation:q=" + destination);
 
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
-        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null)
+        {
             startActivity(mapIntent);
-        } else {
+        } else
+        {
             Snackbar.make(getView(), "Nie posiadasz Map Google. Zainstaluj ze Sklepu Play.", Snackbar.LENGTH_SHORT).show();
             return;
         }
     }
 
-    private void acceptOrder() {
+    private void acceptOrder()
+    {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         order.setOrderStatus(OrderStatus.IN_TRANSIT);
         order.setDelivererId(firebaseUser.getUid());
         db.setOrder(order);
     }
 
-    private void sendNotificationToClient() {
+    private void sendNotificationToClient()
+    {
         final MailSender mailSender = new MailSender();
-        db.getUser(order.getClientId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.getUser(order.getClientId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
+                    for (QueryDocumentSnapshot document : task.getResult())
+                    {
                         User userFromDatabase = document.toObject(User.class);
                         mailSender.execute(createNotificationEmail(userFromDatabase.getGoogleEmail()));
                     }
-                } else {
+                } else
+                {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
     }
 
-    private String[] createNotificationEmail(String emailTo) {
+    private String[] createNotificationEmail(String emailTo)
+    {
         String subject = "Aktualizacja statusu zlecenia";
 
         String pickupAddress = order.getPickupAddress().get("city").toString() + ", ul. " +

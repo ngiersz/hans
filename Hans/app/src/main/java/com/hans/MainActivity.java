@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private FirebaseUser firebaseUser;
     private BroadcastReceiver br;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

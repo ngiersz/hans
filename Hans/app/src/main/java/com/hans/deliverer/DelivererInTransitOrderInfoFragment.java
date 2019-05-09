@@ -171,6 +171,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which)
                                         {
+                                            order.setIsReceived(true);
                                             Bundle bundle = new Bundle();
                                             bundle.putString("order", order.toJSON());
                                             bundle.putString("client", client.toJSON());
