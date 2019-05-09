@@ -39,6 +39,7 @@ public class SignInGoogleActivity extends AppCompatActivity
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private User user;
+    private BroadcastReceiver br;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,7 +47,7 @@ public class SignInGoogleActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_with_google);
 
-        BroadcastReceiver br = new CheckInternetConnectionReceiver();
+        br = new CheckInternetConnectionReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(br, filter);
 
@@ -59,7 +60,6 @@ public class SignInGoogleActivity extends AppCompatActivity
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
         mAuth = FirebaseAuth.getInstance();
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -71,6 +71,13 @@ public class SignInGoogleActivity extends AppCompatActivity
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        this.unregisterReceiver(br);
     }
 
     @Override

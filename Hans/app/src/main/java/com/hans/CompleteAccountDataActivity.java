@@ -15,18 +15,24 @@ import com.hans.domain.User;
 
 public class CompleteAccountDataActivity extends AppCompatActivity
 {
+    private BroadcastReceiver br;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_account_data);
 
-        BroadcastReceiver br = new CheckInternetConnectionReceiver();
+        br = new CheckInternetConnectionReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(br, filter);;
 
     }
-
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        this.unregisterReceiver(br);
+    }
     public void onClickCreateAcoount(View v)
     {
         if (checkIfAllCompletedCorrectly())

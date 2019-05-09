@@ -53,14 +53,15 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private FirebaseUser firebaseUser;
-
+    private BroadcastReceiver br;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BroadcastReceiver br = new CheckInternetConnectionReceiver();
+        br = new CheckInternetConnectionReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(br, filter);
 
@@ -111,6 +112,13 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE);
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        this.unregisterReceiver(br);
     }
 
     @Override
@@ -249,7 +257,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("menu", "moje konto");
                 break;
             case R.id.settings:
-                fragmentClass = SignDocumentFragment.class;
+                fragmentClass = SettingsFragment.class;
                 Log.d("menu", "ustawienia");
                 break;
             case R.id.change_to_client:
