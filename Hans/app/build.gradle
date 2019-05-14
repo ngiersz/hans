@@ -52,5 +52,8 @@ dependencies {
     // firebase storage
     implementation 'com.google.firebase:firebase-storage:16.1.0'
 
+    // shimmer effect for loading
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+
 }
 apply plugin: 'com.google.gms.google-services'

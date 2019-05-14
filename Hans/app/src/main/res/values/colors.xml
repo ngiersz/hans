@@ -7,4 +7,6 @@
     <color name="green">#4CAF50</color>
     <color name="red">#D82929</color>
     <color name="backgroundColor">#f0f0f0</color>
+    <color name="backgroundShimmer">#dddddd</color>
+
 </resources>

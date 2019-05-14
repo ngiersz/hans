@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,6 +50,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
     ListView ordersListView;
     Spinner spinner;
     FusedLocationProviderClient fusedLocationClient;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,8 +60,13 @@ public class DelivererAvailableOrdersFragment extends Fragment
         ((MainActivity) getActivity()).setActionBarTitle("Dostępne zlecenia");
         view = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
 
+        // shimmer effect for loading
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
+
         orderListInit();
         ordersListView = view.findViewById(R.id.listView);
+
+        stopShimmerWhileLoading();
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -170,6 +177,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void sortByPriceDesc()
     {
+        startShimmerWhileLoading();
         Collections.sort(receivedOrderList, new Comparator<Order>()
         {
             @Override
@@ -182,10 +190,12 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 return -1;
             }
         });
+        stopShimmerWhileLoading();
     }
 
     private void sortByPriceAsc()
     {
+        startShimmerWhileLoading();
         Collections.sort(receivedOrderList, new Comparator<Order>()
         {
             @Override
@@ -198,10 +208,12 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 return -1;
             }
         });
+        stopShimmerWhileLoading();
     }
 
     private void sortByDistanceDesc()
     {
+        startShimmerWhileLoading();
         try {
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -222,6 +234,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
                             else {
                                 Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
                             }
+                            stopShimmerWhileLoading();
                             ordersListView.invalidate();
                         }
                     });
@@ -233,6 +246,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void sortByDistanceAsc()
     {
+        startShimmerWhileLoading();
         try {
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -253,6 +267,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
                             else {
                                 Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
                             }
+                            stopShimmerWhileLoading();
                             ordersListView.invalidate();
                         }
                     });
@@ -288,6 +303,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void sortByOrderTimeAsc()
     {
+        startShimmerWhileLoading();
         Collections.sort(receivedOrderList, new Comparator<Order>()
         {
             @Override
@@ -303,10 +319,12 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 return -1;
             }
         });
+        stopShimmerWhileLoading();
     }
 
     private void sortByOrderTimeDesc()
     {
+        startShimmerWhileLoading();
         Collections.sort(receivedOrderList, new Comparator<Order>()
         {
             @Override
@@ -322,6 +340,17 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 return -1;
             }
         });
+        stopShimmerWhileLoading();
+    }
+
+    private void stopShimmerWhileLoading() {
+        shimmerFrameLayout.stopShimmerAnimation();
+        shimmerFrameLayout.setVisibility(View.GONE);
+    }
+
+    private void startShimmerWhileLoading() {
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+        shimmerFrameLayout.startShimmerAnimation();
     }
 
 }
