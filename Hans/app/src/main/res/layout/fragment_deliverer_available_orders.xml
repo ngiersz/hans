@@ -10,11 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/empty_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+        <include layout="@layout/progress_circle" />
+
 
         <TextView
             android:id="@+id/empty_text_view"

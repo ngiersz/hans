@@ -45,7 +45,7 @@ public class DelivererArchiveOrdersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
-        view = inflater.inflate(R.layout.fragment_deliverer_archive_orders, container, false);
+        view = inflater.inflate(R.layout.list_view_orders, container, false);
         ordersListView = view.findViewById(R.id.listView);
         orderListInit();
 
