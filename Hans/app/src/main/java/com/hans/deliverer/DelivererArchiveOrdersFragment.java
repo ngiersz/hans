@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,7 +35,7 @@ public class DelivererArchiveOrdersFragment extends Fragment {
     ArrayList<User> closedOrdersUserList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
     @Override
@@ -43,8 +44,8 @@ public class DelivererArchiveOrdersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
-        v = inflater.inflate(R.layout.fragment_deliverer_archive_orders, container, false);
-        ordersListView = v.findViewById(R.id.listView);
+        view = inflater.inflate(R.layout.fragment_deliverer_archive_orders, container, false);
+        ordersListView = view.findViewById(R.id.listView);
         orderListInit();
 
 
@@ -76,7 +77,7 @@ public class DelivererArchiveOrdersFragment extends Fragment {
 
         });
 
-        return v;
+        return view;
     }
 
     private void orderListInit() {
@@ -99,6 +100,12 @@ public class DelivererArchiveOrdersFragment extends Fragment {
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, closedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+
+                    if(closedOrderList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
 
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());

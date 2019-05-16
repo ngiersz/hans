@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,7 +32,7 @@ public class ClientWaitingsOrdersFragment extends Fragment {
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
 
@@ -42,9 +43,10 @@ public class ClientWaitingsOrdersFragment extends Fragment {
 
         ((MainActivity)getActivity()).setActionBarTitle("Oczekujące zlecenia");
 
-        v = inflater.inflate(R.layout.fragment_client_available_orders, container, false);
+        view = inflater.inflate(R.layout.fragment_client_waitings_orders, container, false);
+
         orderListInit();
-        ordersListView = v.findViewById(R.id.listView);
+        ordersListView = view.findViewById(R.id.listView);
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,7 +64,7 @@ public class ClientWaitingsOrdersFragment extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
 
 
@@ -77,7 +79,7 @@ public class ClientWaitingsOrdersFragment extends Fragment {
                 if (task.isSuccessful()) {
                     receivedOrderList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Order orderFromDatabase =document.toObject(Order.class);
+                        Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         receivedOrderList.add(orderFromDatabase);
                         Log.d("Order", document.toObject(Order.class).toString());
@@ -86,6 +88,11 @@ public class ClientWaitingsOrdersFragment extends Fragment {
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+                    if(receivedOrderList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
 
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());

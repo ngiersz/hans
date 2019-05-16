@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,7 +36,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
     ArrayList<User> inTransitUserList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
     @Override
@@ -45,9 +46,9 @@ public class DelivererInTransitOrdersFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         ((MainActivity) getActivity()).setActionBarTitle("Aktualnie wykonywane zlecenia");
-        v = inflater.inflate(R.layout.fragment_deliverer_in_transit_orders, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_in_transit_orders, container, false);
         orderListInit();
-        ordersListView = v.findViewById(R.id.listView);
+        ordersListView = view.findViewById(R.id.listView);
 
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -81,7 +82,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
         });
 
 
-        return v;
+        return view;
     }
 
 
@@ -109,6 +110,12 @@ public class DelivererInTransitOrdersFragment extends Fragment
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, inTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+
+                    if(inTransitOrderList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
 
                 } else
                 {

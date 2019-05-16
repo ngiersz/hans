@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,11 +30,11 @@ import java.util.ArrayList;
 import static android.support.constraint.Constraints.TAG;
 
 public class ClientArchiveOrdersFragment extends Fragment {
-    ArrayList<Order> InTransitOrderList = new ArrayList<>();
+    ArrayList<Order> archiveOrdersList = new ArrayList<>();
     ArrayList<User> InTransitDelivererList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,8 +43,8 @@ public class ClientArchiveOrdersFragment extends Fragment {
 
         ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
 
-        v = inflater.inflate(R.layout.fragment_client_archive_orders, container, false);
-        ordersListView = v.findViewById(R.id.listView);
+        view = inflater.inflate(R.layout.fragment_client_archive_orders, container, false);
+        ordersListView = view.findViewById(R.id.listView);
         orderListInit();
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -56,9 +57,9 @@ public class ClientArchiveOrdersFragment extends Fragment {
                 transaction.replace(R.id.fragment, newFragment);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("order", InTransitOrderList.get(position).toJSON());
+                bundle.putString("order", archiveOrdersList.get(position).toJSON());
 
-                User client = getUserForOrder(InTransitOrderList.get(position).getDelivererId());
+                User client = getUserForOrder(archiveOrdersList.get(position).getDelivererId());
                 Log.d("Client22", client.toString());
 
 
@@ -70,7 +71,7 @@ public class ClientArchiveOrdersFragment extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
 
 
@@ -82,18 +83,23 @@ public class ClientArchiveOrdersFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    InTransitOrderList.clear();
+                    archiveOrdersList.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Order orderFromDatabase =document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
-                        InTransitOrderList.add(orderFromDatabase);
+                        archiveOrdersList.add(orderFromDatabase);
                         Log.d("Order", document.toObject(Order.class).toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
 
                     }
-                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, InTransitOrderList);
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, archiveOrdersList);
                     ordersListView.setAdapter(orderListAdapter);
 
+                    if(archiveOrdersList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

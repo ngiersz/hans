@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -136,6 +137,12 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
                     sortByOrderTimeAsc();
+
+                    if(receivedOrderList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
                 } else
                 {
                     Log.d(TAG, "Error getting documents: ", task.getException());

@@ -2,7 +2,6 @@ package com.hans.client;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -28,7 +27,7 @@ public class ClientWaitingsOrderInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_client_waiting_order_info, container, false);
         Log.d("orderinfo", "ClientOrderInfoFragment started");
 
         Bundle bundle = this.getArguments();

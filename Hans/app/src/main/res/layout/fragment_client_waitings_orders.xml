@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".client.ClientWaitingsOrdersFragment">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
+            android:gravity="center"/>
+    </FrameLayout>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

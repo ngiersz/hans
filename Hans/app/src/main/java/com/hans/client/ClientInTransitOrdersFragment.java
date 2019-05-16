@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,7 +35,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
     ArrayList<User> InTransitDelivererList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,9 +44,9 @@ public class ClientInTransitOrdersFragment extends Fragment {
 
         ((MainActivity)getActivity()).setActionBarTitle("Zlecenia w trakcie wykonywania");
 
-        v = inflater.inflate(R.layout.fragment_client_available_orders, container, false);
+        view = inflater.inflate(R.layout.fragment_client_waitings_orders, container, false);
         orderListInit();
-        ordersListView = v.findViewById(R.id.listView);
+        ordersListView = view.findViewById(R.id.listView);
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,7 +72,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
             }
         });
 
-        return v;
+        return view;
     }
 
 
@@ -94,6 +95,12 @@ public class ClientInTransitOrdersFragment extends Fragment {
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, InTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+
+                    if(InTransitOrderList.size() > 0)
+                    {
+                        TextView emptyList = view.findViewById(R.id.empty);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    }
 
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
