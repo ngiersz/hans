@@ -43,7 +43,7 @@ public class ClientInTransitOrdersFragment extends Fragment {
 
         ((MainActivity)getActivity()).setActionBarTitle("Zlecenia w trakcie wykonywania");
 
-        v = inflater.inflate(R.layout.fragment_client_all_orders, container, false);
+        v = inflater.inflate(R.layout.fragment_client_available_orders, container, false);
         orderListInit();
         ordersListView = v.findViewById(R.id.listView);
 

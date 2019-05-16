@@ -1,7 +1,10 @@
 package com.hans;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -22,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.hans.BroadcastReceivers.CheckInternetConnectionReceiver;
 import com.hans.domain.User;
 
 import static android.support.constraint.Constraints.TAG;
@@ -35,12 +39,17 @@ public class SignInGoogleActivity extends AppCompatActivity
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private User user;
+    private BroadcastReceiver br;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in_with_google);
+
+        br = new CheckInternetConnectionReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(br, filter);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener()
         {
@@ -51,7 +60,6 @@ public class SignInGoogleActivity extends AppCompatActivity
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
         mAuth = FirebaseAuth.getInstance();
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -66,10 +74,16 @@ public class SignInGoogleActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        this.unregisterReceiver(br);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("koy", "onActivityResult");
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN)
@@ -84,9 +98,7 @@ public class SignInGoogleActivity extends AppCompatActivity
             // firebaseUser ready to use
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             User user = User.createFromJSON(userJSON);
-            Log.d("koy", "mail of new user" + firebaseUser.getEmail());
             user.setGoogleEmail(firebaseUser.getEmail());
-            Log.d("koy", "id of new user" + firebaseUser.getUid());
             user.setGoogleId(firebaseUser.getUid());
             DatabaseFirebase db = new DatabaseFirebase();
             db.insertUserToDatabase(user);
@@ -102,8 +114,6 @@ public class SignInGoogleActivity extends AppCompatActivity
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask)
     {
-        Log.d("koy", "handler");
-
         try
         {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -122,8 +132,6 @@ public class SignInGoogleActivity extends AppCompatActivity
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct)
     {
-        Log.d("koy", "firebaseAuth");
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
@@ -154,6 +162,7 @@ public class SignInGoogleActivity extends AppCompatActivity
                                         {
                                             Intent intent = new Intent(getBaseContext(), MainActivity.class);
                                             startActivity(intent);
+                                            finish(); // destroy this activity, it's not needed anymore
                                         }
                                     } else
                                     {

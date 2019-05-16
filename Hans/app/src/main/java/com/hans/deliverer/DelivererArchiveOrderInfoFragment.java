@@ -51,14 +51,7 @@ public class DelivererArchiveOrderInfoFragment extends Fragment {
             public void onClick(View v)
             {
                 PdfGenerator  pdfGenerator = new PdfGenerator(getContext(), order);
-                try
-                {
                     pdfGenerator.downloadFileFromFirebaseStorage(order.getId());
-                }
-                catch (IOException e)
-                {
-                    Log.d("exception", e.getMessage());
-                }
             }
         });
 

@@ -56,7 +56,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         ((MainActivity) getActivity()).setActionBarTitle("Dostępne zlecenia");
-        view = inflater.inflate(R.layout.fragment_deliverer_all_orders, container, false);
+        view = inflater.inflate(R.layout.fragment_deliverer_available_orders, container, false);
 
         orderListInit();
         ordersListView = view.findViewById(R.id.listView);
