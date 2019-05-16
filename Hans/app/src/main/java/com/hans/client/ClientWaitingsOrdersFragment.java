@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +29,8 @@ import java.util.ArrayList;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class ClientWaitingsOrdersFragment extends Fragment {
+public class ClientWaitingsOrdersFragment extends Fragment
+{
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     DatabaseFirebase db = new DatabaseFirebase();
@@ -36,20 +38,22 @@ public class ClientWaitingsOrdersFragment extends Fragment {
     ListView ordersListView;
 
 
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        ((MainActivity)getActivity()).setActionBarTitle("Oczekujące zlecenia");
+        ((MainActivity) getActivity()).setActionBarTitle("Oczekujące zlecenia");
 
         view = inflater.inflate(R.layout.fragment_client_waitings_orders, container, false);
 
         orderListInit();
         ordersListView = view.findViewById(R.id.listView);
-        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 Log.d("LISTPOS", Integer.toString(position));
                 Fragment newFragment = new ClientWaitingsOrderInfoFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -68,17 +72,22 @@ public class ClientWaitingsOrdersFragment extends Fragment {
     }
 
 
-    private void  orderListInit(){
+    private void orderListInit()
+    {
         Log.d("here", "HERE");
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        db.getAllWaitingOrdersForClient(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.getAllWaitingOrdersForClient(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
                     receivedOrderList.clear();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : task.getResult())
+                    {
                         Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         receivedOrderList.add(orderFromDatabase);
@@ -88,13 +97,22 @@ public class ClientWaitingsOrdersFragment extends Fragment {
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
-                    if(receivedOrderList.size() > 0)
+
+                    if (receivedOrderList.size() > 0)
                     {
-                        TextView emptyList = view.findViewById(R.id.empty);
-                        emptyList.setVisibility(View.INVISIBLE);
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
                     }
 
-                } else {
+                } else
+                {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }

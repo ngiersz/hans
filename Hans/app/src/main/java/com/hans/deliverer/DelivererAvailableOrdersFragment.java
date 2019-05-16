@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -138,10 +139,17 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     ordersListView.setAdapter(orderListAdapter);
                     sortByOrderTimeAsc();
 
-                    if(receivedOrderList.size() > 0)
+                    if (receivedOrderList.size() > 0)
                     {
-                        TextView emptyList = view.findViewById(R.id.empty);
-                        emptyList.setVisibility(View.INVISIBLE);
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
                     }
                 } else
                 {

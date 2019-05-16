@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -96,10 +97,17 @@ public class ClientInTransitOrdersFragment extends Fragment {
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, InTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
 
-                    if(InTransitOrderList.size() > 0)
+                    if (InTransitOrderList.size() > 0)
                     {
-                        TextView emptyList = view.findViewById(R.id.empty);
-                        emptyList.setVisibility(View.INVISIBLE);
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
                     }
 
                 } else {

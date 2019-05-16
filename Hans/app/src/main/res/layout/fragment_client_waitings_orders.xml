@@ -7,16 +7,24 @@
     tools:context=".client.ClientWaitingsOrdersFragment">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
-            android:gravity="center"/>
-    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/empty_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/empty_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
+        android:gravity="center"
+        android:visibility="invisible"/>
+</FrameLayout>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
