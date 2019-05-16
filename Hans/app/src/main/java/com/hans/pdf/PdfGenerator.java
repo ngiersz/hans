@@ -167,21 +167,6 @@ public class PdfGenerator
         paint.setColor(Color.BLACK);
         canvas.drawRect(50, 200, PAGE_WIDTH - 50, 230, paint);
 
-
-//        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/mypdf/";
-//        File file = new File(directory_path);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-//        String targetPdf = directory_path+"test-2.pdf";
-//        File filePath = new File(targetPdf);
-//        try {
-//            document.writeTo(new FileOutputStream(filePath));
-//            Log.d("pdf", "PDF was written to " + targetPdf);
-//        } catch (IOException e) {
-//            Log.d("pdf", "Cannot write PDF to " + targetPdf);
-//
-//        }
     }
 
     public void saveLocal(String filename)

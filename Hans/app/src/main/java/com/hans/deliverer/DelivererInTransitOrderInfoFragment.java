@@ -3,7 +3,6 @@ package com.hans.deliverer;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,6 +56,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         Log.d("Client22", client.toString());
 
 
+        TextView status = view.findViewById(R.id.order_status);
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
         TextView fromStreet = view.findViewById(R.id.fromStreet);
@@ -73,10 +74,10 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
 
-        TextView clientPhone = view.findViewById(R.id.clientPhone);
-        TextView clientName = view.findViewById(R.id.clientName);
-        TextView clientSurname = view.findViewById(R.id.clientSurname);
-        TextView clientEmail = view.findViewById(R.id.clientEmail);
+        TextView clientPhone = view.findViewById(R.id.phone_number);
+        TextView clientName = view.findViewById(R.id.firstname);
+        TextView clientSurname = view.findViewById(R.id.lastname);
+        TextView clientEmail = view.findViewById(R.id.email);
 
         TextView isPaid = view.findViewById(R.id.is_paid);
         TextView isReceived = view.findViewById(R.id.is_received);
@@ -87,7 +88,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         clientPhone.setText(client.getPhoneNumber());
 
 
-
+        status.setText(order.getOrderStatus().getPolishName());
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
         fromStreet.setText(order.getPickupAddress().get("street").toString());

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,24 +57,26 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
 
-        EditText fromCity = view.findViewById(R.id.fromCity);
-        EditText fromZipCode = view.findViewById(R.id.fromZipCode);
-        EditText fromStreet = view.findViewById(R.id.fromStreet);
-        EditText fromNumber = view.findViewById(R.id.fromNumber);
+        TextView status = view.findViewById(R.id.order_status);
+        TextView fromCity = view.findViewById(R.id.fromCity);
+        TextView fromZipCode = view.findViewById(R.id.fromZipCode);
+        TextView fromStreet = view.findViewById(R.id.fromStreet);
+        TextView fromNumber = view.findViewById(R.id.fromNumber);
 
-        EditText toCity = view.findViewById(R.id.toCity);
-        EditText toZipCode = view.findViewById(R.id.toZipCode);
-        EditText toStreet = view.findViewById(R.id.toStreet);
-        EditText toNumber = view.findViewById(R.id.toNumber);
+        TextView toCity = view.findViewById(R.id.toCity);
+        TextView toZipCode = view.findViewById(R.id.toZipCode);
+        TextView toStreet = view.findViewById(R.id.toStreet);
+        TextView toNumber = view.findViewById(R.id.toNumber);
 
-        EditText isPaid = view.findViewById(R.id.is_paid);
-        EditText price = view.findViewById(R.id.price);
-        EditText description = view.findViewById(R.id.description);
-        EditText weight = view.findViewById(R.id.weight);
-        EditText width = view.findViewById(R.id.width);
-        EditText height = view.findViewById(R.id.height);
-        EditText depth = view.findViewById(R.id.depth);
+        TextView isPaid = view.findViewById(R.id.is_paid);
+        TextView price = view.findViewById(R.id.price);
+        TextView description = view.findViewById(R.id.description);
+        TextView weight = view.findViewById(R.id.weight);
+        TextView width = view.findViewById(R.id.width);
+        TextView height = view.findViewById(R.id.height);
+        TextView depth = view.findViewById(R.id.depth);
 
+        status.setText(order.getOrderStatus().getPolishName());
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
         fromStreet.setText(order.getPickupAddress().get("street").toString());
