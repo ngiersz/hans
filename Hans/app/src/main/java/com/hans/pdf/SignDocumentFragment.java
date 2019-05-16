@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.deliverer.DelivererArchiveOrdersFragment;
+import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.domain.Order;
 import com.hans.domain.User;
 
@@ -92,7 +93,7 @@ public class SignDocumentFragment extends Fragment
                 pdfGenerator.sendToFirebaseStorage(order.getId());
 
 
-                Fragment newFragment = new DelivererArchiveOrdersFragment();
+                Fragment newFragment = new DelivererInTransitOrdersFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, newFragment);
                 transaction.addToBackStack(null);
