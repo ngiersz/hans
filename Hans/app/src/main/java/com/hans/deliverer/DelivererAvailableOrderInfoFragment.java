@@ -21,9 +21,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
+import com.hans.MyAccountCompleteFragment;
+import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
 
@@ -145,17 +148,9 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
-
                                 acceptOrder();
-//                                sendNotificationToClient();
 
-                                Fragment newFragment = new DelivererAvailableOrdersFragment();
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
 
-                                transaction.addToBackStack(null);
-                                transaction.commit();
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
@@ -191,10 +186,46 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
 
     private void acceptOrder()
     {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        order.setOrderStatus(OrderStatus.IN_TRANSIT);
-        order.setDelivererId(firebaseUser.getUid());
-        db.setOrder(order);
+        Log.d("Order", "Weszlo");
+        Log.d("Order", order.toString());
+
+        db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    Order orderr;
+                    DocumentSnapshot document = task.getResult();
+                    orderr = document.toObject(Order.class);
+
+                    if((orderr.getDelivererId() == null ) && (orderr.getOrderStatus()==OrderStatus.WAITING_FOR_DELIVERER)){
+                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        order.setOrderStatus(OrderStatus.IN_TRANSIT);
+                        order.setDelivererId(firebaseUser.getUid());
+                        db.setOrder(order);
+                        //                                sendNotificationToClient();
+                        Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+                        Fragment newFragment = new DelivererAvailableOrdersFragment();
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment, newFragment);
+
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
+
+
+                else {
+                    Snackbar.make(getView(), "Przyjęcie się nie powiodło", Snackbar.LENGTH_SHORT).show();
+                    Fragment newFragment = new DelivererAvailableOrdersFragment();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }
+        });
+
     }
 
     private void sendNotificationToClient()

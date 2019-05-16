@@ -179,8 +179,14 @@ public class DatabaseFirebase {
                 });
     }
 
+
     public Task getAllOrdersTask() {
         return db.collection("Orders")
+                .get();
+    }
+
+    public Task getOrder(Order order) {
+        return db.collection("Orders").document(order.getId())
                 .get();
     }
 
