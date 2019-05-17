@@ -31,6 +31,7 @@ import com.hans.map.MapsFragment;
 import com.hans.pdf.GetReceiverNameFragment;
 
 import static android.support.constraint.Constraints.TAG;
+import static android.view.View.getDefaultSize;
 
 public class DelivererInTransitOrderInfoFragment extends Fragment {
     Order order;
@@ -56,7 +57,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         Log.d("Client22", client.toString());
 
 
-        TextView status = view.findViewById(R.id.order_status);
+        final TextView status = view.findViewById(R.id.order_status);
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
         TextView fromStreet = view.findViewById(R.id.fromStreet);
@@ -80,7 +81,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         TextView clientEmail = view.findViewById(R.id.email);
 
         TextView isPaid = view.findViewById(R.id.is_paid);
-        TextView isReceived = view.findViewById(R.id.is_received);
+        final TextView isReceived = view.findViewById(R.id.is_received);
 
         clientEmail.setText(client.getGoogleEmail());
         clientName.setText(client.getName());
@@ -226,7 +227,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
             }
         });
 
-        Button receivedButton = view.findViewById(R.id.received_button);
+        final Button receivedButton = view.findViewById(R.id.received_button);
         if(order.getIsReceived()){
             receivedButton.setVisibility(View.GONE);
         }
@@ -243,17 +244,11 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                             {
 
                                 Snackbar.make(getView(), "Odebrano paczke", Snackbar.LENGTH_SHORT).show();
-
                                 receiveOrder();
-                                Log.d("rec", "Odebralem");
-
                                 //sendNotificationToClient();
-
-                                Fragment newFragment = new DelivererInTransitOrdersFragment();
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
-                                transaction.addToBackStack(null);
-                                transaction.commit();
+                                isReceived.setText("Została odebrana z miejsca początkowego");
+                                isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                                receivedButton.setVisibility(View.INVISIBLE);
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()

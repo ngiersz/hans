@@ -5,10 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +34,7 @@ public class ClientAddOrderFragment extends Fragment
 {
 
     private View view;
+    private Menu menu;
 
     TextView fromCity;
     TextView fromZipCode;
@@ -40,8 +45,9 @@ public class ClientAddOrderFragment extends Fragment
     TextView toStreet;
     TextView toNumber;
     TextView weight;
-    TextView price ;
+    TextView price;
     TextView distance;
+
 
     @Nullable
     @Override
@@ -49,7 +55,10 @@ public class ClientAddOrderFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_client_add_available_order, container, false);
-        ((MainActivity)getActivity()).setActionBarTitle("Nowe zlecenie");
+        ((MainActivity) getActivity()).setActionBarTitle("Nowe zlecenie");
+        NavigationView nav = getActivity().findViewById(R.id.nav_view);
+        // navigation -> menu -> item (zlecenia) -> menu
+        menu = nav.getMenu().getItem(0).getSubMenu();
 
         fromCity = view.findViewById(R.id.fromCity);
         fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -123,6 +132,8 @@ public class ClientAddOrderFragment extends Fragment
                         DatabaseFirebase db = new DatabaseFirebase();
                         db.insertOrderToDatabase(order);
                         Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
+                        menu.getItem(1).setChecked(false);
+                        menu.getItem(1).setChecked(true);
                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                     }
                 });
@@ -134,6 +145,8 @@ public class ClientAddOrderFragment extends Fragment
                         DatabaseFirebase db = new DatabaseFirebase();
                         db.insertOrderToDatabase(order);
                         Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
+                        menu.getItem(1).setChecked(false);
+                        menu.getItem(1).setChecked(true);
                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                     }
                 });
@@ -168,10 +181,11 @@ public class ClientAddOrderFragment extends Fragment
                 Double weightDouble = Double.parseDouble(weight.getText().toString());
                 Map<String, Object> result = new MapsFragment().GetPriceAndDistance(getContext(), location1, location2, weightDouble);
                 Log.d("price", "distance=" + result.get("distance").toString() + " price=" + result.get("price").toString());
-                if (result.get("price").toString().equals("0") || result.get("distance").toString().equals("0")) {
+                if (result.get("price").toString().equals("0") || result.get("distance").toString().equals("0"))
+                {
                     Snackbar.make(getView(), "Co najmniej jedna podana lokacja nie została odnaleziona.", Snackbar.LENGTH_LONG).show();
-                }
-                else {
+                } else
+                {
                     price.setText(result.get("price").toString());
                     distance.setText(result.get("distance").toString());
                 }
@@ -185,22 +199,22 @@ public class ClientAddOrderFragment extends Fragment
 
     private boolean checkIfCorrectlyToComputePrice()
     {
-        String fromCity = ((TextView)view.findViewById(R.id.fromCity)).getText().toString();
-        String toCity = ((TextView)view.findViewById(R.id.toCity)).getText().toString();
-        String weight = ((TextView)view.findViewById(R.id.weight)).getText().toString();
+        String fromCity = ((TextView) view.findViewById(R.id.fromCity)).getText().toString();
+        String toCity = ((TextView) view.findViewById(R.id.toCity)).getText().toString();
+        String weight = ((TextView) view.findViewById(R.id.weight)).getText().toString();
 
         if (!fromCity.isEmpty() & !toCity.isEmpty() & !weight.isEmpty())
-            return  true;
-        else return  false;
+            return true;
+        else return false;
     }
 
     private boolean checkIfCorrectlyToAddOrder()
     {
-        String price = ((TextView)view.findViewById(R.id.price)).getText().toString();
+        String price = ((TextView) view.findViewById(R.id.price)).getText().toString();
 
         if (!price.isEmpty())
-            return  true;
-        else return  false;
+            return true;
+        else return false;
     }
 
 }

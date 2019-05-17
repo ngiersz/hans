@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -41,9 +43,9 @@ import static android.support.constraint.Constraints.TAG;
 
 public class DelivererAvailableOrderInfoFragment extends Fragment
 {
-    Order order;
-
-    DatabaseFirebase db = new DatabaseFirebase();
+    private Order order;
+    private Menu menu;
+    private DatabaseFirebase db = new DatabaseFirebase();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +53,9 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_deliverer_available_order_info, container, false);
+        NavigationView nav = getActivity().findViewById(R.id.nav_view);
+        // navigation -> menu -> item (zlecenia) -> menu
+        menu = nav.getMenu().getItem(0).getSubMenu();
         getActivity().setTitle("Szczegóły zlecenia");
 
         Bundle bundle = this.getArguments();
@@ -152,8 +157,6 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
                             public void onClick(DialogInterface dialog, int which)
                             {
                                 acceptOrder();
-
-
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
@@ -189,41 +192,39 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
 
     private void acceptOrder()
     {
-        Log.d("Order", "Weszlo");
-        Log.d("Order", order.toString());
 
-        db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
 
                     Order orderr;
                     DocumentSnapshot document = task.getResult();
                     orderr = document.toObject(Order.class);
 
-                    if((orderr.getDelivererId() == null ) && (orderr.getOrderStatus()==OrderStatus.WAITING_FOR_DELIVERER)){
+                    if ((orderr.getDelivererId() == null) && (orderr.getOrderStatus() == OrderStatus.WAITING_FOR_DELIVERER))
+                    {
                         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                         order.setOrderStatus(OrderStatus.IN_TRANSIT);
                         order.setDelivererId(firebaseUser.getUid());
                         db.setOrder(order);
                         //                                sendNotificationToClient();
                         Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
+                        menu.getItem(0).setChecked(true);
                         Fragment newFragment = new DelivererAvailableOrdersFragment();
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment, newFragment);
-
-                        transaction.addToBackStack(null);
                         transaction.commit();
                     }
-                }
-
-
-                else {
+                } else
+                {
                     Snackbar.make(getView(), "Przyjęcie się nie powiodło", Snackbar.LENGTH_SHORT).show();
                     Fragment newFragment = new DelivererAvailableOrdersFragment();
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment, newFragment);
-                    transaction.addToBackStack(null);
                     transaction.commit();
                 }
             }
