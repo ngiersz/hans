@@ -1,5 +1,6 @@
 package com.hans.pdf;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,10 +14,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.pdf.PdfDocument;
+import android.media.AudioAttributes;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
@@ -34,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hans.BuildConfig;
 import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.OrderStatus;
@@ -239,7 +245,8 @@ public class PdfGenerator
         builder.setContentTitle("Protokół przekazania towaru")
                 .setContentText("Pobieranie w trakcie")
                 .setSmallIcon(R.drawable.ic_file_download_white)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
 
 // Issue the initial notification with zero progress
         int PROGRESS_MAX = 100;
@@ -273,15 +280,27 @@ public class PdfGenerator
                         // Create the TaskStackBuilder and add the intent, which inflates the back stack
                         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                         stackBuilder.addNextIntentWithParentStack(intent);
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
                         // Get the PendingIntent containing the entire back stack
                         PendingIntent resultPendingIntent =
                                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
                         builder.setContentText("Ukończono pobieranie")
                                 .setProgress(0, 0, false)
                                 .setContentIntent(resultPendingIntent)
+                                .setSmallIcon(R.drawable.ic_file_download_white)
+                                .setDefaults(Notification.DEFAULT_ALL)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setSound(notification)
                                 .setAutoCancel(true);
                         notificationManager.notify(NOTIFICATION_ID_DOWNLOAD, builder.build());
-
+//                        try {
+//                            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                            Ringtone r = RingtoneManager.getRingtone(context, notification);
+//                            r.play();
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                         Log.d("storage", "yay2");
 
                     }
@@ -305,12 +324,17 @@ public class PdfGenerator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
             CharSequence name = "Pobieranie plików";
-            String description = "Powiadomienie o pobraniu protokołu przyjecia towaru";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_DOWNLOAD, name, importance);
+            String description = "Powiadomienie o pobraniu protokołu przyjęcia towaru";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID_DOWNLOAD, name, NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
+            channel.enableVibration(true);
+//            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+//                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+//                    .build();
+//            channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, audioAttributes);
+//            // Register the channel with the system; you can't change the importance
+//            // or other notification behaviors after this
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

@@ -2,6 +2,7 @@ package com.hans.deliverer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -106,9 +107,10 @@ public class DelivererInTransitOrdersFragment extends Fragment
                         Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         inTransitOrderList.add(orderFromDatabase);
-                        Log.d("Order", document.toObject(Order.class).toString());
+                        Log.d("Order",orderFromDatabase.toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
+
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, inTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
 
@@ -175,6 +177,4 @@ public class DelivererInTransitOrdersFragment extends Fragment
         }
         return client;
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.hans;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,6 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
             // TODO: get suffixes from values/strings.xml
             viewHolder.price.setText("Cena: " + order.getPrice().toString() + " zł");
             viewHolder.weight.setText("Waga: " + order.getWeight().toString() + " kg");
-
             view = convertView;
         }
         else {

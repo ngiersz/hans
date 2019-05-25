@@ -37,18 +37,21 @@ public class ClientAddOrderFragment extends Fragment
     private Menu menu;
 
     TextView fromCity;
-    TextView fromZipCode;
+    TextView fromZipCode1;
+    TextView fromZipCode2;
     TextView fromStreet;
     TextView fromNumber;
     TextView toCity;
-    TextView toZipCode;
+    TextView toZipCode1;
+    TextView toZipCode2;
     TextView toStreet;
     TextView toNumber;
     TextView weight;
     TextView price;
     TextView distance;
 
-
+    private String fromZipCode;
+    private  String toZipCode;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -61,12 +64,15 @@ public class ClientAddOrderFragment extends Fragment
         menu = nav.getMenu().getItem(0).getSubMenu();
 
         fromCity = view.findViewById(R.id.fromCity);
-        fromZipCode = view.findViewById(R.id.fromZipCode);
+        fromZipCode1 = view.findViewById(R.id.fromZipCode1);
+        fromZipCode2 = view.findViewById(R.id.fromZipCode2);
+
         fromStreet = view.findViewById(R.id.fromStreet);
         fromNumber = view.findViewById(R.id.fromNumber);
 
         toCity = view.findViewById(R.id.toCity);
-        toZipCode = view.findViewById(R.id.toZipCode);
+        toZipCode1 = view.findViewById(R.id.toZipCode1);
+        toZipCode2 = view.findViewById(R.id.toZipCode2);
         toStreet = view.findViewById(R.id.toStreet);
         toNumber = view.findViewById(R.id.toNumber);
 
@@ -92,13 +98,15 @@ public class ClientAddOrderFragment extends Fragment
 
                 Map<String, Object> pickupAddress = new HashMap<>();
                 pickupAddress.put("city", fromCity.getText().toString());
-                pickupAddress.put("zipCode", fromZipCode.getText().toString());
+                fromZipCode = fromZipCode1.getText().toString() + "-" + fromZipCode2.getText().toString();
+                pickupAddress.put("zipCode", fromZipCode);
                 pickupAddress.put("street", fromStreet.getText().toString());
                 pickupAddress.put("number", fromNumber.getText().toString());
 
                 Map<String, Object> deliveryAddress = new HashMap<>();
                 deliveryAddress.put("city", toCity.getText().toString());
-                deliveryAddress.put("zipCode", toZipCode.getText().toString());
+                toZipCode = toZipCode1.getText().toString() + "-" + toZipCode2.getText().toString();
+                deliveryAddress.put("zipCode", toZipCode);
                 deliveryAddress.put("street", toStreet.getText().toString());
                 deliveryAddress.put("number", toNumber.getText().toString());
 
@@ -132,7 +140,7 @@ public class ClientAddOrderFragment extends Fragment
                         DatabaseFirebase db = new DatabaseFirebase();
                         db.insertOrderToDatabase(order);
                         Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
-                        menu.getItem(1).setChecked(false);
+                        menu.getItem(0).setChecked(false);
                         menu.getItem(1).setChecked(true);
                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                     }
@@ -145,7 +153,7 @@ public class ClientAddOrderFragment extends Fragment
                         DatabaseFirebase db = new DatabaseFirebase();
                         db.insertOrderToDatabase(order);
                         Snackbar.make(getView(), "Dodano zlecenie.", Snackbar.LENGTH_SHORT).show();
-                        menu.getItem(1).setChecked(false);
+                        menu.getItem(0).setChecked(false);
                         menu.getItem(1).setChecked(true);
                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                     }
@@ -170,11 +178,11 @@ public class ClientAddOrderFragment extends Fragment
                 }
 
                 String location1 = fromCity.getText().toString() + " " +
-                        fromZipCode.getText().toString() + " " +
+                        fromZipCode + " " +
                         fromStreet.getText().toString() + " " +
                         fromNumber.getText().toString();
                 String location2 = toCity.getText().toString() + " " +
-                        toZipCode.getText().toString() + " " +
+                        toZipCode + " " +
                         toStreet.getText().toString() + " " +
                         toNumber.getText().toString();
 

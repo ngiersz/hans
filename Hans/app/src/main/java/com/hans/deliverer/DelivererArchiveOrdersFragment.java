@@ -2,6 +2,7 @@ package com.hans.deliverer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -38,6 +39,12 @@ public class DelivererArchiveOrdersFragment extends Fragment {
     DatabaseFirebase db = new DatabaseFirebase();
     View view;
     ListView ordersListView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

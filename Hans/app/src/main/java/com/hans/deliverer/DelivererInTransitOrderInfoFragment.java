@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.OrderStatus;
@@ -202,17 +203,6 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                                     transaction.commit();
                                 }
 
-
-//                                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
-//
-//                                finishOrder();
-//                                sendNotificationToClient();
-
-//                                Fragment newFragment = new DelivererInTransitOrdersFragment();
-//                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                                transaction.replace(R.id.fragment, newFragment);
-//                                transaction.addToBackStack(null);
-//                                transaction.commit();
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
@@ -243,9 +233,9 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which)
                             {
 
-                                Snackbar.make(getView(), "Odebrano paczke", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(getView(), "Odebrano paczkę", Snackbar.LENGTH_SHORT).show();
                                 receiveOrder();
-                                //sendNotificationToClient();
+                                MainActivity.sendNotificationToClient(order);
                                 isReceived.setText("Została odebrana z miejsca początkowego");
                                 isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                                 receivedButton.setVisibility(View.INVISIBLE);
@@ -264,10 +254,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         });
         return view;
     }
-    private void finishOrder(){
-        order.setOrderStatus(OrderStatus.CLOSED);
-        db.setOrder(order);
-    }
+
     private void receiveOrder(){
         order.setIsReceived(true);
         db.setOrder(order);

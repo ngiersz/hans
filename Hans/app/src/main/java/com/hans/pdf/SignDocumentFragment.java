@@ -22,11 +22,13 @@ import android.view.WindowId;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.hans.DatabaseFirebase;
 import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.domain.Order;
+import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
 public class SignDocumentFragment extends Fragment
@@ -67,6 +69,10 @@ public class SignDocumentFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+                DatabaseFirebase db = new DatabaseFirebase();
+                order.setOrderStatus(OrderStatus.CLOSED);
+                db.setOrder(order);
+                MainActivity.sendNotificationToClient(order);
 
                 Matrix rotateMatrix = new Matrix();
                 rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
