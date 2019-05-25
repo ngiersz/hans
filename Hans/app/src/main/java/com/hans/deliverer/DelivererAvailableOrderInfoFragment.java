@@ -212,7 +212,7 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
                         order.setOrderStatus(OrderStatus.IN_TRANSIT);
                         order.setDelivererId(firebaseUser.getUid());
                         db.setOrder(order);
-                        MainActivity.sendNotificationToClient(order);
+//                        MainActivity.sendNotificationToClient(order);
                         Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
                         menu.getItem(0).setChecked(true);
                         Fragment newFragment = new DelivererAvailableOrdersFragment();

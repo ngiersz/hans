@@ -61,6 +61,10 @@
             android:label="Zaloguj się do HANS"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".pdf.SignDocumentActivity"
+            android:label="Podpis odbiorcy"
+            android:screenOrientation="landscape"></activity>
+        <activity
             android:name=".CompleteAccountDataActivity"
             android:label="Uzupełnij swoje dane"
             android:screenOrientation="portrait"></activity>
