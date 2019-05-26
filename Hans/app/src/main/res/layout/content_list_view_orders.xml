@@ -14,16 +14,16 @@
             android:id="@+id/empty_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
             android:gravity="center"
-            android:visibility="invisible"/>
+            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
+            android:visibility="invisible" />
     </FrameLayout>
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"/>
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
 </android.support.design.widget.CoordinatorLayout>
 

@@ -49,12 +49,7 @@ public class GetReceiverNameFragment extends Fragment
                 String receiver_firstname = firstname.getText().toString();
                 String receiver_lastname = lastname.getText().toString();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("receiver_firstname", receiver_firstname);
-                bundle.putString("receiver_lastname", receiver_lastname);
-                bundle.putString("order", order.toJSON());
-                bundle.putString("client", client.toJSON());
-                bundle.putString("deliverer", deliverer.toJSON());
+
 
                 Intent newIntent = new Intent(getContext(), SignDocumentActivity.class);
                 newIntent.putExtra("receiver_firstname", receiver_firstname);
@@ -64,6 +59,14 @@ public class GetReceiverNameFragment extends Fragment
                 newIntent.putExtra("deliverer", deliverer.toJSON());
                 startActivity(newIntent);
 
+
+//                Bundle bundle = new Bundle();
+//                bundle.putString("receiver_firstname", receiver_firstname);
+//                bundle.putString("receiver_lastname", receiver_lastname);
+//                bundle.putString("order", order.toJSON());
+//                bundle.putString("client", client.toJSON());
+//                bundle.putString("deliverer", deliverer.toJSON());
+//
 //                Fragment newFragment = new SignDocumentFragment();
 //                newFragment.setArguments(bundle);
 //                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

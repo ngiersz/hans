@@ -31,7 +31,6 @@ import com.hans.domain.User;
 
 public class SignDocumentActivity extends AppCompatActivity
 {
-    View view;
     SignDocumentActivity.DrawingView dv;
     private Paint mPaint;
     private Path mPath;
@@ -71,14 +70,16 @@ public class SignDocumentActivity extends AppCompatActivity
                 db.setOrder(order);
 //                MainActivity.sendNotificationToClient(order);
 
-                Matrix rotateMatrix = new Matrix();
-                rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
-                mPath.transform(rotateMatrix);
+//                Matrix rotateMatrix = new Matrix();
+//                rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
+//                mPath.transform(rotateMatrix);
 
-                Float scaleX = (float)PAGE_WIDTH/(float)canvas.getHeight();
-                Float scaleY = (float)PAGE_HEIGHT/(float)canvas.getWidth();
+                Float scaleX = (float)PAGE_WIDTH/(float)canvas.getWidth();
+                Float scaleY = (float)PAGE_HEIGHT/(float)canvas.getHeight();
+
+
                 Matrix scaleMatrix = new Matrix();
-                scaleMatrix.setScale(scaleX, scaleY, 0f, PAGE_HEIGHT*scaleY);
+                scaleMatrix.setScale(scaleX, scaleY);
                 mPath.transform(scaleMatrix);
 
                 Matrix scaleMatrix2 = new Matrix();
@@ -86,7 +87,7 @@ public class SignDocumentActivity extends AppCompatActivity
                 mPath.transform(scaleMatrix2);
 
                 Matrix translateMatrix = new Matrix();
-                translateMatrix.setTranslate(400f, 50f);
+                translateMatrix.setTranslate(400f, 100f);
                 mPath.transform(translateMatrix);
 
                 PdfGenerator pdfGenerator = new PdfGenerator(getBaseContext(), order);
@@ -94,6 +95,10 @@ public class SignDocumentActivity extends AppCompatActivity
                 pdfGenerator.signInDocument(mPath);
                 pdfGenerator.saveLocal(order.getId());
                 pdfGenerator.sendToFirebaseStorage(order.getId());
+
+                mPath.reset();
+                canvas.drawColor(Color.WHITE);
+                dv.invalidate();
 
                 Intent newIntent = new Intent(getBaseContext(), MainActivity.class);
                 newIntent.putExtra("documentGenerated", "true");
@@ -120,11 +125,6 @@ public class SignDocumentActivity extends AppCompatActivity
 //                }
 
 
-                mPath.reset();
-                canvas.drawColor(Color.WHITE);
-                dv.invalidate();
-
-                Snackbar.make(findViewById(android.R.id.content), "Gotowy do pobrania dokument dostępny w zakładce 'Zakończone' w szczegółach zlecenia.", Snackbar.LENGTH_LONG).show();
             }
         });
 

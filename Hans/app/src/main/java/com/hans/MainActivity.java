@@ -17,6 +17,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -78,23 +79,6 @@ public class MainActivity extends AppCompatActivity
 //            transaction.commit();
 //        }
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        String documentGenerated = intent.getStringExtra("documentGenerated");
-        if (documentGenerated != null)
-        {
-            Fragment newFragment = new DelivererInTransitOrdersFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment, newFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-            navigationView = findViewById(R.id.nav_view);
-            navigationView.inflateHeaderView(R.layout.menu_header_deliverer);
-            navigationView.getHeaderView(0).setVisibility(View.GONE);
-            navigationView.getHeaderView(1).setVisibility(View.GONE);
-            setupDrawerContent(navigationView);
-
-        }
 
         br = new CheckInternetConnectionReceiver();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -114,6 +98,30 @@ public class MainActivity extends AppCompatActivity
         navigationView.inflateHeaderView(R.layout.menu_header_deliverer);
         navigationView.getHeaderView(1).setVisibility(View.GONE);
         setupDrawerContent(navigationView);
+
+
+        Intent intent = getIntent();
+        String documentGenerated = intent.getStringExtra("documentGenerated");
+        if (documentGenerated != null)
+        {
+            Fragment newFragment = new DelivererInTransitOrdersFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            navigationView = findViewById(R.id.nav_view);
+            navigationView.getMenu().clear();
+            navigationView.getHeaderView(0).setVisibility(View.GONE);
+            navigationView.getHeaderView(1).setVisibility(View.VISIBLE);
+            navigationView.inflateMenu(R.menu.menu_deliverer);
+            setupDrawerContent(navigationView);
+
+            Snackbar.make(findViewById(android.R.id.content), "Gotowy do pobrania dokument dostępny w zakładce 'Zakończone' w szczegółach zlecenia.", Snackbar.LENGTH_LONG).show();
+
+
+
+        }
 
 
         // Check if user is logged.
