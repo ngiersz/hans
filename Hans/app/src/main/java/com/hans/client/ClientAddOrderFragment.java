@@ -11,14 +11,11 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hans.DatabaseFirebase;
@@ -27,6 +24,7 @@ import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.map.MapsFragment;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,7 +120,7 @@ public class ClientAddOrderFragment extends Fragment
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                Timestamp currentDate = Timestamp.now();
+                Date currentDate = new Date(System.currentTimeMillis());
 
                 final Order order = new Order(pickupAddress, deliveryAddress,
                         distanceDouble, priceDouble, weightDouble, dimensions,
