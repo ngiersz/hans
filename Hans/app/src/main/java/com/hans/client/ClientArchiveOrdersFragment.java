@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +27,7 @@ import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
+import com.hans.sort.SortOrders;
 
 import java.util.ArrayList;
 
@@ -38,13 +41,15 @@ public class ClientArchiveOrdersFragment extends Fragment {
     View view;
     ListView ordersListView;
 
+    Spinner spinner;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
 
-        view = inflater.inflate(R.layout.content_list_view_orders, container, false);
+        view = inflater.inflate(R.layout.content_list_view_orders_with_spinner, container, false);
         ordersListView = view.findViewById(R.id.listView);
         orderListInit();
 
@@ -72,7 +77,49 @@ public class ClientArchiveOrdersFragment extends Fragment {
             }
         });
 
+        spinner = view.findViewById(R.id.spinner);
+        spinnerInit();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d("spinner", Integer.toString(position));
+                if (archiveOrdersList.size() > 1)
+                {
+                    SortOrders sortOrders = new SortOrders(archiveOrdersList, getContext(), getActivity());
+                    switch (position)
+                    {
+                        case 0:
+                            archiveOrdersList = sortOrders.sortByOrderTimeAsc();
+                            break;
+                        case 1:
+                            archiveOrdersList = sortOrders.sortByOrderTimeDesc();
+                            break;
+                    }
+                    ordersListView.invalidate();
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, archiveOrdersList);
+                    ordersListView.setAdapter(orderListAdapter);
+                    Log.d("spinner", "Orders list replaced by sorted list");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
         return view;
+    }
+
+    private void spinnerInit() {
+        Spinner dropdown = view.findViewById(R.id.spinner);
+        String[] items = new String[]{"czasie złożenia zamówienia - rosnąco", "czasie złożenia zamówienia - malejąco"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
     }
 
 
