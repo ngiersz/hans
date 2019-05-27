@@ -101,6 +101,9 @@ public class ClientInTransitOrdersFragment extends Fragment {
                     {
                         ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
                         progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.INVISIBLE);
                     } else
                     {
                         ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);

@@ -1,6 +1,7 @@
 package com.hans.client;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,12 +14,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
+
+import java.util.Calendar;
 
 public class ClientWaitingsOrderInfoFragment extends Fragment {
     private Order order;
@@ -38,6 +42,24 @@ public class ClientWaitingsOrderInfoFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
+
+//        Calendar calendar = Calendar.getInstance();
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+//                new DatePickerDialog.OnDateSetListener() {
+//
+//                    @Override
+//                    public void onDateSet(DatePicker mainView, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+//                        String pickedDate = dayOfMonth + "." + (monthOfYear+1) + "." + year;
+//                        Log.d("12345",  pickedDate);
+//
+//                    }
+//                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+//        datePickerDialog.show();
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(order.getDate());
+//        Log.d("12345", cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH)+1) + "." + cal.get(Calendar.YEAR));
 
         TextView status = view.findViewById(R.id.order_status);
         TextView isPaid = view.findViewById(R.id.is_paid);

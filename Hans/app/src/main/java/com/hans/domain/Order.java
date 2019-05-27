@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class Order {
         this.isReceived = false;
     }
 
-    public void setDate(Timestamp date)
+    public void setDate(Date date)
     {
         this.date = date;
     }

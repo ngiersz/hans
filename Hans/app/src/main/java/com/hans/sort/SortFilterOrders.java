@@ -14,18 +14,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.hans.domain.Order;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class SortOrders {
+public class SortFilterOrders
+{
 
     ArrayList<Order> list;
     Context context;
     Activity activity;
 
-    public SortOrders(ArrayList<Order> list, Context context, Activity activity) {
+    public SortFilterOrders(ArrayList<Order> list, Context context, Activity activity) {
         this.list = list;
         this.context = context;
         this.activity = activity;
@@ -190,5 +193,58 @@ public class SortOrders {
             }
         });
         return list;
+    }
+
+    public ArrayList<Order> filterByStartPointCity(String cityToSearch)
+    {
+        ArrayList<Order> resultArray = new ArrayList<>();
+        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("ł", "l");
+
+        for (Order order : list)
+        {
+            String orderCity = order.getPickupAddress().get("city").toString().toLowerCase();
+            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("ł", "l");
+
+            if (orderCity.matches(cityToSearch))
+                resultArray.add(order);
+        }
+        return resultArray;
+    }
+
+    public ArrayList<Order> filterByEndPointCity(String cityToSearch)
+    {
+        ArrayList<Order> resultArray = new ArrayList<>();
+        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("ł", "l");
+
+        for (Order order : list)
+        {
+            String orderCity = order.getDeliveryAddress().get("city").toString().toLowerCase();
+            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("ł", "l");
+            if (orderCity.matches(cityToSearch))
+                resultArray.add(order);
+        }
+        return resultArray;
+    }
+
+    public ArrayList<Order> filterByDate(String pickedDate)
+    {
+        ArrayList<Order> resultArray = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+
+        for (Order order : list)
+        {
+            if (order.getDate() == null)
+                continue;
+            cal.setTime(order.getDate());
+            Log.d("dataaa", order.getDate().toString());
+            String orderDate = cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH)+1) + "." + cal.get(Calendar.YEAR);
+            if (orderDate.equals(pickedDate))
+                resultArray.add(order);
+        }
+        return resultArray;
     }
 }

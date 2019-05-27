@@ -2,11 +2,7 @@ package com.hans.deliverer;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -25,7 +21,6 @@ import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,16 +30,9 @@ import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.NDSpinner;
 import com.hans.domain.Order;
-import com.hans.map.MapsFragment;
-import com.hans.sort.SortOrders;
+import com.hans.sort.SortFilterOrders;
 
-import java.io.IOException;
-import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -53,7 +41,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     ArrayList<Order> receivedOrderList = new ArrayList<>();
     DatabaseFirebase db = new DatabaseFirebase();
-    View view;
+    View mainView;
     ListView ordersListView;
     Spinner sortSpinner;
     NDSpinner filterSpinner;
@@ -65,10 +53,10 @@ public class DelivererAvailableOrdersFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         ((MainActivity) getActivity()).setActionBarTitle("Dostępne zlecenia");
-        view = inflater.inflate(R.layout.fragment_deliverer_available_orders, container, false);
+        mainView = inflater.inflate(R.layout.fragment_deliverer_available_orders, container, false);
 
         orderListInit();
-        ordersListView = view.findViewById(R.id.listView);
+        ordersListView = mainView.findViewById(R.id.listView);
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -91,10 +79,10 @@ public class DelivererAvailableOrdersFragment extends Fragment
         // current location for sorting by distance
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-        sortSpinner = view.findViewById(R.id.spinner_sort);
-        filterSpinner = view.findViewById(R.id.spinner_filter);
-
+        sortSpinner = mainView.findViewById(R.id.spinner_sort);
+        filterSpinner = mainView.findViewById(R.id.spinner_filter);
         spinnersInit();
+
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -103,7 +91,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 Log.d("sortSpinner", Integer.toString(position));
                 if (receivedOrderList.size() > 1)
                 {
-                    SortOrders sortOrders = new SortOrders(receivedOrderList, getContext(), getActivity());
+                    SortFilterOrders sortOrders = new SortFilterOrders(receivedOrderList, getContext(), getActivity());
                     switch (position)
                     {
                         case 0:
@@ -128,8 +116,22 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     ordersListView.invalidate();
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
-                    Log.d("sortSpinner", "Orders list replaced by sorted list");
-                }
+                    // info about empty list
+                    if (receivedOrderList.size() > 0)
+                    {
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
+                    }                }
             }
 
             @Override
@@ -145,6 +147,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, final int position, long id)
             {
+                final SortFilterOrders sortOrders = new SortFilterOrders(receivedOrderList, getContext(), getActivity());
                 Log.d("filter", Integer.toString(position));
                 if (position != 0)
                 {
@@ -165,15 +168,32 @@ public class DelivererAvailableOrdersFragment extends Fragment
                                     switch (position)
                                     {
                                         case 1:
-                                            resultArray = filterByStartPointCity(cityToSearch);
+                                            resultArray = sortOrders.filterByStartPointCity(cityToSearch);
                                             break;
                                         case 2:
-                                            resultArray = filterByEndPointCity(cityToSearch);
+                                            resultArray = sortOrders.filterByEndPointCity(cityToSearch);
                                             break;
 
                                     }
                                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, resultArray);
                                     ordersListView.setAdapter(orderListAdapter);
+
+                                    // info about empty list
+                                    if (resultArray.size() > 0)
+                                    {
+                                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                                        progressBar.setVisibility(View.INVISIBLE);
+
+                                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                                        emptyList.setVisibility(View.INVISIBLE);
+                                    } else
+                                    {
+                                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                                        progressBar.setVisibility(View.INVISIBLE);
+
+                                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                                        emptyList.setVisibility(View.VISIBLE);
+                                    }
 
                                 }
                             })
@@ -190,6 +210,23 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 {
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+
+                    // info about empty list
+                    if (receivedOrderList.size() > 0)
+                    {
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -201,7 +238,7 @@ public class DelivererAvailableOrdersFragment extends Fragment
         });
 
 
-        return view;
+        return mainView;
     }
 
     private void orderListInit()
@@ -226,19 +263,23 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
 
-                    SortOrders sortOrders = new SortOrders(receivedOrderList, getContext(), getActivity());
+                    SortFilterOrders sortOrders = new SortFilterOrders(receivedOrderList, getContext(), getActivity());
                     receivedOrderList = sortOrders.sortByOrderTimeAsc();
 
+                    // info about empty list
                     if (receivedOrderList.size() > 0)
                     {
-                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
-                        progressBar.setVisibility(View.INVISIBLE);
-                    } else
-                    {
-                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = mainView.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = mainView.findViewById(R.id.empty_text_view);
                         emptyList.setVisibility(View.VISIBLE);
                     }
                 } else
@@ -251,52 +292,17 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void spinnersInit()
     {
-        Spinner dropdown = view.findViewById(R.id.spinner_sort);
+        Spinner dropdown = mainView.findViewById(R.id.spinner_sort);
         String[] items = new String[]{"czasie złożenia zamówienia - rosnąco", "czasie złożenia zamówienia - malejąco", "odległości - rosnąco", "odległości - malejąco", "cenie - rosnąco", "cenie - malejąco"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
 
-        Spinner dropdown2 = view.findViewById(R.id.spinner_filter);
+        Spinner dropdown2 = mainView.findViewById(R.id.spinner_filter);
         String[] items2 = new String[]{"brak", "miastach początkowych", "miastach docelowych"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items2);
         dropdown2.setAdapter(adapter2);
     }
 
 
-
-    private ArrayList<Order> filterByStartPointCity(String cityToSearch)
-    {
-        ArrayList<Order> resultArray = new ArrayList<>();
-        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
-        cityToSearch = cityToSearch.replaceAll("ł", "l");
-
-        for (Order order : receivedOrderList)
-        {
-            String orderCity = order.getPickupAddress().get("city").toString().toLowerCase();
-            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
-            orderCity = orderCity.replaceAll("ł", "l");
-
-            if (orderCity.matches(cityToSearch))
-                resultArray.add(order);
-        }
-        return resultArray;
-    }
-
-    private ArrayList<Order> filterByEndPointCity(String cityToSearch)
-    {
-        ArrayList<Order> resultArray = new ArrayList<>();
-        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
-        cityToSearch = cityToSearch.replaceAll("ł", "l");
-
-        for (Order order : receivedOrderList)
-        {
-            String orderCity = order.getDeliveryAddress().get("city").toString().toLowerCase();
-            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
-            orderCity = orderCity.replaceAll("ł", "l");
-            if (orderCity.matches(cityToSearch))
-                resultArray.add(order);
-        }
-        return resultArray;
-    }
 
 }
