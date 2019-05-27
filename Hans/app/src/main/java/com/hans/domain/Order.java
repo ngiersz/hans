@@ -3,8 +3,8 @@ package com.hans.domain;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.firebase.Timestamp;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class Order {
 
     private String delivererId;
 
-    private Timestamp date;
+    private Date date;
 
     private boolean isPaid;
 
@@ -43,7 +43,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, Timestamp date) {
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, Date date) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.length = length;
@@ -91,7 +91,7 @@ public class Order {
 //        this.delivererId = delivererId;
 //    }
 
-    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String description, Timestamp date) {
+    public Order(Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double price, Double weight, String description, Date date) {
         this.pickupAddress = pickupAddress;
         this.deliveryAddress = deliveryAddress;
         this.price = price;
@@ -104,7 +104,7 @@ public class Order {
 
     }
 
-    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, String delivererId, Timestamp date) {
+    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId, String delivererId, Date date) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.pickupAddress = pickupAddress;
@@ -155,7 +155,7 @@ public class Order {
         return description;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -215,8 +215,6 @@ public class Order {
     {
         ObjectMapper objectMapper = new ObjectMapper();
         Order order = null;
-        userJSON = userJSON.replaceAll(",\"date\":\\{[^}]*\\}", "");
-        Log.d("json", "replaced:\n" + userJSON);
         try
         {
             order = objectMapper.readValue(userJSON, Order.class);

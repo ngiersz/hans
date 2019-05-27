@@ -2,17 +2,16 @@ package com.hans;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.firebase.Timestamp;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class OrderListAdapter extends ArrayAdapter<Order> {
@@ -42,7 +41,7 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
-        Timestamp date = getItem(position).getDate();
+        Date date = getItem(position).getDate();
 
         Order order = new Order(pickupAddress, deliveryAddress, price, weight, description, date);
 
