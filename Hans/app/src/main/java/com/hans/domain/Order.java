@@ -58,6 +58,10 @@ public class Order {
         this.isReceived = false;
     }
 
+    public void setDate(Timestamp date)
+    {
+        this.date = date;
+    }
 //    public Order(String id, OrderStatus orderStatus, Map<String, Object> pickupAddress, Map<String, Object> deliveryAddress, Double length, Double price, Double weight, Map<String, Object> dimensions, String description, String clientId) {
 //        this.id = id;
 //        this.orderStatus = orderStatus;

@@ -58,6 +58,7 @@ public class GetReceiverNameFragment extends Fragment
                 newIntent.putExtra("client", client.toJSON());
                 newIntent.putExtra("deliverer", deliverer.toJSON());
                 startActivity(newIntent);
+                getActivity().finish();
 
 
 //                Bundle bundle = new Bundle();

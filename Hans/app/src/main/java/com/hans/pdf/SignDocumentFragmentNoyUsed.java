@@ -31,7 +31,7 @@ import com.hans.domain.Order;
 import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
-public class SignDocumentFragment extends Fragment
+public class SignDocumentFragmentNoyUsed extends Fragment
 {
     View view;
     DrawingView dv;

@@ -103,7 +103,6 @@ public class SignDocumentActivity extends AppCompatActivity
                 Intent newIntent = new Intent(getBaseContext(), MainActivity.class);
                 newIntent.putExtra("documentGenerated", "true");
                 startActivity(newIntent);
-
 //                Fragment newFragment = new DelivererInTransitOrdersFragment();
 //                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //                transaction.replace(R.id.fragment, newFragment);

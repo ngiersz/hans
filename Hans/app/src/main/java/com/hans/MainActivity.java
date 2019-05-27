@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,8 +50,6 @@ import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.domain.Order;
 import com.hans.domain.User;
 import com.hans.mail.MailSender;
-import com.hans.pdf.GetReceiverNameFragment;
-import com.hans.pdf.SignDocumentFragment;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -65,19 +62,11 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private FirebaseUser firebaseUser;
     private BroadcastReceiver br;
-    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//        if (savedInstanceState != null) {
-//            //Restore the fragment's instance
-//            fragment = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
-//            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
-//            transaction.replace(R.id.fragment, fragment);
-//            transaction.commit();
-//        }
         setContentView(R.layout.activity_main);
 
         br = new CheckInternetConnectionReceiver();
@@ -118,8 +107,6 @@ public class MainActivity extends AppCompatActivity
             setupDrawerContent(navigationView);
 
             Snackbar.make(findViewById(android.R.id.content), "Gotowy do pobrania dokument dostępny w zakładce 'Zakończone' w szczegółach zlecenia.", Snackbar.LENGTH_LONG).show();
-
-
 
         }
 

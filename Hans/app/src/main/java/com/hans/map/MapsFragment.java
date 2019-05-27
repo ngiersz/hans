@@ -1,13 +1,16 @@
 package com.hans.map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +107,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         FindOnMap(location1);
         FindOnMap(location2);
         LatLngBounds.Builder bounds = LatLngBounds.builder();
-        bounds.include(markers.get(0));
-        bounds.include(markers.get(1));
+        try
+        {
+            bounds.include(markers.get(0));
+            bounds.include(markers.get(1));
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            Log.d("exception:", e.getMessage());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Błąd!")
+                    .setMessage("Wystąpił nieoczekiwany błąd. Przepraszamy ;(")
+                    .setCancelable(false)
+                    .setNeutralButton("Ok, zamknij", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            getActivity().finish();
+                        }
+                    });
+
+        }
+
         try {
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 150));
         }

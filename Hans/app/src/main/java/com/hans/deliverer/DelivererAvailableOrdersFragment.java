@@ -1,5 +1,7 @@
 package com.hans.deliverer;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -30,15 +33,15 @@ import com.hans.DatabaseFirebase;
 import com.hans.MainActivity;
 import com.hans.OrderListAdapter;
 import com.hans.R;
+import com.hans.domain.NDSpinner;
 import com.hans.domain.Order;
-import com.hans.map.MapsFragment;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -49,7 +52,8 @@ public class DelivererAvailableOrdersFragment extends Fragment
     DatabaseFirebase db = new DatabaseFirebase();
     View view;
     ListView ordersListView;
-    Spinner spinner;
+    Spinner sortSpinner;
+    NDSpinner filterSpinner;
     FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -84,14 +88,16 @@ public class DelivererAvailableOrdersFragment extends Fragment
         // current location for sorting by distance
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-        spinner = view.findViewById(R.id.spinner);
-        spinnerInit();
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        sortSpinner = view.findViewById(R.id.spinner_sort);
+        filterSpinner = view.findViewById(R.id.spinner_filter);
+
+        spinnersInit();
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d("spinner", Integer.toString(position));
+                Log.d("sortSpinner", Integer.toString(position));
                 if (receivedOrderList.size() > 1)
                 {
                     switch (position)
@@ -117,13 +123,75 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
-                    Log.d("spinner", "Orders list replaced by sorted list");
+                    Log.d("sortSpinner", "Orders list replaced by sorted list");
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
+
+            }
+        });
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, final int position, long id)
+            {
+                Log.d("filter", Integer.toString(position));
+                if (position != 0)
+                {
+                    LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                    final View alertDialogView = layoutInflater.inflate(R.layout.alert_dialog_search, null);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setView(alertDialogView)
+                            .setTitle("Podaj nazwę miasta")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    EditText editText = alertDialogView.findViewById(R.id.search_city);
+                                    String cityToSearch = editText.getText().toString().toLowerCase();
+                                    ArrayList<Order> resultArray = new ArrayList<>();
+
+                                    switch (position)
+                                    {
+                                        case 1:
+                                            resultArray = filterByStartPointCity(cityToSearch);
+                                            break;
+                                        case 2:
+                                            resultArray = filterByEndPointCity(cityToSearch);
+                                            break;
+
+                                    }
+                                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, resultArray);
+                                    ordersListView.setAdapter(orderListAdapter);
+
+                                }
+                            })
+                            .setNegativeButton("Anuluj", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    return;
+                                }
+                            })
+                            .create().show();
+                } else
+                {
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
+                    ordersListView.setAdapter(orderListAdapter);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                Log.d("filter", "nothing");
 
             }
         });
@@ -175,12 +243,17 @@ public class DelivererAvailableOrdersFragment extends Fragment
         });
     }
 
-    private void spinnerInit()
+    private void spinnersInit()
     {
-        Spinner dropdown = view.findViewById(R.id.spinner);
+        Spinner dropdown = view.findViewById(R.id.spinner_sort);
         String[] items = new String[]{"czasie złożenia zamówienia - rosnąco", "czasie złożenia zamówienia - malejąco", "odległości - rosnąco", "odległości - malejąco", "cenie - rosnąco", "cenie - malejąco"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
+
+        Spinner dropdown2 = view.findViewById(R.id.spinner_filter);
+        String[] items2 = new String[]{"brak", "miastach początkowych", "miastach docelowych"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items2);
+        dropdown2.setAdapter(adapter2);
     }
 
     private void sortByPriceDesc()
@@ -217,76 +290,93 @@ public class DelivererAvailableOrdersFragment extends Fragment
 
     private void sortByDistanceDesc()
     {
-        try {
+        try
+        {
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>()
+                    {
                         @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
+                        public void onSuccess(Location location)
+                        {
+                            if (location != null)
+                            {
                                 final Location location1 = location;
-                                Collections.sort(receivedOrderList, new Comparator<Order>() {
+                                Collections.sort(receivedOrderList, new Comparator<Order>()
+                                {
                                     @Override
-                                    public int compare(final Order o1, final Order o2) {
-                                        if (getDistanceToPickupAddress(o1, location1) > getDistanceToPickupAddress(o2, location1)) {
+                                    public int compare(final Order o1, final Order o2)
+                                    {
+                                        if (getDistanceToPickupAddress(o1, location1) > getDistanceToPickupAddress(o2, location1))
+                                        {
                                             return 1;
                                         }
                                         return -1;
                                     }
                                 });
-                            }
-                            else {
+                            } else
+                            {
                                 Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
                             }
                             ordersListView.invalidate();
                         }
                     });
-        }
-        catch (SecurityException e) {
+        } catch (SecurityException e)
+        {
             Log.d("excepioton", "Permission for getting location denied");
         }
     }
 
     private void sortByDistanceAsc()
     {
-        try {
+        try
+        {
             fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>()
+                    {
                         @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
+                        public void onSuccess(Location location)
+                        {
+                            if (location != null)
+                            {
                                 final Location location1 = location;
-                                Collections.sort(receivedOrderList, new Comparator<Order>() {
+                                Collections.sort(receivedOrderList, new Comparator<Order>()
+                                {
                                     @Override
-                                    public int compare(final Order o1, final Order o2) {
-                                        if (getDistanceToPickupAddress(o1, location1) <= getDistanceToPickupAddress(o2, location1)) {
+                                    public int compare(final Order o1, final Order o2)
+                                    {
+                                        if (getDistanceToPickupAddress(o1, location1) <= getDistanceToPickupAddress(o2, location1))
+                                        {
                                             return 1;
                                         }
                                         return -1;
                                     }
                                 });
-                            }
-                            else {
+                            } else
+                            {
                                 Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
                             }
                             ordersListView.invalidate();
                         }
                     });
-        }
-        catch (SecurityException e) {
+        } catch (SecurityException e)
+        {
             Log.d("excepioton", "Permission for getting location denied");
         }
     }
 
-    private float getDistanceToPickupAddress(Order order, Location location) {
+    private float getDistanceToPickupAddress(Order order, Location location)
+    {
         Geocoder geocoder = new Geocoder(getContext());
         String pickupAddress1 = order.getPickupAddress().get("city") + " " +
                 order.getPickupAddress().get("zipcode") + " " +
                 order.getPickupAddress().get("street") + " " +
                 order.getPickupAddress().get("number");
         List<Address> addressList = null;
-        try {
+        try
+        {
             addressList = geocoder.getFromLocationName(pickupAddress1, 1);
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
         Address address = addressList.get(0);
@@ -337,6 +427,41 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 return -1;
             }
         });
+    }
+
+    private ArrayList<Order> filterByStartPointCity(String cityToSearch)
+    {
+        ArrayList<Order> resultArray = new ArrayList<>();
+        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("ł", "l");
+
+        for (Order order : receivedOrderList)
+        {
+            String orderCity = order.getPickupAddress().get("city").toString().toLowerCase();
+            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("ł", "l");
+
+            if (orderCity.matches(cityToSearch))
+                resultArray.add(order);
+        }
+        return resultArray;
+    }
+
+    private ArrayList<Order> filterByEndPointCity(String cityToSearch)
+    {
+        ArrayList<Order> resultArray = new ArrayList<>();
+        cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("ł", "l");
+
+        for (Order order : receivedOrderList)
+        {
+            String orderCity = order.getDeliveryAddress().get("city").toString().toLowerCase();
+            orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("ł", "l");
+            if (orderCity.matches(cityToSearch))
+                resultArray.add(order);
+        }
+        return resultArray;
     }
 
 }

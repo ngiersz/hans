@@ -42,7 +42,6 @@ public class ClientWaitingsOrdersFragment extends Fragment
                              Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
         ((MainActivity) getActivity()).setActionBarTitle("Oczekujące zlecenia");
 
         view = inflater.inflate(R.layout.content_list_view_orders, container, false);
