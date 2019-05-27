@@ -32,6 +32,7 @@ import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.map.MapsFragment;
+import com.hans.sort.SortOrders;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +51,6 @@ public class DelivererAvailableOrdersFragment extends Fragment
     View view;
     ListView ordersListView;
     Spinner spinner;
-    FusedLocationProviderClient fusedLocationClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,9 +81,6 @@ public class DelivererAvailableOrdersFragment extends Fragment
             }
         });
 
-        // current location for sorting by distance
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
-
         spinner = view.findViewById(R.id.spinner);
         spinnerInit();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -94,27 +91,29 @@ public class DelivererAvailableOrdersFragment extends Fragment
                 Log.d("spinner", Integer.toString(position));
                 if (receivedOrderList.size() > 1)
                 {
+                    SortOrders sortOrders = new SortOrders(receivedOrderList, getContext(), getActivity());
                     switch (position)
                     {
                         case 0:
-                            sortByOrderTimeAsc();
+                            receivedOrderList = sortOrders.sortByOrderTimeAsc();
                             break;
                         case 1:
-                            sortByOrderTimeDesc();
+                            receivedOrderList = sortOrders.sortByOrderTimeDesc();
                             break;
                         case 2:
-                            sortByDistanceAsc();
+                            receivedOrderList = sortOrders.sortByDistanceAsc();
                             break;
                         case 3:
-                            sortByDistanceDesc();
+                            receivedOrderList = sortOrders.sortByDistanceDesc();
                             break;
                         case 4:
-                            sortByPriceAsc();
+                            receivedOrderList = sortOrders.sortByPriceAsc();
                             break;
                         case 5:
-                            sortByPriceDesc();
+                            receivedOrderList = sortOrders.sortByPriceDesc();
                             break;
                     }
+                    ordersListView.invalidate();
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
                     Log.d("spinner", "Orders list replaced by sorted list");
@@ -153,7 +152,9 @@ public class DelivererAvailableOrdersFragment extends Fragment
                     }
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, receivedOrderList);
                     ordersListView.setAdapter(orderListAdapter);
-                    sortByOrderTimeAsc();
+
+                    SortOrders sortOrders = new SortOrders(receivedOrderList, getContext(), getActivity());
+                    receivedOrderList = sortOrders.sortByOrderTimeAsc();
 
                     if (receivedOrderList.size() > 0)
                     {
@@ -183,160 +184,6 @@ public class DelivererAvailableOrdersFragment extends Fragment
         dropdown.setAdapter(adapter);
     }
 
-    private void sortByPriceDesc()
-    {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-                if (o1.getPrice() < o2.getPrice())
-                {
-                    return 1;
-                }
-                return -1;
-            }
-        });
-    }
 
-    private void sortByPriceAsc()
-    {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-                if (o1.getPrice() > o2.getPrice())
-                {
-                    return 1;
-                }
-                return -1;
-            }
-        });
-    }
-
-    private void sortByDistanceDesc()
-    {
-        try {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                final Location location1 = location;
-                                Collections.sort(receivedOrderList, new Comparator<Order>() {
-                                    @Override
-                                    public int compare(final Order o1, final Order o2) {
-                                        if (getDistanceToPickupAddress(o1, location1) > getDistanceToPickupAddress(o2, location1)) {
-                                            return 1;
-                                        }
-                                        return -1;
-                                    }
-                                });
-                            }
-                            else {
-                                Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
-                            }
-                            ordersListView.invalidate();
-                        }
-                    });
-        }
-        catch (SecurityException e) {
-            Log.d("excepioton", "Permission for getting location denied");
-        }
-    }
-
-    private void sortByDistanceAsc()
-    {
-        try {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                final Location location1 = location;
-                                Collections.sort(receivedOrderList, new Comparator<Order>() {
-                                    @Override
-                                    public int compare(final Order o1, final Order o2) {
-                                        if (getDistanceToPickupAddress(o1, location1) <= getDistanceToPickupAddress(o2, location1)) {
-                                            return 1;
-                                        }
-                                        return -1;
-                                    }
-                                });
-                            }
-                            else {
-                                Snackbar.make(getView(), "Nie znaleziono lokalizacji urządzenia.", Snackbar.LENGTH_LONG).show();
-                            }
-                            ordersListView.invalidate();
-                        }
-                    });
-        }
-        catch (SecurityException e) {
-            Log.d("excepioton", "Permission for getting location denied");
-        }
-    }
-
-    private float getDistanceToPickupAddress(Order order, Location location) {
-        Geocoder geocoder = new Geocoder(getContext());
-        String pickupAddress1 = order.getPickupAddress().get("city") + " " +
-                order.getPickupAddress().get("zipcode") + " " +
-                order.getPickupAddress().get("street") + " " +
-                order.getPickupAddress().get("number");
-        List<Address> addressList = null;
-        try {
-            addressList = geocoder.getFromLocationName(pickupAddress1, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Address address = addressList.get(0);
-        double x1 = address.getLatitude();
-        double y1 = address.getLongitude();
-
-        float[] distance = new float[1];
-        Location.distanceBetween(location.getLatitude(), location.getLongitude(), x1, y1, distance);
-
-        Log.d("distance", "address: " + pickupAddress1);
-        Log.d("distance", Float.toString(distance[0]));
-        return distance[0];
-    }
-
-    private void sortByOrderTimeAsc()
-    {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-                if (o1.getDate() != null && o2.getDate() != null)
-                {
-                    if (o1.getDate().compareTo(o2.getDate()) > 0)
-                    {
-                        return 1;
-                    }
-                }
-                return -1;
-            }
-        });
-    }
-
-    private void sortByOrderTimeDesc()
-    {
-        Collections.sort(receivedOrderList, new Comparator<Order>()
-        {
-            @Override
-            public int compare(Order o1, Order o2)
-            {
-                if (o1.getDate() != null && o2.getDate() != null)
-                {
-                    if (o1.getDate().compareTo(o2.getDate()) < 0)
-                    {
-                        return 1;
-                    }
-                }
-                return -1;
-            }
-        });
-    }
 
 }

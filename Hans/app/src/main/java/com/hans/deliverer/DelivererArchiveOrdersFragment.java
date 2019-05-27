@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +28,7 @@ import com.hans.OrderListAdapter;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.User;
+import com.hans.sort.SortOrders;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,8 @@ public class DelivererArchiveOrdersFragment extends Fragment {
     View view;
     ListView ordersListView;
 
+    Spinner spinner;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
@@ -52,7 +57,7 @@ public class DelivererArchiveOrdersFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ((MainActivity)getActivity()).setActionBarTitle("Zakończone zlecenia");
-        view = inflater.inflate(R.layout.content_list_view_orders, container, false);
+        view = inflater.inflate(R.layout.content_list_view_orders_with_spinner, container, false);
         ordersListView = view.findViewById(R.id.listView);
         orderListInit();
 
@@ -85,8 +90,51 @@ public class DelivererArchiveOrdersFragment extends Fragment {
 
         });
 
+        spinner = view.findViewById(R.id.spinner);
+        spinnerInit();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d("spinner", Integer.toString(position));
+                if (closedOrderList.size() > 1)
+                {
+                    SortOrders sortOrders = new SortOrders(closedOrderList, getContext(), getActivity());
+                    switch (position)
+                    {
+                        case 0:
+                            closedOrderList = sortOrders.sortByOrderTimeAsc();
+                            break;
+                        case 1:
+                            closedOrderList = sortOrders.sortByOrderTimeDesc();
+                            break;
+                    }
+                    ordersListView.invalidate();
+                    OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, closedOrderList);
+                    ordersListView.setAdapter(orderListAdapter);
+                    Log.d("spinner", "Orders list replaced by sorted list");
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
         return view;
     }
+
+    private void spinnerInit() {
+        Spinner dropdown = view.findViewById(R.id.spinner);
+        String[] items = new String[]{"czasie złożenia zamówienia - rosnąco", "czasie złożenia zamówienia - malejąco"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+    }
+
 
     private void orderListInit() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
