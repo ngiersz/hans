@@ -212,7 +212,7 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
                         order.setOrderStatus(OrderStatus.IN_TRANSIT);
                         order.setDelivererId(firebaseUser.getUid());
                         db.setOrder(order);
-//                        MainActivity.sendNotificationToClient(order);
+                        MainActivity.sendNotificationToClient(order);
                         Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
                         menu.getItem(0).setChecked(true);
                         Fragment newFragment = new DelivererAvailableOrdersFragment();
@@ -247,42 +247,4 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
 
     }
 
-
-    private void sendNotificationToClient()
-    {
-        final MailSender mailSender = new MailSender();
-        db.getUser(order.getClientId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task)
-            {
-                if (task.isSuccessful())
-                {
-                    for (QueryDocumentSnapshot document : task.getResult())
-                    {
-                        User userFromDatabase = document.toObject(User.class);
-                        mailSender.execute(createNotificationEmail(userFromDatabase.getGoogleEmail()));
-                    }
-                } else
-                {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
-
-    private String[] createNotificationEmail(String emailTo)
-    {
-        String subject = "Aktualizacja statusu zlecenia";
-
-        String pickupAddress = order.getPickupAddress().get("city").toString() + ", ul. " +
-                order.getPickupAddress().get("street").toString() + " " +
-                order.getPickupAddress().get("number").toString();
-        String deliveryAddress = order.getDeliveryAddress().get("city").toString() + ", ul. " +
-                order.getDeliveryAddress().get("street").toString() + " " +
-                order.getDeliveryAddress().get("number").toString();
-
-        String msg = "Status zlecenia \nz: " + pickupAddress + "\ndo: " + deliveryAddress + "\nzostał zmieniony na: " + order.getOrderStatus().getPolishName();
-        return new String[]{emailTo, subject, msg};
-    }
 }

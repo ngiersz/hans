@@ -235,7 +235,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
 
                                 Snackbar.make(getView(), "Odebrano paczkę", Snackbar.LENGTH_SHORT).show();
                                 receiveOrder();
-//                                MainActivity.sendNotificationToClient(order);
+                                MainActivity.sendNotificationToClient(order);
                                 isReceived.setText("Została odebrana z miejsca początkowego");
                                 isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                                 receivedButton.setVisibility(View.INVISIBLE);

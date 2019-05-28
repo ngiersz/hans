@@ -199,12 +199,14 @@ public class SortFilterOrders
     {
         ArrayList<Order> resultArray = new ArrayList<>();
         cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         cityToSearch = cityToSearch.replaceAll("ł", "l");
 
         for (Order order : list)
         {
             String orderCity = order.getPickupAddress().get("city").toString().toLowerCase();
             orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
             orderCity = orderCity.replaceAll("ł", "l");
 
             if (orderCity.matches(cityToSearch))
@@ -217,12 +219,14 @@ public class SortFilterOrders
     {
         ArrayList<Order> resultArray = new ArrayList<>();
         cityToSearch = Normalizer.normalize(cityToSearch.toLowerCase(), Normalizer.Form.NFD);
+        cityToSearch = cityToSearch.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         cityToSearch = cityToSearch.replaceAll("ł", "l");
 
         for (Order order : list)
         {
             String orderCity = order.getDeliveryAddress().get("city").toString().toLowerCase();
             orderCity = Normalizer.normalize(orderCity, Normalizer.Form.NFD);
+            orderCity = orderCity.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
             orderCity = orderCity.replaceAll("ł", "l");
             if (orderCity.matches(cityToSearch))
                 resultArray.add(order);

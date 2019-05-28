@@ -72,7 +72,7 @@ public class SignDocumentFragmentNoyUsed extends Fragment
                 DatabaseFirebase db = new DatabaseFirebase();
                 order.setOrderStatus(OrderStatus.CLOSED);
                 db.setOrder(order);
-//                MainActivity.sendNotificationToClient(order);
+                MainActivity.sendNotificationToClient(order);
 
                 Matrix rotateMatrix = new Matrix();
                 rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
