@@ -47,7 +47,6 @@
 
         <activity
             android:name=".MainActivity"
-            android:noHistory="false"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
@@ -58,17 +57,14 @@
         </activity>
         <activity
             android:name=".SignInGoogleActivity"
-            android:noHistory="true"
             android:label="Zaloguj się do HANS"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".pdf.SignDocumentActivity"
-            android:noHistory="true"
             android:label="Podpis odbiorcy"
             android:screenOrientation="landscape"></activity>
         <activity
             android:name=".CompleteAccountDataActivity"
-            android:noHistory="true"
             android:label="Uzupełnij swoje dane"
             android:screenOrientation="portrait"></activity>
     </application>

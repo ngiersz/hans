@@ -144,7 +144,6 @@ public class SignInGoogleActivity extends AppCompatActivity
                         {
                             DatabaseFirebase db = new DatabaseFirebase();
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("koy", "signInWithCredential:success");
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
                             db.getUser(firebaseUser.getUid()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
