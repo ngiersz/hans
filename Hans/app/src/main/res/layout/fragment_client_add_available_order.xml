@@ -41,14 +41,36 @@
                         android:inputType="textPostalAddress"
                         android:textSize="20sp" />
 
-
-                    <EditText
-                        android:id="@+id/fromZipCode"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Kod pocztowy"
-                        android:inputType="textPostalAddress"
-                        android:textSize="20sp" />
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/fromZipCode1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="XX"
+                            android:inputType="numberSigned"
+                            android:maxLength="2"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLength="1"
+                            android:text="-"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/fromZipCode2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="XXX"
+                            android:inputType="numberSigned"
+                            android:maxLength="3"
+                            android:textSize="20sp" />
+                    </LinearLayout>
 
 
                     <EditText
@@ -93,13 +115,36 @@
                         android:textSize="20sp" />
 
 
-                    <EditText
-                        android:id="@+id/toZipCode"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Kod pocztowy"
-                        android:inputType="textPostalAddress"
-                        android:textSize="20sp" />
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/toZipCode1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="XX"
+                            android:inputType="numberSigned"
+                            android:maxLength="2"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLength="1"
+                            android:text="-"
+                            android:textSize="20sp" />
+
+                        <EditText
+                            android:id="@+id/toZipCode2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="XXX"
+                            android:inputType="numberSigned"
+                            android:maxLength="3"
+                            android:textSize="20sp" />
+                    </LinearLayout>
 
 
                     <EditText

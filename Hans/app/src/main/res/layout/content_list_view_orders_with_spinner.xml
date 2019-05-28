@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".deliverer.DelivererAvailableOrdersFragment">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -12,14 +10,13 @@
 
         <include layout="@layout/progress_circle" />
 
-
         <TextView
             android:id="@+id/empty_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
             android:gravity="center"
-            android:visibility="invisible"/>
+            android:text="BRAK ELEMENTÓW DO WYŚWIETLENIA"
+            android:visibility="invisible" />
     </FrameLayout>
 
     <LinearLayout
@@ -27,8 +24,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -42,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -58,11 +56,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
+
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/listView"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp" />
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
+

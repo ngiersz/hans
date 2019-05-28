@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,6 @@ import com.hans.domain.Order;
 import com.hans.domain.User;
 import com.hans.map.MapsFragment;
 import com.hans.pdf.PdfGenerator;
-
-import java.io.IOException;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -61,6 +60,8 @@ public class DelivererArchiveOrderInfoFragment extends Fragment {
         order = Order.createFromJSON(orderJSON);
         client = User.createFromJSON(clientJSON);
 
+        TextView status = view.findViewById(R.id.order_status);
+        TextView isPaid = view.findViewById(R.id.is_paid);
 
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
@@ -79,18 +80,17 @@ public class DelivererArchiveOrderInfoFragment extends Fragment {
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
 
-        TextView clientPhone = view.findViewById(R.id.clientPhone);
-        TextView clientName = view.findViewById(R.id.clientName);
-        TextView clientSurname = view.findViewById(R.id.clientSurname);
-        TextView clientEmail = view.findViewById(R.id.clientEmail);
+        TextView clientPhone = view.findViewById(R.id.phone_number);
+        TextView clientName = view.findViewById(R.id.firstname);
+        TextView clientSurname = view.findViewById(R.id.lastname);
+        TextView clientEmail = view.findViewById(R.id.email);
 
         clientEmail.setText(client.getGoogleEmail());
         clientName.setText(client.getName());
         clientSurname.setText(client.getSurname());
         clientPhone.setText(client.getPhoneNumber());
 
-
-
+        status.setText(order.getOrderStatus().getPolishName());
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
         fromStreet.setText(order.getPickupAddress().get("street").toString());
@@ -109,6 +109,15 @@ public class DelivererArchiveOrderInfoFragment extends Fragment {
         depth.setText(order.getDimensions().get("depth").toString());
 
 
+        if (order.getIsPaid())
+        {
+            isPaid.setText("Tak");
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+        } else
+        {
+            isPaid.setText("Nie");
+            isPaid.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+        }
 
         final String startPoint = fromCity.getText() + " " + fromZipCode.getText() + " " + fromStreet.getText() + " " + fromNumber.getText();
         final String destinationPoint = toCity.getText() + " " + toZipCode.getText() + " " + toStreet.getText() + " " + toNumber.getText();

@@ -12,9 +12,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
     <application
@@ -61,6 +59,10 @@
             android:name=".SignInGoogleActivity"
             android:label="Zaloguj się do HANS"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".pdf.SignDocumentActivity"
+            android:label="Podpis odbiorcy"
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".CompleteAccountDataActivity"
             android:label="Uzupełnij swoje dane"

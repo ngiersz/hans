@@ -3,7 +3,6 @@ package com.hans.deliverer;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hans.DatabaseFirebase;
+import com.hans.MainActivity;
 import com.hans.R;
 import com.hans.domain.Order;
 import com.hans.domain.OrderStatus;
@@ -31,6 +32,7 @@ import com.hans.map.MapsFragment;
 import com.hans.pdf.GetReceiverNameFragment;
 
 import static android.support.constraint.Constraints.TAG;
+import static android.view.View.getDefaultSize;
 
 public class DelivererInTransitOrderInfoFragment extends Fragment {
     Order order;
@@ -56,6 +58,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         Log.d("Client22", client.toString());
 
 
+        final TextView status = view.findViewById(R.id.order_status);
         TextView fromCity = view.findViewById(R.id.fromCity);
         TextView fromZipCode = view.findViewById(R.id.fromZipCode);
         TextView fromStreet = view.findViewById(R.id.fromStreet);
@@ -73,13 +76,13 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
 
-        TextView clientPhone = view.findViewById(R.id.clientPhone);
-        TextView clientName = view.findViewById(R.id.clientName);
-        TextView clientSurname = view.findViewById(R.id.clientSurname);
-        TextView clientEmail = view.findViewById(R.id.clientEmail);
+        TextView clientPhone = view.findViewById(R.id.phone_number);
+        TextView clientName = view.findViewById(R.id.firstname);
+        TextView clientSurname = view.findViewById(R.id.lastname);
+        TextView clientEmail = view.findViewById(R.id.email);
 
         TextView isPaid = view.findViewById(R.id.is_paid);
-        TextView isReceived = view.findViewById(R.id.is_received);
+        final TextView isReceived = view.findViewById(R.id.is_received);
 
         clientEmail.setText(client.getGoogleEmail());
         clientName.setText(client.getName());
@@ -87,7 +90,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         clientPhone.setText(client.getPhoneNumber());
 
 
-
+        status.setText(order.getOrderStatus().getPolishName());
         fromCity.setText(order.getPickupAddress().get("city").toString());
         fromZipCode.setText(order.getPickupAddress().get("zipCode").toString());
         fromStreet.setText(order.getPickupAddress().get("street").toString());
@@ -200,17 +203,6 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                                     transaction.commit();
                                 }
 
-
-//                                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
-//
-//                                finishOrder();
-//                                sendNotificationToClient();
-
-//                                Fragment newFragment = new DelivererInTransitOrdersFragment();
-//                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//                                transaction.replace(R.id.fragment, newFragment);
-//                                transaction.addToBackStack(null);
-//                                transaction.commit();
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
@@ -225,7 +217,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
             }
         });
 
-        Button receivedButton = view.findViewById(R.id.received_button);
+        final Button receivedButton = view.findViewById(R.id.received_button);
         if(order.getIsReceived()){
             receivedButton.setVisibility(View.GONE);
         }
@@ -241,18 +233,12 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which)
                             {
 
-                                Snackbar.make(getView(), "Odebrano paczke", Snackbar.LENGTH_SHORT).show();
-
+                                Snackbar.make(getView(), "Odebrano paczkę", Snackbar.LENGTH_SHORT).show();
                                 receiveOrder();
-                                Log.d("rec", "Odebralem");
-
-                                //sendNotificationToClient();
-
-                                Fragment newFragment = new DelivererInTransitOrdersFragment();
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment, newFragment);
-                                transaction.addToBackStack(null);
-                                transaction.commit();
+//                                MainActivity.sendNotificationToClient(order);
+                                isReceived.setText("Została odebrana z miejsca początkowego");
+                                isReceived.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                                receivedButton.setVisibility(View.INVISIBLE);
                             }
                         })
                         .setNegativeButton("ANULUJ", new DialogInterface.OnClickListener()
@@ -268,10 +254,7 @@ public class DelivererInTransitOrderInfoFragment extends Fragment {
         });
         return view;
     }
-    private void finishOrder(){
-        order.setOrderStatus(OrderStatus.CLOSED);
-        db.setOrder(order);
-    }
+
     private void receiveOrder(){
         order.setIsReceived(true);
         db.setOrder(order);

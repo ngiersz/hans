@@ -27,7 +27,6 @@ public class MyAccountEditFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String userJSON = bundle.getString("user");
         user = User.createFromJSON(userJSON);
-        Log.d("my_acc", user.toString());
 
 
         EditText userName = view.findViewById(R.id.usertName);
@@ -52,10 +51,9 @@ public class MyAccountEditFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                Snackbar.make(getView(), "Zapisz zmiany", Snackbar.LENGTH_SHORT).show();
-
+                                Snackbar.make(getView(), "Zapisano zmiany", Snackbar.LENGTH_SHORT).show();
                                 updateUser();
-
+                                //sendNotificationToClient();
 
                             }
                         })
@@ -85,8 +83,6 @@ public class MyAccountEditFragment extends Fragment {
             user.setSurname(userSurName.getText().toString());
             user.setPhoneNumber(userPhone.getText().toString());
             user.setGoogleEmail(userEmail.getText().toString());
-
-            Log.d("my_acc", user.toString());
 
             db.insertUserToDatabase(user);
             Fragment newFragment = new MyAccountFragment();

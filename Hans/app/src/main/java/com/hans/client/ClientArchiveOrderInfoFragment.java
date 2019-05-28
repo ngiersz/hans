@@ -58,10 +58,10 @@ public class ClientArchiveOrderInfoFragment extends Fragment {
         TextView height = view.findViewById(R.id.height);
         TextView depth = view.findViewById(R.id.depth);
 
-        TextView delivererName = view.findViewById(R.id.deliverertName);
-        TextView delivererSurName = view.findViewById(R.id.delivererSurname);
-        TextView delivererEmail = view.findViewById(R.id.delivererEmail);
-        TextView delivererPhone = view.findViewById(R.id.delivererPhone);
+        TextView delivererName = view.findViewById(R.id.firstname);
+        TextView delivererSurName = view.findViewById(R.id.lastname);
+        TextView delivererEmail = view.findViewById(R.id.email);
+        TextView delivererPhone = view.findViewById(R.id.phone_number);
 
         TextView status = view.findViewById(R.id.order_status);
         TextView isPaid = view.findViewById(R.id.is_paid);

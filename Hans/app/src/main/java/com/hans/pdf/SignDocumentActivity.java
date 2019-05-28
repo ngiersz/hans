@@ -8,30 +8,30 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowId;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.hans.DatabaseFirebase;
 import com.hans.MainActivity;
 import com.hans.R;
-import com.hans.deliverer.DelivererArchiveOrdersFragment;
+import com.hans.deliverer.DelivererInTransitOrdersFragment;
 import com.hans.domain.Order;
+import com.hans.domain.OrderStatus;
 import com.hans.domain.User;
 
-public class SignDocumentFragment extends Fragment
+public class SignDocumentActivity extends AppCompatActivity
 {
-    View view;
-    DrawingView dv;
+    SignDocumentActivity.DrawingView dv;
     private Paint mPaint;
     private Path mPath;
     private Canvas canvas;
@@ -39,42 +39,47 @@ public class SignDocumentFragment extends Fragment
     private User client, deliverer;
     private static int PAGE_WIDTH = 842;
     private static int PAGE_HEIGHT = 595;
+    private Context context;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_sign_document);
+        context = getBaseContext();
 
-        Bundle bundle = this.getArguments();
-        String orderJSON = bundle.getString("order");
-        String clientJSON = bundle.getString("client");
-        String delivererJSON = bundle.getString("deliverer");
-        final String receiver_firstname = bundle.getString("receiver_firstname");
-        final String receiver_lastname = bundle.getString("receiver_lastname");
+        Intent intent = getIntent();
+        String orderJSON = intent.getStringExtra("order");
+        String clientJSON = intent.getStringExtra("client");
+        String delivererJSON = intent.getStringExtra("deliverer");
+        final String receiver_firstname = intent.getStringExtra("receiver_firstname");
+        final String receiver_lastname = intent.getStringExtra("receiver_lastname");
 
         order = Order.createFromJSON(orderJSON);
         client = User.createFromJSON(clientJSON);
         deliverer = User.createFromJSON(delivererJSON);
 
-
-        ((MainActivity) getActivity()).setActionBarTitle("Podpis odbiorcy");
-
-        view = inflater.inflate(R.layout.fragment_sign_document, container, false);
-
-        Button confirmButton = view.findViewById(R.id.confirm_button);
+        Button confirmButton = findViewById(R.id.confirm_button);
         confirmButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                DatabaseFirebase db = new DatabaseFirebase();
+                order.setOrderStatus(OrderStatus.CLOSED);
+                db.setOrder(order);
+//                MainActivity.sendNotificationToClient(order);
 
-                Matrix rotateMatrix = new Matrix();
-                rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
-                mPath.transform(rotateMatrix);
+//                Matrix rotateMatrix = new Matrix();
+//                rotateMatrix.setRotate(270f, (float)(canvas.getWidth()/2), (float)(canvas.getHeight()/2));
+//                mPath.transform(rotateMatrix);
 
-                Float scaleX = (float)PAGE_WIDTH/(float)canvas.getHeight();
-                Float scaleY = (float)PAGE_HEIGHT/(float)canvas.getWidth();
+                Float scaleX = (float)PAGE_WIDTH/(float)canvas.getWidth();
+                Float scaleY = (float)PAGE_HEIGHT/(float)canvas.getHeight();
+
+
                 Matrix scaleMatrix = new Matrix();
-                scaleMatrix.setScale(scaleX, scaleY, 0f, PAGE_HEIGHT*scaleY);
+                scaleMatrix.setScale(scaleX, scaleY);
                 mPath.transform(scaleMatrix);
 
                 Matrix scaleMatrix2 = new Matrix();
@@ -82,21 +87,27 @@ public class SignDocumentFragment extends Fragment
                 mPath.transform(scaleMatrix2);
 
                 Matrix translateMatrix = new Matrix();
-                translateMatrix.setTranslate(400f, 50f);
+                translateMatrix.setTranslate(400f, 100f);
                 mPath.transform(translateMatrix);
 
-                PdfGenerator pdfGenerator = new PdfGenerator(getContext(), order);
+                PdfGenerator pdfGenerator = new PdfGenerator(getBaseContext(), order);
                 pdfGenerator.createPdf(client, deliverer, receiver_firstname, receiver_lastname);
                 pdfGenerator.signInDocument(mPath);
                 pdfGenerator.saveLocal(order.getId());
                 pdfGenerator.sendToFirebaseStorage(order.getId());
 
+                mPath.reset();
+                canvas.drawColor(Color.WHITE);
+                dv.invalidate();
 
-                Fragment newFragment = new DelivererArchiveOrdersFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment, newFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                Intent newIntent = new Intent(getBaseContext(), MainActivity.class);
+                newIntent.putExtra("documentGenerated", "true");
+                startActivity(newIntent);
+//                Fragment newFragment = new DelivererInTransitOrdersFragment();
+//                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment, newFragment);
+//                transaction.addToBackStack(null);
+//                transaction.commit();
 
 //                Snackbar.make(getView(), "Zakończono zlecenie", Snackbar.LENGTH_SHORT).show();
 //                finishOrder();
@@ -113,15 +124,10 @@ public class SignDocumentFragment extends Fragment
 //                }
 
 
-                mPath.reset();
-                canvas.drawColor(Color.WHITE);
-                dv.invalidate();
-
-                Snackbar.make(view, "Gotowy do pobrania dokument dostępny w zakładce 'Zakończone' w szczegółach zlecenia.", Snackbar.LENGTH_LONG).show();
             }
         });
 
-        Button clearButton = view.findViewById(R.id.clear_button);
+        Button clearButton = findViewById(R.id.clear_button);
         clearButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -135,8 +141,8 @@ public class SignDocumentFragment extends Fragment
             }
         });
 
-        dv = new DrawingView(getContext());
-        LinearLayout l = view.findViewById(R.id.sign_document_layout);
+        dv = new SignDocumentActivity.DrawingView(getBaseContext());
+        LinearLayout l = findViewById(R.id.sign_document_layout);
         l.addView(dv);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -147,7 +153,6 @@ public class SignDocumentFragment extends Fragment
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(12);
 
-        return view;
     }
 
     public class DrawingView extends View
@@ -155,7 +160,7 @@ public class SignDocumentFragment extends Fragment
         public int width;
         public int height;
         private Bitmap mBitmap;
-//        private Canvas mCanvas;
+        //        private Canvas mCanvas;
 //        private Path mPath;
         private Paint mBitmapPaint;
         Context context;

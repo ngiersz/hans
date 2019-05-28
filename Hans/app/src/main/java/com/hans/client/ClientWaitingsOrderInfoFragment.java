@@ -1,17 +1,20 @@
 package com.hans.client;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,21 +22,44 @@ import com.hans.DatabaseFirebase;
 import com.hans.R;
 import com.hans.domain.Order;
 
+import java.util.Calendar;
+
 public class ClientWaitingsOrderInfoFragment extends Fragment {
-    Order order;
-    ListView ordersListView;
-    DatabaseFirebase db = new DatabaseFirebase();
+    private Order order;
+    private ListView ordersListView;
+    private DatabaseFirebase db = new DatabaseFirebase();
+    private Menu menu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_client_order_info, container, false);
-        Log.d("orderinfo", "ClientOrderInfoFragment started");
+        View view = inflater.inflate(R.layout.fragment_client_waiting_order_info, container, false);
+        NavigationView nav = getActivity().findViewById(R.id.nav_view);
+        // navigation -> menu -> item (zlecenia) -> menu
+        menu = nav.getMenu().getItem(0).getSubMenu();
 
         Bundle bundle = this.getArguments();
         String orderJSON = bundle.getString("order");
         order = Order.createFromJSON(orderJSON);
+
+//        Calendar calendar = Calendar.getInstance();
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+//                new DatePickerDialog.OnDateSetListener() {
+//
+//                    @Override
+//                    public void onDateSet(DatePicker mainView, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+//                        String pickedDate = dayOfMonth + "." + (monthOfYear+1) + "." + year;
+//                        Log.d("12345",  pickedDate);
+//
+//                    }
+//                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+//        datePickerDialog.show();
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(order.getDate());
+//        Log.d("12345", cal.get(Calendar.DAY_OF_MONTH) + "." + (cal.get(Calendar.MONTH)+1) + "." + cal.get(Calendar.YEAR));
 
         TextView status = view.findViewById(R.id.order_status);
         TextView isPaid = view.findViewById(R.id.is_paid);
@@ -84,8 +110,8 @@ public class ClientWaitingsOrderInfoFragment extends Fragment {
         ordersListView = view.findViewById(R.id.listView);
 
 
-        Button button = view.findViewById(R.id.cancel_order_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button cancelOrderbutton = view.findViewById(R.id.cancel_order_button);
+        cancelOrderbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -98,6 +124,7 @@ public class ClientWaitingsOrderInfoFragment extends Fragment {
                             {
                                 db.deleteOrderByID(order);
                                 Snackbar.make(getView(), "Anulowano zlecenie", Snackbar.LENGTH_SHORT).show();
+                                menu.getItem(1).setChecked(true);
                                 getActivity().getSupportFragmentManager().popBackStackImmediate();
                             }
                         })

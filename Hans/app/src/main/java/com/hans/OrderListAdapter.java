@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.firebase.Timestamp;
 import com.hans.domain.Order;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class OrderListAdapter extends ArrayAdapter<Order> {
@@ -41,7 +41,7 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
         String description = getItem(position).getDescription();
         Double price = getItem(position).getPrice();
         Double weight = getItem(position).getWeight();
-        Timestamp date = getItem(position).getDate();
+        Date date = getItem(position).getDate();
 
         Order order = new Order(pickupAddress, deliveryAddress, price, weight, description, date);
 
@@ -59,19 +59,21 @@ public class OrderListAdapter extends ArrayAdapter<Order> {
             viewHolder.price = convertView.findViewById(R.id.price);
             viewHolder.weight = convertView.findViewById(R.id.weight);
 
-            viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress().get("city") + " " + order.getPickupAddress().get("street") + " " + order.getPickupAddress().get("number"));
-            viewHolder.deliveryAddress.setText("Do: " +order.getDeliveryAddress().get("city") + " " + order.getDeliveryAddress().get("street") + " " + order.getDeliveryAddress().get("number"));
-            viewHolder.description.setText(order.getDescription());
-            // TODO: get suffixes from values/strings.xml
-            viewHolder.price.setText("Cena: " + order.getPrice().toString() + " zł");
-            viewHolder.weight.setText("Waga: " + order.getWeight().toString() + " kg");
 
             view = convertView;
+            convertView.setTag(viewHolder);
         }
         else {
+            viewHolder = (ViewHolder) convertView.getTag();
             view = convertView;
         }
 
+        viewHolder.pickupAddress.setText("Z: " + order.getPickupAddress().get("city") + " " + order.getPickupAddress().get("street") + " " + order.getPickupAddress().get("number"));
+        viewHolder.deliveryAddress.setText("Do: " +order.getDeliveryAddress().get("city") + " " + order.getDeliveryAddress().get("street") + " " + order.getDeliveryAddress().get("number"));
+        viewHolder.description.setText("Opis: " + order.getDescription());
+        // TODO: get suffixes from values/strings.xml
+        viewHolder.price.setText("Cena: " + order.getPrice().toString() + " zł");
+        viewHolder.weight.setText("Waga: " + order.getWeight().toString() + " kg");
         return view;
     }
 

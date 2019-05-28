@@ -2,6 +2,7 @@ package com.hans.deliverer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,7 +38,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
     ArrayList<User> inTransitUserList = new ArrayList<>();
 
     DatabaseFirebase db = new DatabaseFirebase();
-    View v;
+    View view;
     ListView ordersListView;
 
     @Override
@@ -45,9 +48,9 @@ public class DelivererInTransitOrdersFragment extends Fragment
         super.onCreate(savedInstanceState);
 
         ((MainActivity) getActivity()).setActionBarTitle("Aktualnie wykonywane zlecenia");
-        v = inflater.inflate(R.layout.fragment_deliverer_in_transit_orders, container, false);
+        view = inflater.inflate(R.layout.content_list_view_orders, container, false);
         orderListInit();
-        ordersListView = v.findViewById(R.id.listView);
+        ordersListView = view.findViewById(R.id.listView);
 
 
         ordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -81,7 +84,7 @@ public class DelivererInTransitOrdersFragment extends Fragment
         });
 
 
-        return v;
+        return view;
     }
 
 
@@ -104,11 +107,28 @@ public class DelivererInTransitOrdersFragment extends Fragment
                         Order orderFromDatabase = document.toObject(Order.class);
                         orderFromDatabase.setId(document.getId());
                         inTransitOrderList.add(orderFromDatabase);
-                        Log.d("Order", document.toObject(Order.class).toString());
+                        Log.d("Order",orderFromDatabase.toString());
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
+
                     OrderListAdapter orderListAdapter = new OrderListAdapter(getContext(), R.layout.adapter_view_layout, inTransitOrderList);
                     ordersListView.setAdapter(orderListAdapter);
+
+                    if (inTransitOrderList.size() > 0)
+                    {
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.INVISIBLE);
+                    } else
+                    {
+                        ProgressBar progressBar = view.findViewById(R.id.empty_progress_bar);
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                        TextView emptyList = view.findViewById(R.id.empty_text_view);
+                        emptyList.setVisibility(View.VISIBLE);
+                    }
 
                 } else
                 {
@@ -160,6 +180,4 @@ public class DelivererInTransitOrdersFragment extends Fragment
         }
         return client;
     }
-
-
 }
