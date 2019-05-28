@@ -186,9 +186,9 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
 
     private void acceptOrder()
     {
+
         Log.d("Order", "Weszlo");
         Log.d("Order", order.toString());
-
         db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -212,6 +212,15 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
                         transaction.addToBackStack(null);
                         transaction.commit();
                     }
+                    else{
+                        Snackbar.make(getView(), "Przepraszamy, zlecenie nieaktualne", Snackbar.LENGTH_SHORT).show();
+                        Fragment newFragment = new DelivererAvailableOrdersFragment();
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment, newFragment);
+
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
                 }
 
 
@@ -227,6 +236,7 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
         });
 
     }
+
 
     private void sendNotificationToClient()
     {
