@@ -195,53 +195,42 @@ public class DelivererAvailableOrderInfoFragment extends Fragment
 
     private void acceptOrder()
     {
-
-        Log.d("Order", "Weszlo");
-        Log.d("Order", order.toString());
-        db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.getOrder(order).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>()
+        {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-
+            public void onComplete(@NonNull Task<DocumentSnapshot> task)
+            {
+                if (task.isSuccessful())
+                {
                     Order orderr;
                     DocumentSnapshot document = task.getResult();
+
                     orderr = document.toObject(Order.class);
+                    if (orderr != null)
+                    {
+                        if ((orderr.getDelivererId() == null) && (orderr.getOrderStatus() == OrderStatus.WAITING_FOR_DELIVERER))
+                        {
+                            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            order.setOrderStatus(OrderStatus.IN_TRANSIT);
+                            order.setDelivererId(firebaseUser.getUid());
+                            db.setOrder(order);
+                            MainActivity.sendNotificationToClient(order);
+                            Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
 
-                    if((orderr.getDelivererId() == null ) && (orderr.getOrderStatus()==OrderStatus.WAITING_FOR_DELIVERER)){
-                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                        order.setOrderStatus(OrderStatus.IN_TRANSIT);
-                        order.setDelivererId(firebaseUser.getUid());
-                        db.setOrder(order);
-                        MainActivity.sendNotificationToClient(order);
-                        Snackbar.make(getView(), "Przyjęto zlecenie", Snackbar.LENGTH_SHORT).show();
-                        menu.getItem(0).setChecked(true);
-                        Fragment newFragment = new DelivererAvailableOrdersFragment();
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment, newFragment);
-
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    }
-                    else{
-                        Snackbar.make(getView(), "Przepraszamy, zlecenie nieaktualne", Snackbar.LENGTH_SHORT).show();
-                        Fragment newFragment = new DelivererAvailableOrdersFragment();
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment, newFragment);
-
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                            menu.getItem(0).setChecked(true);
+                            Fragment newFragment = new DelivererAvailableOrdersFragment();
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment, newFragment);
+                            transaction.commit();
+                        }
                     }
                 }
 
-
-                else {
-                    Snackbar.make(getView(), "Przyjęcie się nie powiodło", Snackbar.LENGTH_SHORT).show();
-                    Fragment newFragment = new DelivererAvailableOrdersFragment();
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment, newFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
+                Snackbar.make(getView(), "Przepraszamy, zlecenie nieaktualne", Snackbar.LENGTH_SHORT).show();
+                Fragment newFragment = new DelivererAvailableOrdersFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment, newFragment);
+                transaction.commit();
             }
         });
 

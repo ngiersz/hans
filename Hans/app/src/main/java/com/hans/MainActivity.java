@@ -210,6 +210,15 @@ public class MainActivity extends AppCompatActivity
 //                firebaseUser = (FirebaseUser) data.getExtras().get("userFirebase");
 //                String userJSON = data.getStringExtra("userJSON");
 //                user = User.createFromJSON(userJSON);
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                    {
+                        // Permission is not granted
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_WRITE_READ_EXTERNAL_STORAGE);
+                    }
 
                     Fragment mapsActivity = new ClientWaitingsOrdersFragment();
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

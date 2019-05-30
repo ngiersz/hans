@@ -18,8 +18,8 @@ import javax.mail.internet.MimeMessage;
 public class MailSender extends AsyncTask<String, Integer, Void> {
 
     // TODO: properties in another file
-    final String fromEmail = ""; // mail i haslo do konta Google Hansa
-    final String password = "";
+    final String fromEmail = "hans25164@gmail.com"; // mail i haslo do konta Google Hansa
+    final String password = "Hans123456";
 
     @Override
     protected Void doInBackground(String... strings) {
