@@ -24,6 +24,8 @@ public class SettingsFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_settings, container, false);
+        ((MainActivity) getActivity()).setActionBarTitle("Ustawienia");
+
         Button logoutButton = view.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener()
         {

@@ -43,7 +43,6 @@ import com.hans.client.ClientAddOrderFragment;
 import com.hans.client.ClientWaitingsOrdersFragment;
 import com.hans.client.ClientArchiveOrdersFragment;
 import com.hans.client.ClientInTransitOrdersFragment;
-import com.hans.client.ClientMenuFragment;
 import com.hans.deliverer.DelivererAvailableOrdersFragment;
 import com.hans.deliverer.DelivererArchiveOrdersFragment;
 import com.hans.deliverer.DelivererInTransitOrdersFragment;
@@ -261,7 +260,7 @@ public class MainActivity extends AppCompatActivity
         {
             // Create a new fragment and specify the fragment to show based on nav item clicked
             Fragment fragment = null;
-            Class fragmentClass;
+            Class fragmentClass = null;
             switch (menuItem.getItemId())
             {
                 case R.id.new_order:
@@ -317,8 +316,7 @@ public class MainActivity extends AppCompatActivity
                     navigationView.getHeaderView(1).setVisibility(View.VISIBLE);
                     navigationView.inflateMenu(R.menu.menu_deliverer);
                     break;
-                default:
-                    fragmentClass = ClientMenuFragment.class;
+
             }
 
             try
